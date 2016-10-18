@@ -39,3 +39,6 @@ profile
 *.sdf
 *.opensdf
 *.suo
+
+misc/msvc12/ioq3.VC.db
+misc/msvc12/ioq3.VC.VC.opendb
