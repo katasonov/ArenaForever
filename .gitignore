@@ -71,3 +71,5 @@ Thumb*
 _Upgrade*
 *.asmx
 syntax: glob
+
+misc/winquake.res
