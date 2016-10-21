@@ -151,50 +151,57 @@ void _UI_KeyEvent( int key, qboolean down );
 void _UI_MouseEvent( int dx, int dy );
 void _UI_Refresh( int realtime );
 qboolean _UI_IsFullscreen( void );
-Q_EXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11  ) {
-  switch ( command ) {
-	  case UI_GETAPIVERSION:
-		  return UI_API_VERSION;
 
-	  case UI_INIT:
-		  _UI_Init(arg0);
-		  return 0;
+intptr_t uiMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11) 
+{
+	switch (command) {
+	case UI_GETAPIVERSION:
+		return UI_API_VERSION;
 
-	  case UI_SHUTDOWN:
-		  _UI_Shutdown();
-		  return 0;
+	case UI_INIT:
+		_UI_Init(arg0);
+		return 0;
 
-	  case UI_KEY_EVENT:
-		  _UI_KeyEvent( arg0, arg1 );
-		  return 0;
+	case UI_SHUTDOWN:
+		_UI_Shutdown();
+		return 0;
 
-	  case UI_MOUSE_EVENT:
-		  _UI_MouseEvent( arg0, arg1 );
-		  return 0;
+	case UI_KEY_EVENT:
+		_UI_KeyEvent(arg0, arg1);
+		return 0;
 
-	  case UI_REFRESH:
-		  _UI_Refresh( arg0 );
-		  return 0;
+	case UI_MOUSE_EVENT:
+		_UI_MouseEvent(arg0, arg1);
+		return 0;
 
-	  case UI_IS_FULLSCREEN:
-		  return _UI_IsFullscreen();
+	case UI_REFRESH:
+		_UI_Refresh(arg0);
+		return 0;
 
-	  case UI_SET_ACTIVE_MENU:
-		  _UI_SetActiveMenu( arg0 );
-		  return 0;
+	case UI_IS_FULLSCREEN:
+		return _UI_IsFullscreen();
 
-	  case UI_CONSOLE_COMMAND:
-		  return UI_ConsoleCommand(arg0);
+	case UI_SET_ACTIVE_MENU:
+		_UI_SetActiveMenu(arg0);
+		return 0;
 
-	  case UI_DRAW_CONNECT_SCREEN:
-		  UI_DrawConnectScreen( arg0 );
-		  return 0;
-	  case UI_HASUNIQUECDKEY: // mod authors need to observe this
-	    return qtrue; // change this to qfalse for mods!
+	case UI_CONSOLE_COMMAND:
+		return UI_ConsoleCommand(arg0);
+
+	case UI_DRAW_CONNECT_SCREEN:
+		UI_DrawConnectScreen(arg0);
+		return 0;
+	case UI_HASUNIQUECDKEY: // mod authors need to observe this
+		return qtrue; // change this to qfalse for mods!
 
 	}
 
 	return -1;
+}
+
+Q_EXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11  ) 
+{
+	return uiMain(command, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
 }
 
 

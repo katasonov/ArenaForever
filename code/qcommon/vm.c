@@ -611,8 +611,20 @@ vm_t *VM_Create( const char *module, intptr_t (*systemCalls)(intptr_t *),
 	do
 	{
 		retval = FS_FindVM(&startSearch, filename, sizeof(filename), module, (interpret == VMI_NATIVE));
-		
-		if(retval == VMI_NATIVE)
+
+		//Do static linking of ui
+		if (Q_strncmp(module, "ui", 2) == 0)
+		{
+			Sys_LoadUIModuleStatic(&vm->entryPoint, VM_DllSyscall);
+
+			//if (vm->dllHandle)
+			//{
+				vm->systemCall = systemCalls;
+				return vm;
+			//}
+
+		}
+		else if(retval == VMI_NATIVE)
 		{
 			Com_Printf("Try loading dll file %s\n", filename);
 

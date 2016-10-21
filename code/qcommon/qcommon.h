@@ -1071,6 +1071,10 @@ void	Sys_Init (void);
 // general development dll loading for virtual machine testing
 void	* QDECL Sys_LoadGameDll( const char *name, intptr_t (QDECL **entryPoint)(int, ...),
 				  intptr_t (QDECL *systemcalls)(intptr_t, ...) );
+
+void	Sys_LoadUIModuleStatic(intptr_t(QDECL **entryPoint)(int, ...), 
+			intptr_t(*systemcalls)(intptr_t, ...));
+
 void	Sys_UnloadDll( void *dllHandle );
 
 char	*Sys_GetCurrentUser( void );

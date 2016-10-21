@@ -34,6 +34,12 @@ Q_EXPORT void dllEntry( intptr_t (QDECL *syscallptr)( intptr_t arg,... ) ) {
 	syscall = syscallptr;
 }
 
+//Used for static linkage
+void uiModuleEntry(intptr_t(QDECL *syscallptr)(intptr_t arg, ...)) {
+	syscall = syscallptr;
+}
+
+
 int PASSFLOAT( float x ) {
 	floatint_t fi;
 	fi.f = x;
