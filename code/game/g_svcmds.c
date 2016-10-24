@@ -166,7 +166,7 @@ static void UpdateIPBans (void)
 		}
 	}
 
-	trap_Cvar_Set( "g_banIPs", iplist_final );
+	g_trap_Cvar_Set( "g_banIPs", iplist_final );
 }
 
 /*
@@ -265,12 +265,12 @@ void Svcmd_AddIP_f (void)
 {
 	char		str[MAX_TOKEN_CHARS];
 
-	if ( trap_Argc() < 2 ) {
+	if ( g_trap_Argc() < 2 ) {
 		G_Printf("Usage: addip <ip-mask>\n");
 		return;
 	}
 
-	trap_Argv( 1, str, sizeof( str ) );
+	g_trap_Argv( 1, str, sizeof( str ) );
 
 	AddIP( str );
 
@@ -287,12 +287,12 @@ void Svcmd_RemoveIP_f (void)
 	int			i;
 	char		str[MAX_TOKEN_CHARS];
 
-	if ( trap_Argc() < 2 ) {
+	if ( g_trap_Argc() < 2 ) {
 		G_Printf("Usage: removeip <ip-mask>\n");
 		return;
 	}
 
-	trap_Argv( 1, str, sizeof( str ) );
+	g_trap_Argv( 1, str, sizeof( str ) );
 
 	if (!StringToFilter (str, &f))
 		return;
@@ -423,20 +423,20 @@ void	Svcmd_ForceTeam_f( void ) {
 	gclient_t	*cl;
 	char		str[MAX_TOKEN_CHARS];
 
-	if ( trap_Argc() < 3 ) {
+	if ( g_trap_Argc() < 3 ) {
 		G_Printf("Usage: forceteam <player> <team>\n");
 		return;
 	}
 
 	// find the player
-	trap_Argv( 1, str, sizeof( str ) );
+	g_trap_Argv( 1, str, sizeof( str ) );
 	cl = ClientForString( str );
 	if ( !cl ) {
 		return;
 	}
 
 	// set the team
-	trap_Argv( 2, str, sizeof( str ) );
+	g_trap_Argv( 2, str, sizeof( str ) );
 	SetTeam( &g_entities[cl - level.clients], str );
 }
 
@@ -451,7 +451,7 @@ ConsoleCommand
 qboolean	ConsoleCommand( void ) {
 	char	cmd[MAX_TOKEN_CHARS];
 
-	trap_Argv( 0, cmd, sizeof( cmd ) );
+	g_trap_Argv( 0, cmd, sizeof( cmd ) );
 
 	if ( Q_stricmp (cmd, "entitylist") == 0 ) {
 		Svcmd_EntityList_f();

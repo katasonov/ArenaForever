@@ -30,14 +30,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 static intptr_t (QDECL *syscall)( intptr_t arg, ... ) = (intptr_t (QDECL *)( intptr_t, ...))-1;
 
+#ifndef USE_STATIC_MODS
 Q_EXPORT void dllEntry( intptr_t (QDECL *syscallptr)( intptr_t arg,... ) ) {
 	syscall = syscallptr;
 }
-
+#else
 //Used for static linkage
 void uiModuleEntry(intptr_t(QDECL *syscallptr)(intptr_t arg, ...)) {
 	syscall = syscallptr;
 }
+#endif // USE_STATIC_MODS
 
 
 int PASSFLOAT( float x ) {

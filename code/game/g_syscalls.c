@@ -30,60 +30,66 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 static intptr_t (QDECL *syscall)( intptr_t arg, ... ) = (intptr_t (QDECL *)( intptr_t, ...))-1;
 
-
+#ifndef USE_STATIC_MODS
 Q_EXPORT void dllEntry( intptr_t (QDECL *syscallptr)( intptr_t arg,... ) ) {
 	syscall = syscallptr;
 }
+#else
+//Used for static linkage
+void gameModuleEntry(intptr_t(QDECL *syscallptr)(intptr_t arg, ...)) {
+	syscall = syscallptr;
+}
+#endif //USE_STATIC_MODS
 
-int PASSFLOAT( float x ) {
+int G_PASSFLOAT( float x ) {
 	floatint_t fi;
 	fi.f = x;
 	return fi.i;
 }
 
-void	trap_Print( const char *text ) {
+void	g_trap_Print( const char *text ) {
 	syscall( G_PRINT, text );
 }
 
-void trap_Error( const char *text )
+void g_trap_Error( const char *text )
 {
 	syscall( G_ERROR, text );
 	// shut up GCC warning about returning functions, because we know better
 	exit(1);
 }
 
-int		trap_Milliseconds( void ) {
+int		g_trap_Milliseconds( void ) {
 	return syscall( G_MILLISECONDS ); 
 }
-int		trap_Argc( void ) {
+int		g_trap_Argc( void ) {
 	return syscall( G_ARGC );
 }
 
-void	trap_Argv( int n, char *buffer, int bufferLength ) {
+void	g_trap_Argv( int n, char *buffer, int bufferLength ) {
 	syscall( G_ARGV, n, buffer, bufferLength );
 }
 
-int		trap_FS_FOpenFile( const char *qpath, fileHandle_t *f, fsMode_t mode ) {
+int		g_trap_FS_FOpenFile( const char *qpath, fileHandle_t *f, fsMode_t mode ) {
 	return syscall( G_FS_FOPEN_FILE, qpath, f, mode );
 }
 
-void	trap_FS_Read( void *buffer, int len, fileHandle_t f ) {
+void	g_trap_FS_Read( void *buffer, int len, fileHandle_t f ) {
 	syscall( G_FS_READ, buffer, len, f );
 }
 
-void	trap_FS_Write( const void *buffer, int len, fileHandle_t f ) {
+void	g_trap_FS_Write( const void *buffer, int len, fileHandle_t f ) {
 	syscall( G_FS_WRITE, buffer, len, f );
 }
 
-void	trap_FS_FCloseFile( fileHandle_t f ) {
+void	g_trap_FS_FCloseFile( fileHandle_t f ) {
 	syscall( G_FS_FCLOSE_FILE, f );
 }
 
-int trap_FS_GetFileList(  const char *path, const char *extension, char *listbuf, int bufsize ) {
+int g_trap_FS_GetFileList(  const char *path, const char *extension, char *listbuf, int bufsize ) {
 	return syscall( G_FS_GETFILELIST, path, extension, listbuf, bufsize );
 }
 
-int trap_FS_Seek( fileHandle_t f, long offset, int origin ) {
+int g_trap_FS_Seek( fileHandle_t f, long offset, int origin ) {
 	return syscall( G_FS_SEEK, f, offset, origin );
 }
 
@@ -91,15 +97,15 @@ void	trap_SendConsoleCommand( int exec_when, const char *text ) {
 	syscall( G_SEND_CONSOLE_COMMAND, exec_when, text );
 }
 
-void	trap_Cvar_Register( vmCvar_t *cvar, const char *var_name, const char *value, int flags ) {
+void	g_trap_Cvar_Register( vmCvar_t *cvar, const char *var_name, const char *value, int flags ) {
 	syscall( G_CVAR_REGISTER, cvar, var_name, value, flags );
 }
 
-void	trap_Cvar_Update( vmCvar_t *cvar ) {
+void	g_trap_Cvar_Update( vmCvar_t *cvar ) {
 	syscall( G_CVAR_UPDATE, cvar );
 }
 
-void trap_Cvar_Set( const char *var_name, const char *value ) {
+void g_trap_Cvar_Set( const char *var_name, const char *value ) {
 	syscall( G_CVAR_SET, var_name, value );
 }
 
@@ -107,7 +113,7 @@ int trap_Cvar_VariableIntegerValue( const char *var_name ) {
 	return syscall( G_CVAR_VARIABLE_INTEGER_VALUE, var_name );
 }
 
-void trap_Cvar_VariableStringBuffer( const char *var_name, char *buffer, int bufsize ) {
+void g_trap_Cvar_VariableStringBuffer( const char *var_name, char *buffer, int bufsize ) {
 	syscall( G_CVAR_VARIABLE_STRING_BUFFER, var_name, buffer, bufsize );
 }
 
@@ -222,7 +228,7 @@ void trap_DebugPolygonDelete(int id) {
 	syscall( G_DEBUG_POLYGON_DELETE, id );
 }
 
-int trap_RealTime( qtime_t *qtime ) {
+int g_trap_RealTime( qtime_t *qtime ) {
 	return syscall( G_REAL_TIME, qtime );
 }
 
@@ -252,7 +258,7 @@ int trap_BotLibDefine(char *string) {
 }
 
 int trap_BotLibStartFrame(float time) {
-	return syscall( BOTLIB_START_FRAME, PASSFLOAT( time ) );
+	return syscall( BOTLIB_START_FRAME, G_PASSFLOAT( time ) );
 }
 
 int trap_BotLibLoadMap(const char *mapname) {
@@ -370,7 +376,7 @@ int trap_AAS_Swimming(vec3_t origin) {
 }
 
 int trap_AAS_PredictClientMovement(void /* struct aas_clientmove_s */ *move, int entnum, vec3_t origin, int presencetype, int onground, vec3_t velocity, vec3_t cmdmove, int cmdframes, int maxframes, float frametime, int stopevent, int stopareanum, int visualize) {
-	return syscall( BOTLIB_AAS_PREDICT_CLIENT_MOVEMENT, move, entnum, origin, presencetype, onground, velocity, cmdmove, cmdframes, maxframes, PASSFLOAT(frametime), stopevent, stopareanum, visualize );
+	return syscall( BOTLIB_AAS_PREDICT_CLIENT_MOVEMENT, move, entnum, origin, presencetype, onground, velocity, cmdmove, cmdframes, maxframes, G_PASSFLOAT(frametime), stopevent, stopareanum, visualize );
 }
 
 void trap_EA_Say(int client, char *str) {
@@ -450,7 +456,7 @@ void trap_EA_DelayedJump(int client) {
 }
 
 void trap_EA_Move(int client, vec3_t dir, float speed) {
-	syscall( BOTLIB_EA_MOVE, client, dir, PASSFLOAT(speed) );
+	syscall( BOTLIB_EA_MOVE, client, dir, G_PASSFLOAT(speed) );
 }
 
 void trap_EA_View(int client, vec3_t viewangles) {
@@ -458,11 +464,11 @@ void trap_EA_View(int client, vec3_t viewangles) {
 }
 
 void trap_EA_EndRegular(int client, float thinktime) {
-	syscall( BOTLIB_EA_END_REGULAR, client, PASSFLOAT(thinktime) );
+	syscall( BOTLIB_EA_END_REGULAR, client, G_PASSFLOAT(thinktime) );
 }
 
 void trap_EA_GetInput(int client, float thinktime, void /* struct bot_input_s */ *input) {
-	syscall( BOTLIB_EA_GET_INPUT, client, PASSFLOAT(thinktime), input );
+	syscall( BOTLIB_EA_GET_INPUT, client, G_PASSFLOAT(thinktime), input );
 }
 
 void trap_EA_ResetInput(int client) {
@@ -470,7 +476,7 @@ void trap_EA_ResetInput(int client) {
 }
 
 int trap_BotLoadCharacter(char *charfile, float skill) {
-	return syscall( BOTLIB_AI_LOAD_CHARACTER, charfile, PASSFLOAT(skill));
+	return syscall( BOTLIB_AI_LOAD_CHARACTER, charfile, G_PASSFLOAT(skill));
 }
 
 void trap_BotFreeCharacter(int character) {
@@ -485,7 +491,7 @@ float trap_Characteristic_Float(int character, int index) {
 
 float trap_Characteristic_BFloat(int character, int index, float min, float max) {
 	floatint_t fi;
-	fi.i = syscall( BOTLIB_AI_CHARACTERISTIC_BFLOAT, character, index, PASSFLOAT(min), PASSFLOAT(max) );
+	fi.i = syscall( BOTLIB_AI_CHARACTERISTIC_BFLOAT, character, index, G_PASSFLOAT(min), G_PASSFLOAT(max) );
 	return fi.f;
 }
 
@@ -630,7 +636,7 @@ int trap_BotChooseLTGItem(int goalstate, vec3_t origin, int *inventory, int trav
 }
 
 int trap_BotChooseNBGItem(int goalstate, vec3_t origin, int *inventory, int travelflags, void /* struct bot_goal_s */ *ltg, float maxtime) {
-	return syscall( BOTLIB_AI_CHOOSE_NBG_ITEM, goalstate, origin, inventory, travelflags, ltg, PASSFLOAT(maxtime) );
+	return syscall( BOTLIB_AI_CHOOSE_NBG_ITEM, goalstate, origin, inventory, travelflags, ltg, G_PASSFLOAT(maxtime) );
 }
 
 int trap_BotTouchingGoal(vec3_t origin, void /* struct bot_goal_s */ *goal) {
@@ -660,7 +666,7 @@ float trap_BotAvoidGoalTime(int goalstate, int number) {
 }
 
 void trap_BotSetAvoidGoalTime(int goalstate, int number, float avoidtime) {
-	syscall( BOTLIB_AI_SET_AVOID_GOAL_TIME, goalstate, number, PASSFLOAT(avoidtime));
+	syscall( BOTLIB_AI_SET_AVOID_GOAL_TIME, goalstate, number, G_PASSFLOAT(avoidtime));
 }
 
 void trap_BotInitLevelItems(void) {
@@ -688,7 +694,7 @@ void trap_BotSaveGoalFuzzyLogic(int goalstate, char *filename) {
 }
 
 void trap_BotMutateGoalFuzzyLogic(int goalstate, float range) {
-	syscall( BOTLIB_AI_MUTATE_GOAL_FUZZY_LOGIC, goalstate, PASSFLOAT(range) );
+	syscall( BOTLIB_AI_MUTATE_GOAL_FUZZY_LOGIC, goalstate, G_PASSFLOAT(range) );
 }
 
 int trap_BotAllocGoalState(int state) {
@@ -704,7 +710,7 @@ void trap_BotResetMoveState(int movestate) {
 }
 
 void trap_BotAddAvoidSpot(int movestate, vec3_t origin, float radius, int type) {
-	syscall( BOTLIB_AI_ADD_AVOID_SPOT, movestate, origin, PASSFLOAT(radius), type);
+	syscall( BOTLIB_AI_ADD_AVOID_SPOT, movestate, origin, G_PASSFLOAT(radius), type);
 }
 
 void trap_BotMoveToGoal(void /* struct bot_moveresult_s */ *result, int movestate, void /* struct bot_goal_s */ *goal, int travelflags) {
@@ -712,7 +718,7 @@ void trap_BotMoveToGoal(void /* struct bot_moveresult_s */ *result, int movestat
 }
 
 int trap_BotMoveInDirection(int movestate, vec3_t dir, float speed, int type) {
-	return syscall( BOTLIB_AI_MOVE_IN_DIRECTION, movestate, dir, PASSFLOAT(speed), type );
+	return syscall( BOTLIB_AI_MOVE_IN_DIRECTION, movestate, dir, G_PASSFLOAT(speed), type );
 }
 
 void trap_BotResetAvoidReach(int movestate) {
@@ -728,7 +734,7 @@ int trap_BotReachabilityArea(vec3_t origin, int testground) {
 }
 
 int trap_BotMovementViewTarget(int movestate, void /* struct bot_goal_s */ *goal, int travelflags, float lookahead, vec3_t target) {
-	return syscall( BOTLIB_AI_MOVEMENT_VIEW_TARGET, movestate, goal, travelflags, PASSFLOAT(lookahead), target );
+	return syscall( BOTLIB_AI_MOVEMENT_VIEW_TARGET, movestate, goal, travelflags, G_PASSFLOAT(lookahead), target );
 }
 
 int trap_BotPredictVisiblePosition(vec3_t origin, int areanum, void /* struct bot_goal_s */ *goal, int travelflags, vec3_t target) {
@@ -775,18 +781,18 @@ int trap_GeneticParentsAndChildSelection(int numranks, float *ranks, int *parent
 	return syscall( BOTLIB_AI_GENETIC_PARENTS_AND_CHILD_SELECTION, numranks, ranks, parent1, parent2, child );
 }
 
-int trap_PC_LoadSource( const char *filename ) {
+int g_trap_PC_LoadSource( const char *filename ) {
 	return syscall( BOTLIB_PC_LOAD_SOURCE, filename );
 }
 
-int trap_PC_FreeSource( int handle ) {
+int g_trap_PC_FreeSource( int handle ) {
 	return syscall( BOTLIB_PC_FREE_SOURCE, handle );
 }
 
-int trap_PC_ReadToken( int handle, pc_token_t *pc_token ) {
+int g_trap_PC_ReadToken( int handle, pc_token_t *pc_token ) {
 	return syscall( BOTLIB_PC_READ_TOKEN, handle, pc_token );
 }
 
-int trap_PC_SourceFileAndLine( int handle, char *filename, int *line ) {
+int g_trap_PC_SourceFileAndLine( int handle, char *filename, int *line ) {
 	return syscall( BOTLIB_PC_SOURCE_FILE_AND_LINE, handle, filename, line );
 }

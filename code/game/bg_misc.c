@@ -1391,14 +1391,22 @@ Handles the sequence numbers
 ===============
 */
 
-void	trap_Cvar_VariableStringBuffer( const char *var_name, char *buffer, int bufsize );
+#ifdef QAGAME
+void	g_trap_Cvar_VariableStringBuffer( const char *var_name, char *buffer, int bufsize );
+#else
+void	trap_Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufsize);
+#endif
 
 void BG_AddPredictableEventToPlayerstate( int newEvent, int eventParm, playerState_t *ps ) {
 
 #ifdef _DEBUG
 	{
 		char buf[256];
+#ifdef QAGAME
+		g_trap_Cvar_VariableStringBuffer("showevents", buf, sizeof(buf));
+#else
 		trap_Cvar_VariableStringBuffer("showevents", buf, sizeof(buf));
+#endif
 		if ( atof(buf) != 0 ) {
 #ifdef QAGAME
 			Com_Printf(" game event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount/*ps->commandTime*/, ps->eventSequence, eventnames[newEvent], eventParm);

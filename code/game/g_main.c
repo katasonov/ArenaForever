@@ -189,6 +189,45 @@ void G_ShutdownGame( int restart );
 void CheckExitRules( void );
 
 
+//Used for static linkage
+intptr_t gameMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11)
+{
+	switch (command) {
+	case GAME_INIT:
+		G_InitGame(arg0, arg1, arg2);
+		return 0;
+	case GAME_SHUTDOWN:
+		G_ShutdownGame(arg0);
+		return 0;
+	case GAME_CLIENT_CONNECT:
+		return (intptr_t)ClientConnect(arg0, arg1, arg2);
+	case GAME_CLIENT_THINK:
+		ClientThink(arg0);
+		return 0;
+	case GAME_CLIENT_USERINFO_CHANGED:
+		ClientUserinfoChanged(arg0);
+		return 0;
+	case GAME_CLIENT_DISCONNECT:
+		ClientDisconnect(arg0);
+		return 0;
+	case GAME_CLIENT_BEGIN:
+		ClientBegin(arg0);
+		return 0;
+	case GAME_CLIENT_COMMAND:
+		ClientCommand(arg0);
+		return 0;
+	case GAME_RUN_FRAME:
+		G_RunFrame(arg0);
+		return 0;
+	case GAME_CONSOLE_COMMAND:
+		return ConsoleCommand();
+	case BOTAI_START_FRAME:
+		return BotAIStartFrame(arg0);
+	}
+
+	return -1;
+}
+
 /*
 ================
 vmMain
@@ -197,44 +236,12 @@ This is the only way control passes into the module.
 This must be the very first function compiled into the .q3vm file
 ================
 */
+#ifndef USE_STATIC_MODS
 Q_EXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11  ) {
-	switch ( command ) {
-	case GAME_INIT:
-		G_InitGame( arg0, arg1, arg2 );
-		return 0;
-	case GAME_SHUTDOWN:
-		G_ShutdownGame( arg0 );
-		return 0;
-	case GAME_CLIENT_CONNECT:
-		return (intptr_t)ClientConnect( arg0, arg1, arg2 );
-	case GAME_CLIENT_THINK:
-		ClientThink( arg0 );
-		return 0;
-	case GAME_CLIENT_USERINFO_CHANGED:
-		ClientUserinfoChanged( arg0 );
-		return 0;
-	case GAME_CLIENT_DISCONNECT:
-		ClientDisconnect( arg0 );
-		return 0;
-	case GAME_CLIENT_BEGIN:
-		ClientBegin( arg0 );
-		return 0;
-	case GAME_CLIENT_COMMAND:
-		ClientCommand( arg0 );
-		return 0;
-	case GAME_RUN_FRAME:
-		G_RunFrame( arg0 );
-		return 0;
-	case GAME_CONSOLE_COMMAND:
-		return ConsoleCommand();
-	case BOTAI_START_FRAME:
-		return BotAIStartFrame( arg0 );
-	}
-
-	return -1;
+	return gameMain(command, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
 }
 
-
+#endif
 void QDECL G_Printf( const char *fmt, ... ) {
 	va_list		argptr;
 	char		text[1024];
@@ -243,7 +250,7 @@ void QDECL G_Printf( const char *fmt, ... ) {
 	Q_vsnprintf (text, sizeof(text), fmt, argptr);
 	va_end (argptr);
 
-	trap_Print( text );
+	g_trap_Print( text );
 }
 
 void QDECL G_Error( const char *fmt, ... ) {
@@ -254,7 +261,7 @@ void QDECL G_Error( const char *fmt, ... ) {
 	Q_vsnprintf (text, sizeof(text), fmt, argptr);
 	va_end (argptr);
 
-	trap_Error( text );
+	g_trap_Error( text );
 }
 
 /*
@@ -339,7 +346,7 @@ void G_RegisterCvars( void ) {
 	qboolean remapped = qfalse;
 
 	for ( i = 0, cv = gameCvarTable ; i < gameCvarTableSize ; i++, cv++ ) {
-		trap_Cvar_Register( cv->vmCvar, cv->cvarName,
+		g_trap_Cvar_Register( cv->vmCvar, cv->cvarName,
 			cv->defaultString, cv->cvarFlags );
 		if ( cv->vmCvar )
 			cv->modificationCount = cv->vmCvar->modificationCount;
@@ -356,8 +363,8 @@ void G_RegisterCvars( void ) {
 	// check some things
 	if ( g_gametype.integer < 0 || g_gametype.integer >= GT_MAX_GAME_TYPE ) {
 		G_Printf( "g_gametype %i is out of range, defaulting to 0\n", g_gametype.integer );
-		trap_Cvar_Set( "g_gametype", "0" );
-		trap_Cvar_Update( &g_gametype );
+		g_trap_Cvar_Set( "g_gametype", "0" );
+		g_trap_Cvar_Update( &g_gametype );
 	}
 
 	level.warmupModificationCount = g_warmup.modificationCount;
@@ -375,7 +382,7 @@ void G_UpdateCvars( void ) {
 
 	for ( i = 0, cv = gameCvarTable ; i < gameCvarTableSize ; i++, cv++ ) {
 		if ( cv->vmCvar ) {
-			trap_Cvar_Update( cv->vmCvar );
+			g_trap_Cvar_Update( cv->vmCvar );
 
 			if ( cv->modificationCount != cv->vmCvar->modificationCount ) {
 				cv->modificationCount = cv->vmCvar->modificationCount;
@@ -427,9 +434,9 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 
 	if ( g_gametype.integer != GT_SINGLE_PLAYER && g_logfile.string[0] ) {
 		if ( g_logfileSync.integer ) {
-			trap_FS_FOpenFile( g_logfile.string, &level.logFile, FS_APPEND_SYNC );
+			g_trap_FS_FOpenFile( g_logfile.string, &level.logFile, FS_APPEND_SYNC );
 		} else {
-			trap_FS_FOpenFile( g_logfile.string, &level.logFile, FS_APPEND );
+			g_trap_FS_FOpenFile( g_logfile.string, &level.logFile, FS_APPEND );
 		}
 		if ( !level.logFile ) {
 			G_Printf( "WARNING: Couldn't open logfile: %s\n", g_logfile.string );
@@ -522,7 +529,7 @@ void G_ShutdownGame( int restart ) {
 	if ( level.logFile ) {
 		G_LogPrintf("ShutdownGame:\n" );
 		G_LogPrintf("------------------------------------------------------------\n" );
-		trap_FS_FCloseFile( level.logFile );
+		g_trap_FS_FCloseFile( level.logFile );
 		level.logFile = 0;
 	}
 
@@ -538,6 +545,8 @@ void G_ShutdownGame( int restart ) {
 
 //===================================================================
 
+#ifndef USE_STATIC_MODS
+
 void QDECL Com_Error ( int level, const char *error, ... ) {
 	va_list		argptr;
 	char		text[1024];
@@ -546,7 +555,7 @@ void QDECL Com_Error ( int level, const char *error, ... ) {
 	Q_vsnprintf (text, sizeof(text), error, argptr);
 	va_end (argptr);
 
-	trap_Error( text );
+	g_trap_Error( text );
 }
 
 void QDECL Com_Printf( const char *msg, ... ) {
@@ -557,9 +566,9 @@ void QDECL Com_Printf( const char *msg, ... ) {
 	Q_vsnprintf (text, sizeof(text), msg, argptr);
 	va_end (argptr);
 
-	trap_Print( text );
+	g_trap_Print( text );
 }
-
+#endif // USE_STATIC_MODS
 /*
 ========================================================================
 
@@ -1013,7 +1022,7 @@ void BeginIntermission( void ) {
 	}
 #ifdef MISSIONPACK
 	if (g_singlePlayer.integer) {
-		trap_Cvar_Set("ui_singlePlayerActive", "0");
+		g_trap_Cvar_Set("ui_singlePlayerActive", "0");
 		UpdateTournamentInfo();
 	}
 #else
@@ -1060,11 +1069,11 @@ void ExitLevel (void) {
 		return;	
 	}
 
-	trap_Cvar_VariableStringBuffer( "nextmap", nextmap, sizeof(nextmap) );
-	trap_Cvar_VariableStringBuffer( "d1", d1, sizeof(d1) );
+	g_trap_Cvar_VariableStringBuffer( "nextmap", nextmap, sizeof(nextmap) );
+	g_trap_Cvar_VariableStringBuffer( "d1", d1, sizeof(d1) );
 
 	if( !Q_stricmp( nextmap, "map_restart 0" ) && Q_stricmp( d1, "" ) ) {
-		trap_Cvar_Set( "nextmap", "vstr d2" );
+		g_trap_Cvar_Set( "nextmap", "vstr d2" );
 		trap_SendConsoleCommand( EXEC_APPEND, "vstr d1\n" );
 	} else {
 		trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
@@ -1130,7 +1139,7 @@ void QDECL G_LogPrintf( const char *fmt, ... ) {
 		return;
 	}
 
-	trap_FS_Write( string, strlen( string ), level.logFile );
+	g_trap_FS_Write( string, strlen( string ), level.logFile );
 }
 
 /*
@@ -1481,7 +1490,7 @@ void CheckTournament( void ) {
 		// if the warmup time has counted down, restart
 		if ( level.time > level.warmupTime ) {
 			level.warmupTime += 10000;
-			trap_Cvar_Set( "g_restarted", "1" );
+			g_trap_Cvar_Set( "g_restarted", "1" );
 			trap_SendConsoleCommand( EXEC_APPEND, "map_restart 0\n" );
 			level.restarted = qtrue;
 			return;
@@ -1536,7 +1545,7 @@ void CheckTournament( void ) {
 		// if the warmup time has counted down, restart
 		if ( level.time > level.warmupTime ) {
 			level.warmupTime += 10000;
-			trap_Cvar_Set( "g_restarted", "1" );
+			g_trap_Cvar_Set( "g_restarted", "1" );
 			trap_SendConsoleCommand( EXEC_APPEND, "map_restart 0\n" );
 			level.restarted = qtrue;
 			return;
@@ -1715,9 +1724,9 @@ void CheckCvars( void ) {
 	if ( g_password.modificationCount != lastMod ) {
 		lastMod = g_password.modificationCount;
 		if ( *g_password.string && Q_stricmp( g_password.string, "none" ) ) {
-			trap_Cvar_Set( "g_needpass", "1" );
+			g_trap_Cvar_Set( "g_needpass", "1" );
 		} else {
-			trap_Cvar_Set( "g_needpass", "0" );
+			g_trap_Cvar_Set( "g_needpass", "0" );
 		}
 	}
 }
@@ -1864,6 +1873,6 @@ void G_RunFrame( int levelTime ) {
 		for (i = 0; i < MAX_GENTITIES; i++) {
 			G_Printf("%4i: %s\n", i, g_entities[i].classname);
 		}
-		trap_Cvar_Set("g_listEntity", "0");
+		g_trap_Cvar_Set("g_listEntity", "0");
 	}
 }

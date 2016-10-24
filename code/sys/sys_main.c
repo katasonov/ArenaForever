@@ -540,9 +540,12 @@ void *Sys_LoadDll(const char *name, qboolean useSystemLib)
 
 intptr_t uiMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11);
 void uiModuleEntry(intptr_t(QDECL *syscallptr)(intptr_t arg, ...));
+intptr_t gameMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11);
+void gameModuleEntry(intptr_t(QDECL *syscallptr)(intptr_t arg, ...));
 /*
 =================
-Sys_LoadGameDll
+Sys_LoadUIModuleStatic
+Sys_LoadQAGameModuleStatic
 
 Used to load module as static library instead of a dll or virtual machine
 =================
@@ -557,6 +560,15 @@ void Sys_LoadUIModuleStatic(
 	uiModuleEntry(systemcalls);
 }
 
+void Sys_LoadQAGameModuleStatic(
+	intptr_t(QDECL **entryPoint)(int, ...),
+	intptr_t(*systemcalls)(intptr_t, ...))
+{
+	Com_Printf("Loading Server QAGame\n");
+
+	*entryPoint = gameMain;
+	gameModuleEntry(systemcalls);
+}
 
 /*
 =================

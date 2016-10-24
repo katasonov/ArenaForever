@@ -143,7 +143,7 @@ void G_RankRunFrame()
 		if( ((g_fraglimit.integer == 0) || (g_fraglimit.integer > 100)) && 
 			((g_timelimit.integer == 0) || (g_timelimit.integer > 1000)) )
 		{
-			trap_Cvar_Set( "timelimit", "1000" );
+			g_trap_Cvar_Set( "timelimit", "1000" );
 		}
 	}
 
@@ -1085,15 +1085,15 @@ void G_RankGameOver( void )
 	}
 	
 	// hostname
-	trap_Cvar_VariableStringBuffer( "sv_hostname", str, sizeof(str) );
+	g_trap_Cvar_VariableStringBuffer( "sv_hostname", str, sizeof(str) );
 	trap_RankReportStr( -1, -1, QGR_KEY_HOSTNAME, str );
 
 	// map
-	trap_Cvar_VariableStringBuffer( "mapname", str, sizeof(str) );
+	g_trap_Cvar_VariableStringBuffer( "mapname", str, sizeof(str) );
 	trap_RankReportStr( -1, -1, QGR_KEY_MAP, str );
 
 	// mod
-	trap_Cvar_VariableStringBuffer( "fs_game", str, sizeof(str) );
+	g_trap_Cvar_VariableStringBuffer( "fs_game", str, sizeof(str) );
 	trap_RankReportStr( -1, -1, QGR_KEY_MOD, str );
 
 	// gametype
@@ -1129,7 +1129,7 @@ void G_RankGameOver( void )
 	trap_RankReportInt( -1, -1, QGR_KEY_DEDICATED, num, 0 );
 
 	// version
-	trap_Cvar_VariableStringBuffer( "version", str, sizeof(str) );
+	g_trap_Cvar_VariableStringBuffer( "version", str, sizeof(str) );
 	trap_RankReportStr( -1, -1, QGR_KEY_VERSION, str );
 }
 

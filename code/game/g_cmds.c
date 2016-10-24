@@ -133,9 +133,9 @@ char	*ConcatArgs( int start ) {
 	char	arg[MAX_STRING_CHARS];
 
 	len = 0;
-	c = trap_Argc();
+	c = g_trap_Argc();
 	for ( i = start ; i < c ; i++ ) {
-		trap_Argv( i, arg, sizeof( arg ) );
+		g_trap_Argv( i, arg, sizeof( arg ) );
 		tlen = strlen( arg );
 		if ( len + tlen >= MAX_STRING_CHARS - 1 ) {
 			break;
@@ -444,10 +444,10 @@ void Cmd_TeamTask_f( gentity_t *ent ) {
 	int task;
 	int client = ent->client - level.clients;
 
-	if ( trap_Argc() != 2 ) {
+	if ( g_trap_Argc() != 2 ) {
 		return;
 	}
-	trap_Argv( 1, arg, sizeof( arg ) );
+	g_trap_Argv( 1, arg, sizeof( arg ) );
 	task = atoi( arg );
 
 	trap_GetUserinfo(client, userinfo, sizeof(userinfo));
@@ -669,7 +669,7 @@ void Cmd_Team_f( gentity_t *ent ) {
 	int			oldTeam;
 	char		s[MAX_TOKEN_CHARS];
 
-	if ( trap_Argc() != 2 ) {
+	if ( g_trap_Argc() != 2 ) {
 		oldTeam = ent->client->sess.sessionTeam;
 		switch ( oldTeam ) {
 		case TEAM_BLUE:
@@ -699,7 +699,7 @@ void Cmd_Team_f( gentity_t *ent ) {
 		ent->client->sess.losses++;
 	}
 
-	trap_Argv( 1, s, sizeof( s ) );
+	g_trap_Argv( 1, s, sizeof( s ) );
 
 	SetTeam( ent, s );
 
@@ -716,14 +716,14 @@ void Cmd_Follow_f( gentity_t *ent ) {
 	int		i;
 	char	arg[MAX_TOKEN_CHARS];
 
-	if ( trap_Argc() != 2 ) {
+	if ( g_trap_Argc() != 2 ) {
 		if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
 			StopFollowing( ent );
 		}
 		return;
 	}
 
-	trap_Argv( 1, arg, sizeof( arg ) );
+	g_trap_Argv( 1, arg, sizeof( arg ) );
 	i = ClientNumberFromString( ent, arg );
 	if ( i == -1 ) {
 		return;
@@ -923,7 +923,7 @@ Cmd_Say_f
 static void Cmd_Say_f( gentity_t *ent, int mode, qboolean arg0 ) {
 	char		*p;
 
-	if ( trap_Argc () < 2 && !arg0 ) {
+	if ( g_trap_Argc () < 2 && !arg0 ) {
 		return;
 	}
 
@@ -950,12 +950,12 @@ static void Cmd_Tell_f( gentity_t *ent ) {
 	char		*p;
 	char		arg[MAX_TOKEN_CHARS];
 
-	if ( trap_Argc () < 3 ) {
+	if ( g_trap_Argc () < 3 ) {
 		trap_SendServerCommand( ent-g_entities, "print \"Usage: tell <player id> <message>\n\"" );
 		return;
 	}
 
-	trap_Argv( 1, arg, sizeof( arg ) );
+	g_trap_Argv( 1, arg, sizeof( arg ) );
 	targetNum = ClientNumberFromString( ent, arg );
 	if ( targetNum == -1 ) {
 		return;
@@ -1049,7 +1049,7 @@ Cmd_Voice_f
 static void Cmd_Voice_f( gentity_t *ent, int mode, qboolean arg0, qboolean voiceonly ) {
 	char		*p;
 
-	if ( trap_Argc () < 2 && !arg0 ) {
+	if ( g_trap_Argc () < 2 && !arg0 ) {
 		return;
 	}
 
@@ -1076,12 +1076,12 @@ static void Cmd_VoiceTell_f( gentity_t *ent, qboolean voiceonly ) {
 	char		*id;
 	char		arg[MAX_TOKEN_CHARS];
 
-	if ( trap_Argc () < 3 ) {
+	if ( g_trap_Argc () < 3 ) {
 		trap_SendServerCommand( ent-g_entities, va( "print \"Usage: %s <player id> <voice id>\n\"", voiceonly ? "votell" : "vtell" ) );
 		return;
 	}
 
-	trap_Argv( 1, arg, sizeof( arg ) );
+	g_trap_Argv( 1, arg, sizeof( arg ) );
 	targetNum = ClientNumberFromString( ent, arg );
 	if ( targetNum == -1 ) {
 		return;
@@ -1197,12 +1197,12 @@ void Cmd_GameCommand_f( gentity_t *ent ) {
 	int			order;
 	char		arg[MAX_TOKEN_CHARS];
 
-	if ( trap_Argc() != 3 ) {
+	if ( g_trap_Argc() != 3 ) {
 		trap_SendServerCommand( ent-g_entities, va( "print \"Usage: gc <player id> <order 0-%d>\n\"", numgc_orders - 1 ) );
 		return;
 	}
 
-	trap_Argv( 2, arg, sizeof( arg ) );
+	g_trap_Argv( 2, arg, sizeof( arg ) );
 	order = atoi( arg );
 
 	if ( order < 0 || order >= numgc_orders ) {
@@ -1210,7 +1210,7 @@ void Cmd_GameCommand_f( gentity_t *ent ) {
 		return;
 	}
 
-	trap_Argv( 1, arg, sizeof( arg ) );
+	g_trap_Argv( 1, arg, sizeof( arg ) );
 	targetNum = ClientNumberFromString( ent, arg );
 	if ( targetNum == -1 ) {
 		return;
@@ -1280,8 +1280,8 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 	}
 
 	// make sure it is a valid command to vote on
-	trap_Argv( 1, arg1, sizeof( arg1 ) );
-	trap_Argv( 2, arg2, sizeof( arg2 ) );
+	g_trap_Argv( 1, arg1, sizeof( arg1 ) );
+	g_trap_Argv( 2, arg2, sizeof( arg2 ) );
 
 	// check for command separators in arg2
 	for( c = arg2; *c; ++c) {
@@ -1331,7 +1331,7 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 		// this allows a player to change maps, but not upset the map rotation
 		char	s[MAX_STRING_CHARS];
 
-		trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof(s) );
+		g_trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof(s) );
 		if (*s) {
 			Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %s; set nextmap \"%s\"", arg1, arg2, s );
 		} else {
@@ -1341,7 +1341,7 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 	} else if ( !Q_stricmp( arg1, "nextmap" ) ) {
 		char	s[MAX_STRING_CHARS];
 
-		trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof(s) );
+		g_trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof(s) );
 		if (!*s) {
 			trap_SendServerCommand( ent-g_entities, "print \"nextmap not set.\n\"" );
 			return;
@@ -1396,7 +1396,7 @@ void Cmd_Vote_f( gentity_t *ent ) {
 
 	ent->client->ps.eFlags |= EF_VOTED;
 
-	trap_Argv( 1, msg, sizeof( msg ) );
+	g_trap_Argv( 1, msg, sizeof( msg ) );
 
 	if ( tolower( msg[0] ) == 'y' || msg[0] == '1' ) {
 		level.voteYes++;
@@ -1447,12 +1447,12 @@ void Cmd_CallTeamVote_f( gentity_t *ent ) {
 	}
 
 	// make sure it is a valid command to vote on
-	trap_Argv( 1, arg1, sizeof( arg1 ) );
+	g_trap_Argv( 1, arg1, sizeof( arg1 ) );
 	arg2[0] = '\0';
-	for ( i = 2; i < trap_Argc(); i++ ) {
+	for ( i = 2; i < g_trap_Argc(); i++ ) {
 		if (i > 2)
 			strcat(arg2, " ");
-		trap_Argv( i, &arg2[strlen(arg2)], sizeof( arg2 ) - strlen(arg2) );
+		g_trap_Argv( i, &arg2[strlen(arg2)], sizeof( arg2 ) - strlen(arg2) );
 	}
 
 	if( strchr( arg1, ';' ) || strchr( arg2, ';' ) ) {
@@ -1571,7 +1571,7 @@ void Cmd_TeamVote_f( gentity_t *ent ) {
 
 	ent->client->ps.eFlags |= EF_TEAMVOTED;
 
-	trap_Argv( 1, msg, sizeof( msg ) );
+	g_trap_Argv( 1, msg, sizeof( msg ) );
 
 	if ( tolower( msg[0] ) == 'y' || msg[0] == '1' ) {
 		level.teamVoteYes[cs_offset]++;
@@ -1600,18 +1600,18 @@ void Cmd_SetViewpos_f( gentity_t *ent ) {
 		trap_SendServerCommand( ent-g_entities, "print \"Cheats are not enabled on this server.\n\"");
 		return;
 	}
-	if ( trap_Argc() != 5 ) {
+	if ( g_trap_Argc() != 5 ) {
 		trap_SendServerCommand( ent-g_entities, "print \"usage: setviewpos x y z yaw\n\"");
 		return;
 	}
 
 	VectorClear( angles );
 	for ( i = 0 ; i < 3 ; i++ ) {
-		trap_Argv( i + 1, buffer, sizeof( buffer ) );
+		g_trap_Argv( i + 1, buffer, sizeof( buffer ) );
 		origin[i] = atof( buffer );
 	}
 
-	trap_Argv( 4, buffer, sizeof( buffer ) );
+	g_trap_Argv( 4, buffer, sizeof( buffer ) );
 	angles[YAW] = atof( buffer );
 
 	TeleportPlayer( ent, origin, angles );
@@ -1656,7 +1656,7 @@ void ClientCommand( int clientNum ) {
 	}
 
 
-	trap_Argv( 0, cmd, sizeof( cmd ) );
+	g_trap_Argv( 0, cmd, sizeof( cmd ) );
 
 	if (Q_stricmp (cmd, "say") == 0) {
 		Cmd_Say_f (ent, SAY_ALL, qfalse);

@@ -612,15 +612,24 @@ vm_t *VM_Create( const char *module, intptr_t (*systemCalls)(intptr_t *),
 	{
 		retval = FS_FindVM(&startSearch, filename, sizeof(filename), module, (interpret == VMI_NATIVE));
 
+#ifdef USE_STATIC_MODS
+		//This used to static compile mods to simplify debuggin
 		//Do static linking of ui
 		if (Q_strncmp(module, "ui", 2) == 0)
 		{
 			Sys_LoadUIModuleStatic(&vm->entryPoint, VM_DllSyscall);
-
-				vm->systemCall = systemCalls;
-				return vm;
-		}		
-		else if(retval == VMI_NATIVE)
+			vm->systemCall = systemCalls;
+			return vm;
+		}
+		else if (Q_strncmp(module, "qagame", 6) == 0)
+		{
+			Sys_LoadQAGameModuleStatic(&vm->entryPoint, VM_DllSyscall);
+			vm->systemCall = systemCalls;
+			return vm;
+		}
+		else 
+#endif
+		if(retval == VMI_NATIVE)
 		{
 			Com_Printf("Try loading dll file %s\n", filename);
 

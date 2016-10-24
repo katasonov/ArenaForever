@@ -4667,7 +4667,7 @@ void BotCheckConsoleMessages(bot_state_t *bs) {
 				//unify the message
 				trap_UnifyWhiteSpaces(message);
 				//
-				trap_Cvar_Update(&bot_testrchat);
+				g_trap_Cvar_Update(&bot_testrchat);
 				if (bot_testrchat.integer) {
 					//
 					trap_BotLibVarSet("bot_testrchat", "1");
@@ -5405,14 +5405,14 @@ void BotSetupDeathmatchAI(void) {
 	gametype = trap_Cvar_VariableIntegerValue("g_gametype");
 	maxclients = trap_Cvar_VariableIntegerValue("sv_maxclients");
 
-	trap_Cvar_Register(&bot_rocketjump, "bot_rocketjump", "1", 0);
-	trap_Cvar_Register(&bot_grapple, "bot_grapple", "0", 0);
-	trap_Cvar_Register(&bot_fastchat, "bot_fastchat", "0", 0);
-	trap_Cvar_Register(&bot_nochat, "bot_nochat", "0", 0);
-	trap_Cvar_Register(&bot_testrchat, "bot_testrchat", "0", 0);
-	trap_Cvar_Register(&bot_challenge, "bot_challenge", "0", 0);
-	trap_Cvar_Register(&bot_predictobstacles, "bot_predictobstacles", "1", 0);
-	trap_Cvar_Register(&g_spSkill, "g_spSkill", "2", 0);
+	g_trap_Cvar_Register(&bot_rocketjump, "bot_rocketjump", "1", 0);
+	g_trap_Cvar_Register(&bot_grapple, "bot_grapple", "0", 0);
+	g_trap_Cvar_Register(&bot_fastchat, "bot_fastchat", "0", 0);
+	g_trap_Cvar_Register(&bot_nochat, "bot_nochat", "0", 0);
+	g_trap_Cvar_Register(&bot_testrchat, "bot_testrchat", "0", 0);
+	g_trap_Cvar_Register(&bot_challenge, "bot_challenge", "0", 0);
+	g_trap_Cvar_Register(&bot_predictobstacles, "bot_predictobstacles", "1", 0);
+	g_trap_Cvar_Register(&g_spSkill, "g_spSkill", "2", 0);
 	//
 	if (gametype == GT_CTF) {
 		if (trap_BotGetLevelItemGoal(-1, "Red Flag", &ctf_redflag) < 0)

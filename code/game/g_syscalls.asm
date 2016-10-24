@@ -1,19 +1,19 @@
 code
 
-equ	trap_Print				-1
-equ	trap_Error				-2
-equ	trap_Milliseconds		-3
-equ	trap_Cvar_Register		-4
-equ	trap_Cvar_Update		-5
-equ	trap_Cvar_Set			-6
+equ	g_trap_Print				-1
+equ	g_trap_Error				-2
+equ	g_trap_Milliseconds		-3
+equ	g_trap_Cvar_Register		-4
+equ	g_trap_Cvar_Update		-5
+equ	g_trap_Cvar_Set			-6
 equ	trap_Cvar_VariableIntegerValue	-7
-equ	trap_Cvar_VariableStringBuffer	-8
-equ	trap_Argc				-9
-equ	trap_Argv				-10
-equ	trap_FS_FOpenFile		-11
-equ	trap_FS_Read			-12
-equ	trap_FS_Write			-13
-equ	trap_FS_FCloseFile		-14
+equ	g_trap_Cvar_VariableStringBuffer	-8
+equ	g_trap_Argc				-9
+equ	g_trap_Argv				-10
+equ	g_trap_FS_FOpenFile		-11
+equ	g_trap_FS_Read			-12
+equ	g_trap_FS_Write			-13
+equ	g_trap_FS_FCloseFile		-14
 equ	trap_SendConsoleCommand	-15
 equ	trap_LocateGameData		-16
 equ	trap_DropClient			-17
@@ -38,14 +38,14 @@ equ	trap_BotAllocateClient	-35
 equ	trap_BotFreeClient		-36
 equ	trap_GetUsercmd			-37
 equ	trap_GetEntityToken		-38
-equ	trap_FS_GetFileList		-39
+equ	g_trap_FS_GetFileList		-39
 equ trap_DebugPolygonCreate	-40
 equ trap_DebugPolygonDelete	-41
-equ trap_RealTime			-42
+equ g_trap_RealTime			-42
 equ trap_SnapVector			-43
 equ trap_TraceCapsule		-44
 equ trap_EntityContactCapsule	-45
-equ trap_FS_Seek -46
+equ g_trap_FS_Seek -46
 
 equ	memset					-101
 equ	memcpy					-102
