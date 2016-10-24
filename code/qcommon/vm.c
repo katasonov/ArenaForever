@@ -627,6 +627,12 @@ vm_t *VM_Create( const char *module, intptr_t (*systemCalls)(intptr_t *),
 			vm->systemCall = systemCalls;
 			return vm;
 		}
+		else if (Q_strncmp(module, "cgame", 5) == 0)
+		{
+			Sys_LoadCGameModuleStatic(&vm->entryPoint, VM_DllSyscall);
+			vm->systemCall = systemCalls;
+			return vm;
+		}
 		else 
 #endif
 		if(retval == VMI_NATIVE)

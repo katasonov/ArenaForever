@@ -542,6 +542,8 @@ intptr_t uiMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, i
 void uiModuleEntry(intptr_t(QDECL *syscallptr)(intptr_t arg, ...));
 intptr_t gameMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11);
 void gameModuleEntry(intptr_t(QDECL *syscallptr)(intptr_t arg, ...));
+intptr_t cgameMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11);
+void cgameModuleEntry(intptr_t(QDECL *syscallptr)(intptr_t arg, ...));
 /*
 =================
 Sys_LoadUIModuleStatic
@@ -569,6 +571,17 @@ void Sys_LoadQAGameModuleStatic(
 	*entryPoint = gameMain;
 	gameModuleEntry(systemcalls);
 }
+
+void Sys_LoadCGameModuleStatic(
+	intptr_t(QDECL **entryPoint)(int, ...),
+	intptr_t(*systemcalls)(intptr_t, ...))
+{
+	Com_Printf("Loading Server CGame\n");
+
+	*entryPoint = cgameMain;
+	cgameModuleEntry(systemcalls);
+}
+
 
 /*
 =================
