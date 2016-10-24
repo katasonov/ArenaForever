@@ -170,7 +170,7 @@ void CG_ImpactMark( qhandle_t markShader, const vec3_t origin, const vec3_t dir,
 
 	// get the fragments
 	VectorScale( dir, -20, projection );
-	numFragments = cg_trapCM_MarkFragments( 4, (void *)originalPoints,
+	numFragments = cg_trap_CM_MarkFragments( 4, (void *)originalPoints,
 					projection, MAX_MARK_POINTS, markPoints[0],
 					MAX_MARK_FRAGMENTS, markFragments );
 
@@ -202,7 +202,7 @@ void CG_ImpactMark( qhandle_t markShader, const vec3_t origin, const vec3_t dir,
 
 		// if it is a temporary (shadow) mark, add it immediately and forget about it
 		if ( temporary ) {
-			cg_trapR_AddPolyToScene( markShader, mf->numPoints, verts );
+			cg_trap_R_AddPolyToScene( markShader, mf->numPoints, verts );
 			continue;
 		}
 
@@ -288,6 +288,6 @@ void CG_AddMarks( void ) {
 		}
 
 
-		cg_trapR_AddPolyToScene( mp->markShader, mp->poly.numVerts, mp->verts );
+		cg_trap_R_AddPolyToScene( mp->markShader, mp->poly.numVerts, mp->verts );
 	}
 }

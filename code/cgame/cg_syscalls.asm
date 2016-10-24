@@ -17,7 +17,7 @@ equ	cg_trapFS_FCloseFile					-14
 equ	cg_trapSendConsoleCommand				-15
 equ	cg_trapAddCommand						-16
 equ	cg_trapSendClientCommand				-17
-equ	cg_trapUpdateScreen					-18
+equ	cg_trap_UpdateScreen					-18
 equ	cg_trapCM_LoadMap						-19
 equ	cg_trapCM_NumInlineModels				-20
 equ	cg_trapCM_InlineModel					-21

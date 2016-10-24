@@ -299,7 +299,7 @@ void CG_ObeliskPain( vec3_t org ) {
 	} else {
 		sfx = cgs.media.obeliskHitSound3;
 	}
-	cg_trapS_StartSound ( org, ENTITYNUM_NONE, CHAN_BODY, sfx );
+	cg_trap_S_StartSound ( org, ENTITYNUM_NONE, CHAN_BODY, sfx );
 }
 
 
@@ -341,7 +341,7 @@ void CG_InvulnerabilityImpact( vec3_t org, vec3_t angles ) {
 	} else {
 		sfx = cgs.media.invulnerabilityImpactSound3;
 	}
-	cg_trapS_StartSound (org, ENTITYNUM_NONE, CHAN_BODY, sfx );
+	cg_trap_S_StartSound (org, ENTITYNUM_NONE, CHAN_BODY, sfx );
 }
 
 /*
@@ -374,7 +374,7 @@ void CG_InvulnerabilityJuiced( vec3_t org ) {
 	VectorClear(angles);
 	AnglesToAxis( angles, re->axis );
 
-	cg_trapS_StartSound (org, ENTITYNUM_NONE, CHAN_BODY, cgs.media.invulnerabilityJuicedSound );
+	cg_trap_S_StartSound (org, ENTITYNUM_NONE, CHAN_BODY, cgs.media.invulnerabilityJuicedSound );
 }
 
 #endif

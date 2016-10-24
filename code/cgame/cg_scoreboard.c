@@ -85,7 +85,7 @@ static void CG_DrawClientScore( int y, score_t *score, float *color, float fade,
 	int iconx, headx;
 
 	if ( score->client < 0 || score->client >= cgs.maxclients ) {
-		cg_Com_Printf( "Bad score->client: %i\n", score->client );
+		Com_Printf( "Bad score->client: %i\n", score->client );
 		return;
 	}
 	
@@ -460,7 +460,7 @@ void CG_DrawOldTourneyScoreboard( void ) {
 	// request more scores regularly
 	if ( cg.scoresRequestTime + 2000 < cg.time ) {
 		cg.scoresRequestTime = cg.time;
-		cg_trapSendClientCommand( "score" );
+		cg_trap_SendClientCommand( "score" );
 	}
 
 	// draw the dialog background

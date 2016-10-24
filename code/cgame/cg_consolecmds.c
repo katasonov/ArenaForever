@@ -40,8 +40,8 @@ void CG_TargetCommand_f( void ) {
 		return;
 	}
 
-	cg_trapArgv( 1, test, 4 );
-	cg_trapSendClientCommand( va( "gc %i %i", targetNum, atoi( test ) ) );
+	cg_trap_Argv( 1, test, 4 );
+	cg_trap_SendClientCommand( va( "gc %i %i", targetNum, atoi( test ) ) );
 }
 
 
@@ -54,7 +54,7 @@ Keybinding command
 =================
 */
 static void CG_SizeUp_f (void) {
-	cg_trapCvar_Set("cg_viewsize", va("%i",(int)(cg_viewsize.integer+10)));
+	cg_trap_Cvar_Set("cg_viewsize", va("%i",(int)(cg_viewsize.integer+10)));
 }
 
 
@@ -66,7 +66,7 @@ Keybinding command
 =================
 */
 static void CG_SizeDown_f (void) {
-	cg_trapCvar_Set("cg_viewsize", va("%i",(int)(cg_viewsize.integer-10)));
+	cg_trap_Cvar_Set("cg_viewsize", va("%i",(int)(cg_viewsize.integer-10)));
 }
 
 
@@ -93,7 +93,7 @@ static void CG_ScoresDown_f( void ) {
 		// the scores are more than two seconds out of data,
 		// so request new ones
 		cg.scoresRequestTime = cg.time;
-		cg_trapSendClientCommand( "score" );
+		cg_trap_SendClientCommand( "score" );
 
 		// leave the current scores up if they were already
 		// displayed, but if this is the first hit, clear them out
@@ -127,7 +127,7 @@ static void CG_LoadHud_f( void) {
 	String_Init();
 	Menu_Reset();
 	
-	cg_trapCvar_VariableStringBuffer("cg_hudFiles", buff, sizeof(buff));
+	cg_trap_Cvar_VariableStringBuffer("cg_hudFiles", buff, sizeof(buff));
 	hudSet = buff;
 	if (hudSet[0] == '\0') {
 		hudSet = "ui/hud.txt";
@@ -157,24 +157,24 @@ static void CG_scrollScoresUp_f( void) {
 
 
 static void CG_spWin_f( void) {
-	cg_trapCvar_Set("cg_cameraOrbit", "2");
-	cg_trapCvar_Set("cg_cameraOrbitDelay", "35");
-	cg_trapCvar_Set("cg_thirdPerson", "1");
-	cg_trapCvar_Set("cg_thirdPersonAngle", "0");
-	cg_trapCvar_Set("cg_thirdPersonRange", "100");
+	cg_trap_Cvar_Set("cg_cameraOrbit", "2");
+	cg_trap_Cvar_Set("cg_cameraOrbitDelay", "35");
+	cg_trap_Cvar_Set("cg_thirdPerson", "1");
+	cg_trap_Cvar_Set("cg_thirdPersonAngle", "0");
+	cg_trap_Cvar_Set("cg_thirdPersonRange", "100");
 	CG_AddBufferedSound(cgs.media.winnerSound);
-	//cg_trapS_StartLocalSound(cgs.media.winnerSound, CHAN_ANNOUNCER);
+	//cg_trap_S_StartLocalSound(cgs.media.winnerSound, CHAN_ANNOUNCER);
 	CG_CenterPrint("YOU WIN!", SCREEN_HEIGHT * .30, 0);
 }
 
 static void CG_spLose_f( void) {
-	cg_trapCvar_Set("cg_cameraOrbit", "2");
-	cg_trapCvar_Set("cg_cameraOrbitDelay", "35");
-	cg_trapCvar_Set("cg_thirdPerson", "1");
-	cg_trapCvar_Set("cg_thirdPersonAngle", "0");
-	cg_trapCvar_Set("cg_thirdPersonRange", "100");
+	cg_trap_Cvar_Set("cg_cameraOrbit", "2");
+	cg_trap_Cvar_Set("cg_cameraOrbitDelay", "35");
+	cg_trap_Cvar_Set("cg_thirdPerson", "1");
+	cg_trap_Cvar_Set("cg_thirdPersonAngle", "0");
+	cg_trap_Cvar_Set("cg_thirdPersonRange", "100");
 	CG_AddBufferedSound(cgs.media.loserSound);
-	//cg_trapS_StartLocalSound(cgs.media.loserSound, CHAN_ANNOUNCER);
+	//cg_trap_S_StartLocalSound(cgs.media.loserSound, CHAN_ANNOUNCER);
 	CG_CenterPrint("YOU LOSE...", SCREEN_HEIGHT * .30, 0);
 }
 
@@ -190,9 +190,9 @@ static void CG_TellTarget_f( void ) {
 		return;
 	}
 
-	cg_trapArgs( message, 128 );
+	cg_trap_Args( message, 128 );
 	Com_sprintf( command, 128, "tell %i %s", clientNum, message );
-	cg_trapSendClientCommand( command );
+	cg_trap_SendClientCommand( command );
 }
 
 static void CG_TellAttacker_f( void ) {
@@ -205,9 +205,9 @@ static void CG_TellAttacker_f( void ) {
 		return;
 	}
 
-	cg_trapArgs( message, 128 );
+	cg_trap_Args( message, 128 );
 	Com_sprintf( command, 128, "tell %i %s", clientNum, message );
-	cg_trapSendClientCommand( command );
+	cg_trap_SendClientCommand( command );
 }
 
 #ifdef MISSIONPACK
@@ -221,9 +221,9 @@ static void CG_VoiceTellTarget_f( void ) {
 		return;
 	}
 
-	cg_trapArgs( message, 128 );
+	cg_trap_Args( message, 128 );
 	Com_sprintf( command, 128, "vtell %i %s", clientNum, message );
-	cg_trapSendClientCommand( command );
+	cg_trap_SendClientCommand( command );
 }
 
 static void CG_VoiceTellAttacker_f( void ) {
@@ -236,9 +236,9 @@ static void CG_VoiceTellAttacker_f( void ) {
 		return;
 	}
 
-	cg_trapArgs( message, 128 );
+	cg_trap_Args( message, 128 );
 	Com_sprintf( command, 128, "vtell %i %s", clientNum, message );
-	cg_trapSendClientCommand( command );
+	cg_trap_SendClientCommand( command );
 }
 
 static void CG_NextTeamMember_f( void ) {
@@ -282,17 +282,17 @@ static void CG_NextOrder_f( void ) {
 
 
 static void CG_ConfirmOrder_f (void ) {
-	cg_trapSendConsoleCommand(va("cmd vtell %d %s\n", cgs.acceptLeader, VOICECHAT_YES));
-	cg_trapSendConsoleCommand("+button5; wait; -button5");
+	cg_trap_SendConsoleCommand(va("cmd vtell %d %s\n", cgs.acceptLeader, VOICECHAT_YES));
+	cg_trap_SendConsoleCommand("+button5; wait; -button5");
 	if (cg.time < cgs.acceptOrderTime) {
-		cg_trapSendClientCommand(va("teamtask %d\n", cgs.acceptTask));
+		cg_trap_SendClientCommand(va("teamtask %d\n", cgs.acceptTask));
 		cgs.acceptOrderTime = 0;
 	}
 }
 
 static void CG_DenyOrder_f (void ) {
-	cg_trapSendConsoleCommand(va("cmd vtell %d %s\n", cgs.acceptLeader, VOICECHAT_NO));
-	cg_trapSendConsoleCommand("+button6; wait; -button6");
+	cg_trap_SendConsoleCommand(va("cmd vtell %d %s\n", cgs.acceptLeader, VOICECHAT_NO));
+	cg_trap_SendConsoleCommand("+button6; wait; -button6");
 	if (cg.time < cgs.acceptOrderTime) {
 		cgs.acceptOrderTime = 0;
 	}
@@ -300,65 +300,65 @@ static void CG_DenyOrder_f (void ) {
 
 static void CG_TaskOffense_f (void ) {
 	if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF) {
-		cg_trapSendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONGETFLAG));
+		cg_trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONGETFLAG));
 	} else {
-		cg_trapSendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONOFFENSE));
+		cg_trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONOFFENSE));
 	}
-	cg_trapSendClientCommand(va("teamtask %d\n", TEAMTASK_OFFENSE));
+	cg_trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_OFFENSE));
 }
 
 static void CG_TaskDefense_f (void ) {
-	cg_trapSendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONDEFENSE));
-	cg_trapSendClientCommand(va("teamtask %d\n", TEAMTASK_DEFENSE));
+	cg_trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONDEFENSE));
+	cg_trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_DEFENSE));
 }
 
 static void CG_TaskPatrol_f (void ) {
-	cg_trapSendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONPATROL));
-	cg_trapSendClientCommand(va("teamtask %d\n", TEAMTASK_PATROL));
+	cg_trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONPATROL));
+	cg_trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_PATROL));
 }
 
 static void CG_TaskCamp_f (void ) {
-	cg_trapSendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONCAMPING));
-	cg_trapSendClientCommand(va("teamtask %d\n", TEAMTASK_CAMP));
+	cg_trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONCAMPING));
+	cg_trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_CAMP));
 }
 
 static void CG_TaskFollow_f (void ) {
-	cg_trapSendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONFOLLOW));
-	cg_trapSendClientCommand(va("teamtask %d\n", TEAMTASK_FOLLOW));
+	cg_trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONFOLLOW));
+	cg_trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_FOLLOW));
 }
 
 static void CG_TaskRetrieve_f (void ) {
-	cg_trapSendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONRETURNFLAG));
-	cg_trapSendClientCommand(va("teamtask %d\n", TEAMTASK_RETRIEVE));
+	cg_trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONRETURNFLAG));
+	cg_trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_RETRIEVE));
 }
 
 static void CG_TaskEscort_f (void ) {
-	cg_trapSendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONFOLLOWCARRIER));
-	cg_trapSendClientCommand(va("teamtask %d\n", TEAMTASK_ESCORT));
+	cg_trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONFOLLOWCARRIER));
+	cg_trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_ESCORT));
 }
 
 static void CG_TaskOwnFlag_f (void ) {
-	cg_trapSendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_IHAVEFLAG));
+	cg_trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_IHAVEFLAG));
 }
 
 static void CG_TauntKillInsult_f (void ) {
-	cg_trapSendConsoleCommand("cmd vsay kill_insult\n");
+	cg_trap_SendConsoleCommand("cmd vsay kill_insult\n");
 }
 
 static void CG_TauntPraise_f (void ) {
-	cg_trapSendConsoleCommand("cmd vsay praise\n");
+	cg_trap_SendConsoleCommand("cmd vsay praise\n");
 }
 
 static void CG_TauntTaunt_f (void ) {
-	cg_trapSendConsoleCommand("cmd vtaunt\n");
+	cg_trap_SendConsoleCommand("cmd vtaunt\n");
 }
 
 static void CG_TauntDeathInsult_f (void ) {
-	cg_trapSendConsoleCommand("cmd vsay death_insult\n");
+	cg_trap_SendConsoleCommand("cmd vsay death_insult\n");
 }
 
 static void CG_TauntGauntlet_f (void ) {
-	cg_trapSendConsoleCommand("cmd vsay kill_gauntlet\n");
+	cg_trap_SendConsoleCommand("cmd vsay kill_gauntlet\n");
 }
 
 static void CG_TaskSuicide_f (void ) {
@@ -371,7 +371,7 @@ static void CG_TaskSuicide_f (void ) {
 	}
 
 	Com_sprintf( command, 128, "tell %i suicide", clientNum );
-	cg_trapSendClientCommand( command );
+	cg_trap_SendClientCommand( command );
 }
 
 
@@ -416,25 +416,25 @@ CG_StartOrbit_f
 static void CG_StartOrbit_f( void ) {
 	char var[MAX_TOKEN_CHARS];
 
-	cg_trapCvar_VariableStringBuffer( "developer", var, sizeof( var ) );
+	cg_trap_Cvar_VariableStringBuffer( "developer", var, sizeof( var ) );
 	if ( !atoi(var) ) {
 		return;
 	}
 	if (cg_cameraOrbit.value != 0) {
-		cg_trapCvar_Set ("cg_cameraOrbit", "0");
-		cg_trapCvar_Set("cg_thirdPerson", "0");
+		cg_trap_Cvar_Set ("cg_cameraOrbit", "0");
+		cg_trap_Cvar_Set("cg_thirdPerson", "0");
 	} else {
-		cg_trapCvar_Set("cg_cameraOrbit", "5");
-		cg_trapCvar_Set("cg_thirdPerson", "1");
-		cg_trapCvar_Set("cg_thirdPersonAngle", "0");
-		cg_trapCvar_Set("cg_thirdPersonRange", "100");
+		cg_trap_Cvar_Set("cg_cameraOrbit", "5");
+		cg_trap_Cvar_Set("cg_thirdPerson", "1");
+		cg_trap_Cvar_Set("cg_thirdPersonAngle", "0");
+		cg_trap_Cvar_Set("cg_thirdPersonRange", "100");
 	}
 }
 
 /*
 static void CG_Camera_f( void ) {
 	char name[1024];
-	cg_trapArgv( 1, name, sizeof(name));
+	cg_trap_Argv( 1, name, sizeof(name));
 	if (cg_traploadCamera(name)) {
 		cg.cameraMode = qtrue;
 		cg_trapstartCamera(cg.time);
@@ -541,43 +541,43 @@ void CG_InitConsoleCommands( void ) {
 	int		i;
 
 	for ( i = 0 ; i < ARRAY_LEN( commands ) ; i++ ) {
-		cg_trapAddCommand( commands[i].cmd );
+		cg_trap_AddCommand( commands[i].cmd );
 	}
 
 	//
 	// the game server will interpret these commands, which will be automatically
 	// forwarded to the server after they are not recognized locally
 	//
-	cg_trapAddCommand ("kill");
-	cg_trapAddCommand ("say");
-	cg_trapAddCommand ("say_team");
-	cg_trapAddCommand ("tell");
+	cg_trap_AddCommand ("kill");
+	cg_trap_AddCommand ("say");
+	cg_trap_AddCommand ("say_team");
+	cg_trap_AddCommand ("tell");
 #ifdef MISSIONPACK
-	cg_trapAddCommand ("vsay");
-	cg_trapAddCommand ("vsay_team");
-	cg_trapAddCommand ("vtell");
-	cg_trapAddCommand ("vtaunt");
-	cg_trapAddCommand ("vosay");
-	cg_trapAddCommand ("vosay_team");
-	cg_trapAddCommand ("votell");
+	cg_trap_AddCommand ("vsay");
+	cg_trap_AddCommand ("vsay_team");
+	cg_trap_AddCommand ("vtell");
+	cg_trap_AddCommand ("vtaunt");
+	cg_trap_AddCommand ("vosay");
+	cg_trap_AddCommand ("vosay_team");
+	cg_trap_AddCommand ("votell");
 #endif
-	cg_trapAddCommand ("give");
-	cg_trapAddCommand ("god");
-	cg_trapAddCommand ("notarget");
-	cg_trapAddCommand ("noclip");
-	cg_trapAddCommand ("where");
-	cg_trapAddCommand ("team");
-	cg_trapAddCommand ("follow");
-	cg_trapAddCommand ("follownext");
-	cg_trapAddCommand ("followprev");
-	cg_trapAddCommand ("levelshot");
-	cg_trapAddCommand ("addbot");
-	cg_trapAddCommand ("setviewpos");
-	cg_trapAddCommand ("callvote");
-	cg_trapAddCommand ("vote");
-	cg_trapAddCommand ("callteamvote");
-	cg_trapAddCommand ("teamvote");
-	cg_trapAddCommand ("stats");
-	cg_trapAddCommand ("teamtask");
-	cg_trapAddCommand ("loaddefered");	// spelled wrong, but not changing for demo
+	cg_trap_AddCommand ("give");
+	cg_trap_AddCommand ("god");
+	cg_trap_AddCommand ("notarget");
+	cg_trap_AddCommand ("noclip");
+	cg_trap_AddCommand ("where");
+	cg_trap_AddCommand ("team");
+	cg_trap_AddCommand ("follow");
+	cg_trap_AddCommand ("follownext");
+	cg_trap_AddCommand ("followprev");
+	cg_trap_AddCommand ("levelshot");
+	cg_trap_AddCommand ("addbot");
+	cg_trap_AddCommand ("setviewpos");
+	cg_trap_AddCommand ("callvote");
+	cg_trap_AddCommand ("vote");
+	cg_trap_AddCommand ("callteamvote");
+	cg_trap_AddCommand ("teamvote");
+	cg_trap_AddCommand ("stats");
+	cg_trap_AddCommand ("teamtask");
+	cg_trap_AddCommand ("loaddefered");	// spelled wrong, but not changing for demo
 }
