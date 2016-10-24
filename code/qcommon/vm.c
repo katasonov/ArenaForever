@@ -617,13 +617,9 @@ vm_t *VM_Create( const char *module, intptr_t (*systemCalls)(intptr_t *),
 		{
 			Sys_LoadUIModuleStatic(&vm->entryPoint, VM_DllSyscall);
 
-			//if (vm->dllHandle)
-			//{
 				vm->systemCall = systemCalls;
 				return vm;
-			//}
-
-		}
+		}		
 		else if(retval == VMI_NATIVE)
 		{
 			Com_Printf("Try loading dll file %s\n", filename);
