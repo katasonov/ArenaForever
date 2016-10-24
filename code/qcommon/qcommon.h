@@ -1078,6 +1078,9 @@ void	Sys_LoadUIModuleStatic(intptr_t(QDECL **entryPoint)(int, ...),
 void	Sys_LoadQAGameModuleStatic(intptr_t(QDECL **entryPoint)(int, ...),
 	intptr_t(*systemcalls)(intptr_t, ...));
 
+void	Sys_LoadCGameModuleStatic(intptr_t(QDECL **entryPoint)(int, ...),
+	intptr_t(*systemcalls)(intptr_t, ...));
+
 void	Sys_UnloadDll( void *dllHandle );
 
 char	*Sys_GetCurrentUser( void );

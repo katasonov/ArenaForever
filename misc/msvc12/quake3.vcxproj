@@ -190,8 +190,7 @@
     </Link>
     <PostBuildEvent>
       <Message>Post build processing..</Message>
-      <Command>rem bash -c "perl ./unix/cons -- debug"
-xcopy /Y "..\..\SDL2-2.0.4\VisualC\Win32\Debug\SDL2.dll" "$(OutDir)"</Command>
+      <Command>rem bash -c "perl ./unix/cons -- debug"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
