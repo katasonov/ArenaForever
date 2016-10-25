@@ -26,19 +26,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // q_shared.h -- included first by ALL program modules.
 // A user mod should never modify this file
 
+#define STANDALONE
+
 #ifdef STANDALONE
-  #define PRODUCT_NAME				"iofoo3"
-  #define BASEGAME					"foobar"
-  #define CLIENT_WINDOW_TITLE		"changeme"
-  #define CLIENT_WINDOW_MIN_TITLE	"changeme2"
-  #define HOMEPATH_NAME_UNIX		".foo"
-  #define HOMEPATH_NAME_WIN			"FooBar"
-  #define HOMEPATH_NAME_MACOSX		HOMEPATH_NAME_WIN
-//  #define STEAMPATH_NAME			"Foo Bar"
-//  #define STEAMPATH_APPID         ""
-  #define GAMENAME_FOR_MASTER		"foobar"	// must NOT contain whitespace
-  #define CINEMATICS_LOGO		"foologo.roq"
-  #define CINEMATICS_INTRO		"intro.roq"
+	#define PRODUCT_NAME				"Qlympia"
+	#define BASEGAME					"baseq3"
+	#define CLIENT_WINDOW_TITLE		"Qlympia"
+	#define CLIENT_WINDOW_MIN_TITLE	"QL"
+	#define HOMEPATH_NAME_UNIX		".qlmp"
+	#define HOMEPATH_NAME_WIN			"Qlympia"
+	#define HOMEPATH_NAME_MACOSX		HOMEPATH_NAME_WIN
+	#define STEAMPATH_NAME			"Qlimpia Arena"
+	#define STEAMPATH_APPID			"2300"
+	#define GAMENAME_FOR_MASTER		"Qlympia"
+	#define CINEMATICS_LOGO		"idlogo.RoQ"
+	#define CINEMATICS_INTRO		"intro.RoQ"
+	#define LEGACY_PROTOCOL
 //  #define LEGACY_PROTOCOL	// You probably don't need this for your standalone game
 #else
   #define PRODUCT_NAME				"ioq3"
