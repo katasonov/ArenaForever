@@ -21,6 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F7B397A4-8111-421B-A23B-B9A2CE509183}</ProjectGuid>
     <RootNamespace>opengl2</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug TA|Win32'" Label="Configuration">
@@ -34,7 +35,7 @@
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
@@ -72,7 +73,7 @@
     <OutDir>..\..\build\debug-msvc12-x86\</OutDir>
     <IntDir>..\..\build\debug-msvc12-x86\opengl2\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>renderer_opengl2_x86</TargetName>
+    <TargetName>opengl2</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\..\build\release-msvc12-x86\</OutDir>
@@ -217,7 +218,7 @@ cscript.exe glsl_stringify.vbs ..\..\code\renderergl2\glsl\tonemap_vp.glsl ..\..
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\code\SDL2\include;..\..\code\libcurl;..\..\code\AL;..\..\code\libspeex\include;..\..\code\zlib;..\..\code\jpeg-8c;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN32;WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;BOTLIB;USE_ICON;USE_CURL;USE_CURL_DLOPEN;USE_OPENAL;USE_OPENAL_DLOPEN;USE_VOIP;HAVE_CONFIG_H;USE_INTERNAL_JPEG;USE_RENDERER_DLOPEN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WIN32;WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;BOTLIB;USE_ICON;USE_CURL;USE_CURL_DLOPEN;USE_OPENAL;USE_OPENAL_DLOPEN;USE_VOIP;HAVE_CONFIG_H;USE_INTERNAL_JPEG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <PrecompiledHeaderOutputFile>$(IntDir)opengl2.pch</PrecompiledHeaderOutputFile>
