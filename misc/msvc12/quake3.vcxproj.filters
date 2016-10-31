@@ -569,6 +569,32 @@
     <ClCompile Include="..\..\code\zlib\zutil.c">
       <Filter>zlib</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\code\cgame\cg_consolecmds.c" />
+    <ClCompile Include="..\..\code\cgame\cg_draw.c" />
+    <ClCompile Include="..\..\code\cgame\cg_drawtools.c" />
+    <ClCompile Include="..\..\code\cgame\cg_effects.c" />
+    <ClCompile Include="..\..\code\cgame\cg_ents.c" />
+    <ClCompile Include="..\..\code\cgame\cg_event.c" />
+    <ClCompile Include="..\..\code\cgame\cg_info.c" />
+    <ClCompile Include="..\..\code\cgame\cg_localents.c" />
+    <ClCompile Include="..\..\code\cgame\cg_main.c" />
+    <ClCompile Include="..\..\code\cgame\cg_marks.c" />
+    <ClCompile Include="..\..\code\cgame\cg_newDraw.c" />
+    <ClCompile Include="..\..\code\cgame\cg_particles.c" />
+    <ClCompile Include="..\..\code\cgame\cg_players.c" />
+    <ClCompile Include="..\..\code\cgame\cg_playerstate.c" />
+    <ClCompile Include="..\..\code\cgame\cg_predict.c" />
+    <ClCompile Include="..\..\code\cgame\cg_scoreboard.c" />
+    <ClCompile Include="..\..\code\cgame\cg_servercmds.c" />
+    <ClCompile Include="..\..\code\cgame\cg_snapshot.c" />
+    <ClCompile Include="..\..\code\cgame\cg_syscalls.c" />
+    <ClCompile Include="..\..\code\cgame\cg_view.c" />
+    <ClCompile Include="..\..\code\cgame\cg_weapons.c" />
+    <ClCompile Include="..\..\code\game\bg_lib.c" />
+    <ClCompile Include="..\..\code\game\bg_misc.c" />
+    <ClCompile Include="..\..\code\game\bg_pmove.c" />
+    <ClCompile Include="..\..\code\game\bg_slidemove.c" />
+    <ClCompile Include="..\..\code\ui\ui_shared.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\code\cgame\cg_public.h" />
@@ -677,6 +703,7 @@
     <ClInclude Include="..\..\code\botlib\l_struct.h">
       <Filter>botlib</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\code\cgame\cg_local.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\code\asm\ftola.asm" />
