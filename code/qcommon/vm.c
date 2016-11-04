@@ -621,14 +621,12 @@ vm_t *VM_Create( const char *module, intptr_t (*systemCalls)(intptr_t *),
 			vm->systemCall = systemCalls;
 			return vm;
 		}
-#ifdef QAGAME
 		else if (Q_strncmp(module, "qagame", 6) == 0)
 		{
 			Sys_LoadQAGameModuleStatic(&vm->entryPoint, VM_DllSyscall);
 			vm->systemCall = systemCalls;
 			return vm;
 		}
-#endif //QAGAME
 		else if (Q_strncmp(module, "cgame", 5) == 0)
 		{
 			Sys_LoadCGameModuleStatic(&vm->entryPoint, VM_DllSyscall);

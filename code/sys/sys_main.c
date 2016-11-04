@@ -562,7 +562,6 @@ void Sys_LoadUIModuleStatic(
 	uiModuleEntry(systemcalls);
 }
 
-#ifdef QAGAME
 void Sys_LoadQAGameModuleStatic(
 	intptr_t(QDECL **entryPoint)(int, ...),
 	intptr_t(*systemcalls)(intptr_t, ...))
@@ -572,7 +571,6 @@ void Sys_LoadQAGameModuleStatic(
 	*entryPoint = gameMain;
 	gameModuleEntry(systemcalls);
 }
-#endif
 
 void Sys_LoadCGameModuleStatic(
 	intptr_t(QDECL **entryPoint)(int, ...),

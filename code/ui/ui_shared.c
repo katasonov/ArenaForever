@@ -84,39 +84,37 @@ static char		memoryPool[MEM_POOL_SIZE];
 static int		allocPoint, outOfMemory;
 
 
-/*
-===============
-UI_Alloc
-===============
-*/				  
-void *UI_Alloc( int size ) {
-	char	*p; 
 
-	if ( allocPoint + size > MEM_POOL_SIZE ) {
-		outOfMemory = qtrue;
-		if (DC->Print) {
-			DC->Print("UI_Alloc: Failure. Out of memory!\n");
-		}
-    //DC->trap_Print(S_COLOR_YELLOW"WARNING: UI Out of Memory!\n");
-		return NULL;
-	}
+//===============
+//UI_Alloc
+//===============
 
-	p = &memoryPool[allocPoint];
+//void *UI_Alloc( int size ) {
+//	char	*p; 
+//
+//	if ( allocPoint + size > MEM_POOL_SIZE ) {
+//		outOfMemory = qtrue;
+//		if (DC->Print) {
+//			DC->Print("UI_Alloc: Failure. Out of memory!\n");
+//		}
+//    //DC->trap_Print(S_COLOR_YELLOW"WARNING: UI Out of Memory!\n");
+//		return NULL;
+//	}
+//
+//	p = &memoryPool[allocPoint];
+//
+//	allocPoint += ( size + 15 ) & ~15;
+//
+//	return p;
+//}
 
-	allocPoint += ( size + 15 ) & ~15;
-
-	return p;
-}
-
-/*
-===============
-UI_InitMemory
-===============
-*/
-void UI_InitMemory( void ) {
-	allocPoint = 0;
-	outOfMemory = qfalse;
-}
+//===============
+//UI_InitMemory
+//===============
+//void UI_InitMemory( void ) {
+//	allocPoint = 0;
+//	outOfMemory = qfalse;
+//}
 
 qboolean UI_OutOfMemory( void ) {
 	return outOfMemory;

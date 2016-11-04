@@ -1830,9 +1830,9 @@ PmoveSingle
 
 ================
 */
-void trap_SnapVector( float *v );
 
-void PmoveSingle (pmove_t *pmove) {
+typedef void(*trap_snap_vector_clbk_t)(float *v);
+void PmoveSingle (pmove_t *pmove, trap_snap_vector_clbk_t trap_snap_vector_clbk) {
 	pm = pmove;
 
 	// this counter lets us debug movement problems with a journal
@@ -2011,7 +2011,7 @@ void PmoveSingle (pmove_t *pmove) {
 	PM_WaterEvents();
 
 	// snap some parts of playerstate to save network bandwidth
-	trap_SnapVector( pm->ps->velocity );
+	trap_snap_vector_clbk( pm->ps->velocity );
 }
 
 
@@ -2022,7 +2022,8 @@ Pmove
 Can be called by either the server or the client
 ================
 */
-void Pmove (pmove_t *pmove) {
+typedef void (*trap_snap_vector_clbk_t)(float *v);
+void Pmove (pmove_t *pmove, trap_snap_vector_clbk_t trap_snap_vector_clbk) {
 	int			finalTime;
 
 	finalTime = pmove->cmd.serverTime;
@@ -2055,7 +2056,7 @@ void Pmove (pmove_t *pmove) {
 			}
 		}
 		pmove->cmd.serverTime = pmove->ps->commandTime + msec;
-		PmoveSingle( pmove );
+		PmoveSingle( pmove, trap_snap_vector_clbk);
 
 		if ( pmove->ps->pm_flags & PMF_JUMP_HELD ) {
 			pmove->cmd.upmove = 20;

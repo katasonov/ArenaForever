@@ -232,7 +232,7 @@ int g_trap_RealTime( qtime_t *qtime ) {
 	return syscall( G_REAL_TIME, qtime );
 }
 
-void trap_SnapVector( float *v ) {
+void g_trap_SnapVector( float *v ) {
 	syscall( G_SNAPVECTOR, v );
 }
 

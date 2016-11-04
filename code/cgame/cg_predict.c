@@ -579,7 +579,7 @@ void CG_PredictPlayerState( void ) {
 			cg_pmove.cmd.serverTime = ((cg_pmove.cmd.serverTime + pmove_msec.integer-1) / pmove_msec.integer) * pmove_msec.integer;
 		}
 
-		Pmove (&cg_pmove);
+		Pmove (&cg_pmove, cg_trap_SnapVector);
 
 		moved = qtrue;
 
