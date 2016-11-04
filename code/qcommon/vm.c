@@ -615,21 +615,24 @@ vm_t *VM_Create( const char *module, intptr_t (*systemCalls)(intptr_t *),
 #ifdef USE_STATIC_MODS
 		//This used to static compile mods to simplify debuggin
 		//Do static linking of ui
+#ifndef SERVER
 		if (Q_strncmp(module, "ui", 2) == 0)
 		{
 			Sys_LoadUIModuleStatic(&vm->entryPoint, VM_DllSyscall);
 			vm->systemCall = systemCalls;
 			return vm;
 		}
-		else if (Q_strncmp(module, "qagame", 6) == 0)
-		{
-			Sys_LoadQAGameModuleStatic(&vm->entryPoint, VM_DllSyscall);
-			vm->systemCall = systemCalls;
-			return vm;
-		}
 		else if (Q_strncmp(module, "cgame", 5) == 0)
 		{
 			Sys_LoadCGameModuleStatic(&vm->entryPoint, VM_DllSyscall);
+			vm->systemCall = systemCalls;
+			return vm;
+		}
+		else
+#endif
+		if (Q_strncmp(module, "qagame", 6) == 0)
+		{
+			Sys_LoadQAGameModuleStatic(&vm->entryPoint, VM_DllSyscall);
 			vm->systemCall = systemCalls;
 			return vm;
 		}
