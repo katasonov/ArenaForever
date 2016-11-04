@@ -257,7 +257,7 @@ PROTOCOL
 
 // maintain a list of compatible protocols for demo playing
 // NOTE: that stuff only works with two digits protocols
-extern int demo_protocols[];
+int demo_protocols[];
 
 #if !defined UPDATE_SERVER_NAME && !defined STANDALONE
 #define	UPDATE_SERVER_NAME	"update.quake3arena.com"
@@ -571,7 +571,7 @@ void	Cvar_Restart_f( void );
 
 void Cvar_CompleteCvarName( char *args, int argNum );
 
-extern	int			cvar_modifiedFlags;
+int			cvar_modifiedFlags;
 // whenever a cvar is modifed, its flags will be OR'd into this, so
 // a single check can determine if any CVAR_USERINFO, CVAR_SERVERINFO,
 // etc, variables have been modified since the last check.  The bit
@@ -776,7 +776,7 @@ MISC
 
 // centralizing the declarations for cl_cdkey
 // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=470
-extern char cl_cdkey[34];
+char cl_cdkey[34];
 
 // returned by Sys_GetProcessorFeatures
 typedef enum
@@ -849,52 +849,52 @@ qboolean		Com_FieldStringToPlayerName( char *name, int length, const char *rawna
 int QDECL	Com_strCompare( const void *a, const void *b );
 
 
-extern	cvar_t	*com_developer;
-extern	cvar_t	*com_dedicated;
-extern	cvar_t	*com_speeds;
-extern	cvar_t	*com_timescale;
-extern	cvar_t	*com_sv_running;
-extern	cvar_t	*com_cl_running;
-extern	cvar_t	*com_version;
-extern	cvar_t	*com_blood;
-extern	cvar_t	*com_buildScript;		// for building release pak files
-extern	cvar_t	*com_journal;
-extern	cvar_t	*com_cameraMode;
-extern	cvar_t	*com_ansiColor;
-extern	cvar_t	*com_unfocused;
-extern	cvar_t	*com_maxfpsUnfocused;
-extern	cvar_t	*com_minimized;
-extern	cvar_t	*com_maxfpsMinimized;
-extern	cvar_t	*com_altivec;
-extern	cvar_t	*com_standalone;
-extern	cvar_t	*com_basegame;
-extern	cvar_t	*com_homepath;
+cvar_t	*com_developer;
+cvar_t	*com_dedicated;
+cvar_t	*com_speeds;
+cvar_t	*com_timescale;
+cvar_t	*com_sv_running;
+cvar_t	*com_cl_running;
+cvar_t	*com_version;
+cvar_t	*com_blood;
+cvar_t	*com_buildScript;		// for building release pak files
+cvar_t	*com_journal;
+cvar_t	*com_cameraMode;
+cvar_t	*com_ansiColor;
+cvar_t	*com_unfocused;
+cvar_t	*com_maxfpsUnfocused;
+cvar_t	*com_minimized;
+cvar_t	*com_maxfpsMinimized;
+cvar_t	*com_altivec;
+cvar_t	*com_standalone;
+cvar_t	*com_basegame;
+cvar_t	*com_homepath;
 
 // both client and server must agree to pause
-extern	cvar_t	*cl_paused;
-extern	cvar_t	*sv_paused;
+cvar_t	*cl_paused;
+cvar_t	*sv_paused;
 
-extern	cvar_t	*cl_packetdelay;
-extern	cvar_t	*sv_packetdelay;
+cvar_t	*cl_packetdelay;
+cvar_t	*sv_packetdelay;
 
-extern	cvar_t	*com_gamename;
-extern	cvar_t	*com_protocol;
+cvar_t	*com_gamename;
+cvar_t	*com_protocol;
 #ifdef LEGACY_PROTOCOL
-extern	cvar_t	*com_legacyprotocol;
+cvar_t	*com_legacyprotocol;
 #endif
 
 // com_speeds times
-extern	int		time_game;
-extern	int		time_frontend;
-extern	int		time_backend;		// renderer backend time
+int		time_game;
+int		time_frontend;
+int		time_backend;		// renderer backend time
 
-extern	int		com_frameTime;
+int		com_frameTime;
 
-extern	qboolean	com_errorEntered;
-extern	qboolean	com_fullyInitialized;
+qboolean	com_errorEntered;
+qboolean	com_fullyInitialized;
 
-extern	fileHandle_t	com_journalFile;
-extern	fileHandle_t	com_journalDataFile;
+fileHandle_t	com_journalFile;
+fileHandle_t	com_journalDataFile;
 
 typedef enum {
 	TAG_FREE,
@@ -1212,7 +1212,7 @@ int		Huff_getBloc(void);
 void	Huff_setBloc(int _bloc);
 
 
-extern huffman_t clientHuffTables;
+huffman_t clientHuffTables;
 
 #define	SV_ENCODE_START		4
 #define SV_DECODE_START		12
