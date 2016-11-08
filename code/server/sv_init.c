@@ -414,11 +414,12 @@ void SV_SpawnServer( char *server, qboolean killBots ) {
 
 	// if not running a dedicated server CL_MapLoading will connect the client to the server
 	// also print some status stuff
+#ifndef DEDICATED
 	CL_MapLoading();
 
 	// make sure all the client stuff is unloaded
 	CL_ShutdownAll(qfalse);
-
+#endif
 	// clear the whole hunk because we're (re)loading the server
 	Hunk_Clear();
 
@@ -650,6 +651,9 @@ void SV_Init (void)
 	sv_minPing = Cvar_Get ("sv_minPing", "0", CVAR_ARCHIVE | CVAR_SERVERINFO );
 	sv_maxPing = Cvar_Get ("sv_maxPing", "0", CVAR_ARCHIVE | CVAR_SERVERINFO );
 	sv_floodProtect = Cvar_Get ("sv_floodProtect", "1", CVAR_ARCHIVE | CVAR_SERVERINFO );
+#ifdef DEDICATED
+	cl_shownet = Cvar_Get("cl_shownet", "0", CVAR_TEMP);
+#endif
 
 	// systeminfo
 	Cvar_Get ("sv_cheats", "1", CVAR_SYSTEMINFO | CVAR_ROM );
@@ -781,7 +785,9 @@ void SV_Shutdown( char *finalmsg ) {
 	Com_Printf( "---------------------------\n" );
 
 	// disconnect any local clients
+#ifndef DEDICATED
 	if( sv_killserver->integer != 2 )
 		CL_Disconnect( qfalse );
+#endif
 }
 

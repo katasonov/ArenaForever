@@ -306,11 +306,13 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 	if (code == ERR_DISCONNECT || code == ERR_SERVERDISCONNECT) {
 		VM_Forced_Unload_Start();
 		SV_Shutdown( "Server disconnected" );
+#ifndef DEDICATED
 		if ( restartClient ) {
 			CL_Init();
 		}
 		CL_Disconnect( qtrue );
 		CL_FlushMemory( );
+#endif
 		VM_Forced_Unload_Done();
 		// make sure we can get at our local stuff
 		FS_PureServerSetLoadedPaks("", "");
@@ -320,11 +322,13 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 		Com_Printf ("********************\nERROR: %s\n********************\n", com_errorMessage);
 		VM_Forced_Unload_Start();
 		SV_Shutdown (va("Server crashed: %s",  com_errorMessage));
+#ifndef DEDICATED
 		if ( restartClient ) {
 			CL_Init();
 		}
 		CL_Disconnect( qtrue );
 		CL_FlushMemory( );
+#endif
 		VM_Forced_Unload_Done();
 		FS_PureServerSetLoadedPaks("", "");
 		com_errorEntered = qfalse;
@@ -332,6 +336,7 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 	} else if ( code == ERR_NEED_CD ) {
 		VM_Forced_Unload_Start();
 		SV_Shutdown( "Server didn't have CD" );
+#ifndef DEDICATED
 		if ( restartClient ) {
 			CL_Init();
 		}
@@ -340,7 +345,9 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 			CL_FlushMemory( );
 			VM_Forced_Unload_Done();
 			CL_CDDialog();
-		} else {
+		} else 
+#endif
+		{
 			Com_Printf("Server didn't have CD\n" );
 			VM_Forced_Unload_Done();
 		}
@@ -351,7 +358,9 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 		longjmp (abortframe, -1);
 	} else {
 		VM_Forced_Unload_Start();
+#ifndef DEDICATED
 		CL_Shutdown(va("Client fatal crashed: %s", com_errorMessage), qtrue, qtrue);
+#endif
 		SV_Shutdown(va("Server fatal crashed: %s", com_errorMessage));
 		VM_Forced_Unload_Done();
 	}
@@ -380,7 +389,9 @@ void Com_Quit_f( void ) {
 		// a corrupt call stack makes no difference
 		VM_Forced_Unload_Start();
 		SV_Shutdown(p[0] ? p : "Server quit");
+#ifndef DEDICATED
 		CL_Shutdown(p[0] ? p : "Client quit", qtrue, qtrue);
+#endif
 		VM_Forced_Unload_Done();
 		Com_Shutdown ();
 		FS_Shutdown(qtrue);
@@ -2186,9 +2197,11 @@ int Com_EventLoop( void ) {
 		// if no more events are available
 		if ( ev.evType == SE_NONE ) {
 			// manually send packet events for the loopback channel
+#ifndef DEDICATED
 			while ( NET_GetLoopPacket( NS_CLIENT, &evFrom, &buf ) ) {
 				CL_PacketEvent( evFrom, &buf );
 			}
+#endif
 
 			while ( NET_GetLoopPacket( NS_SERVER, &evFrom, &buf ) ) {
 				// if the server just shut down, flush the events
@@ -2200,7 +2213,7 @@ int Com_EventLoop( void ) {
 			return ev.evTime;
 		}
 
-
+#ifndef DEDICATED
 		switch(ev.evType)
 		{
 			case SE_KEY:
@@ -2223,6 +2236,7 @@ int Com_EventLoop( void ) {
 				Com_Error( ERR_FATAL, "Com_EventLoop: bad event type %i", ev.evType );
 			break;
 		}
+#endif
 
 		// free any block data
 		if ( ev.evPtr ) {
@@ -2384,7 +2398,7 @@ void Com_GameRestart(int checksumFeed, qboolean disconnect)
 		// Kill server if we have one
 		if(com_sv_running->integer)
 			SV_Shutdown("Game directory changed");
-
+#ifndef DEDICATED
 		if(com_gameClientRestarting)
 		{
 			if(disconnect)
@@ -2392,7 +2406,7 @@ void Com_GameRestart(int checksumFeed, qboolean disconnect)
 				
 			CL_Shutdown("Game directory changed", disconnect, qfalse);
 		}
-
+#endif
 		FS_Restart(checksumFeed);
 	
 		// Clean out any user and VM created cvars
@@ -2406,13 +2420,13 @@ void Com_GameRestart(int checksumFeed, qboolean disconnect)
 			// new network settings might make the connection fail.
 			NET_Restart_f();
 		}
-
+#ifndef DEDICATED
 		if(com_gameClientRestarting)
 		{
 			CL_Init();
 			CL_StartHunkUsers(qfalse);
 		}
-		
+#endif		
 		com_gameRestarting = qfalse;
 		com_gameClientRestarting = qfalse;
 	}
@@ -2691,8 +2705,9 @@ void Com_Init( char *commandLine ) {
 	com_developer = Cvar_Get("developer", "0", CVAR_TEMP);
 
 	// done early so bind command exists
+#ifndef DEDICATED
 	CL_InitKeyCommands();
-
+#endif
 	com_standalone = Cvar_Get("com_standalone", "0", CVAR_ROM);
 	com_basegame = Cvar_Get("com_basegame", BASEGAME, CVAR_INIT);
 	com_homepath = Cvar_Get("com_homepath", "", CVAR_INIT);
@@ -2828,9 +2843,9 @@ void Com_Init( char *commandLine ) {
 
 	// start in full screen ui mode
 	Cvar_Set("r_uiFullScreen", "1");
-
+#ifndef DEDICATED
 	CL_StartHunkUsers( qfalse );
-
+#endif
 	// make sure single player is off by default
 	Cvar_Set("ui_singlePlayerActive", "0");
 
@@ -2905,6 +2920,7 @@ void Com_ReadFromPipe( void )
 //==================================================================
 
 void Com_WriteConfigToFile( const char *filename ) {
+#ifndef DEDICATED
 	fileHandle_t	f;
 
 	f = FS_FOpenFileWrite( filename );
@@ -2917,6 +2933,7 @@ void Com_WriteConfigToFile( const char *filename ) {
 	Key_WriteBindings (f);
 	Cvar_WriteVariables (f);
 	FS_FCloseFile( f );
+#endif
 }
 
 
@@ -3175,7 +3192,9 @@ void Com_Frame( void ) {
 		com_dedicated->modified = qfalse;
 		if ( !com_dedicated->integer ) {
 			SV_Shutdown( "dedicated set to 0" );
+#ifndef DEDICATED
 			CL_FlushMemory();
+#endif
 		}
 	}
 

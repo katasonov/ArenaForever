@@ -797,16 +797,18 @@ void	Cmd_ExecuteString( const char *text ) {
 	}
 
 	// check client game commands
+#ifndef DEDICATED
 	if ( com_cl_running && com_cl_running->integer && CL_GameCommand() ) {
 		return;
 	}
-
+#endif
 	// check server game commands
 	if ( com_sv_running && com_sv_running->integer && SV_GameCommand() ) {
 		return;
 	}
 
 	// check ui commands
+#ifndef DEDICATED
 	if ( com_cl_running && com_cl_running->integer && UI_GameCommand() ) {
 		return;
 	}
@@ -814,6 +816,7 @@ void	Cmd_ExecuteString( const char *text ) {
 	// send it as a server command if we are connected
 	// this will usually result in a chat message
 	CL_ForwardCommandToServer ( text );
+#endif
 }
 
 /*

@@ -112,7 +112,9 @@ Restart the input subsystem
 */
 void Sys_In_Restart_f( void )
 {
+#ifndef DEDICATED
 	IN_Restart( );
+#endif
 }
 
 /*
@@ -775,7 +777,9 @@ int main( int argc, char **argv )
 
 	while( 1 )
 	{
+#ifndef DEDICATED
 		IN_Frame( );
+#endif
 		Com_Frame( );
 	}
 
