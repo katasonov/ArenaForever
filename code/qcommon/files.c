@@ -718,7 +718,7 @@ long FS_SV_FOpenFileRead(const char *filename, fileHandle_t *fp)
 	Q_strncpyz( fsh[f].name, filename, sizeof( fsh[f].name ) );
 
 	// don't let sound stutter
-#ifndef DEDICATED
+#ifndef SERVER
 	S_ClearSoundBuffer();
 #endif
 
@@ -795,7 +795,7 @@ void FS_SV_Rename( const char *from, const char *to, qboolean safe ) {
 	}
 
 	// don't let sound stutter
-#ifndef DEDICATED
+#ifndef SERVER
 	S_ClearSoundBuffer();
 #endif
 
@@ -831,7 +831,7 @@ void FS_Rename( const char *from, const char *to ) {
 	}
 
 	// don't let sound stutter
-#ifndef DEDICATED
+#ifndef SERVER
 	S_ClearSoundBuffer();
 #endif
 	from_ospath = FS_BuildOSPath( fs_homepath->string, fs_gamedir, from );
@@ -940,7 +940,7 @@ fileHandle_t FS_FOpenFileAppend( const char *filename ) {
 	Q_strncpyz( fsh[f].name, filename, sizeof( fsh[f].name ) );
 
 	// don't let sound stutter
-#ifndef DEDICATED
+#ifndef SERVER
 	S_ClearSoundBuffer();
 #endif
 
@@ -985,7 +985,7 @@ fileHandle_t FS_FCreateOpenPipeFile( const char *filename ) {
 	Q_strncpyz( fsh[f].name, filename, sizeof( fsh[f].name ) );
 
 	// don't let sound stutter
-#ifndef DEDICATED
+#ifndef SERVER
 	S_ClearSoundBuffer();
 #endif
 

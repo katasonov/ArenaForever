@@ -45,7 +45,7 @@ static char homePath[ MAX_OSPATH ] = { 0 };
 // Used to store the Steam Quake 3 installation path
 static char steamPath[ MAX_OSPATH ] = { 0 };
 
-#ifndef DEDICATED
+#ifndef SERVER
 static UINT timerResolution = 0;
 #endif
 
@@ -593,7 +593,7 @@ void Sys_Sleep( int msec )
 	if( msec == 0 )
 		return;
 
-#ifdef DEDICATED
+#ifdef SERVER
 	if( msec < 0 )
 		WaitForSingleObject( GetStdHandle( STD_INPUT_HANDLE ), INFINITE );
 	else
@@ -710,13 +710,13 @@ Windows specific initialisation
 */
 void Sys_PlatformInit( void )
 {
-#ifndef DEDICATED
+#ifndef SERVER
 	TIMECAPS ptc;
 #endif
 
 	Sys_SetFloatEnv();
 
-#ifndef DEDICATED
+#ifndef SERVER
 	if(timeGetDevCaps(&ptc, sizeof(ptc)) == MMSYSERR_NOERROR)
 	{
 		timerResolution = ptc.wPeriodMin;
@@ -743,7 +743,7 @@ Windows specific initialisation
 */
 void Sys_PlatformExit( void )
 {
-#ifndef DEDICATED
+#ifndef SERVER
 	if(timerResolution)
 		timeEndPeriod(timerResolution);
 #endif

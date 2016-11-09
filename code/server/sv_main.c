@@ -59,7 +59,7 @@ cvar_t	*sv_pure;
 cvar_t	*sv_floodProtect;
 cvar_t	*sv_lanForceRate; // dedicated 1 (LAN) server forces local client rates to 99999 (bug #491)
 
-#ifdef DEDICATED
+#ifdef SERVER
 //needs for msg.c
 cvar_t	*cl_shownet;
 #endif
@@ -1072,7 +1072,7 @@ void SV_Frame( int msec ) {
 	if (!com_sv_running->integer)
 	{
 		// Running as a server, but no map loaded
-#ifdef DEDICATED
+#ifdef SERVER
 		// Block until something interesting happens
 		Sys_Sleep(-1);
 #endif

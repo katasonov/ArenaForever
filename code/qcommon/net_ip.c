@@ -1418,7 +1418,7 @@ NET_GetCvars
 static qboolean NET_GetCvars( void ) {
 	int modified;
 
-#ifdef DEDICATED
+#ifdef SERVER
 	// I want server owners to explicitly turn on ipv6 support.
 	net_enabled = Cvar_Get( "net_enabled", "1", CVAR_LATCH | CVAR_ARCHIVE );
 #else
@@ -1637,7 +1637,7 @@ void NET_Event(fd_set *fdr)
 
 			if(com_sv_running->integer)
 				Com_RunAndTimeServerPacket(&from, &netmsg);
-#ifndef DEDICATED
+#ifndef SERVER
 			else
 				CL_PacketEvent(from, &netmsg);
 #endif

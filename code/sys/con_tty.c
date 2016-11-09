@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../qcommon/qcommon.h"
 #include "sys_local.h"
 
-#ifndef DEDICATED
+#ifndef SERVER
 #include "../client/client.h"
 #endif
 
@@ -65,7 +65,7 @@ static field_t TTY_con;
 static field_t ttyEditLines[ CON_HISTORY ];
 static int hist_current = -1, hist_count = 0;
 
-#ifndef DEDICATED
+#ifndef SERVER
 // Don't use "]" as it would be the same as in-game console,
 //   this makes it clear where input came from.
 #define TTY_CONSOLE_PROMPT "tty]"
@@ -376,7 +376,7 @@ char *CON_Input( void )
 			{
 				if (key == '\n')
 				{
-#ifndef DEDICATED
+#ifndef SERVER
 					// if not in the game explicitly prepend a slash if needed
 					if (clc.state != CA_ACTIVE && TTY_con.cursor &&
 						TTY_con.buffer[0] != '/' && TTY_con.buffer[0] != '\\')

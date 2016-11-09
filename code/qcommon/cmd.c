@@ -797,7 +797,7 @@ void	Cmd_ExecuteString( const char *text ) {
 	}
 
 	// check client game commands
-#ifndef DEDICATED
+#ifndef SERVER
 	if ( com_cl_running && com_cl_running->integer && CL_GameCommand() ) {
 		return;
 	}
@@ -808,7 +808,7 @@ void	Cmd_ExecuteString( const char *text ) {
 	}
 
 	// check ui commands
-#ifndef DEDICATED
+#ifndef SERVER
 	if ( com_cl_running && com_cl_running->integer && UI_GameCommand() ) {
 		return;
 	}

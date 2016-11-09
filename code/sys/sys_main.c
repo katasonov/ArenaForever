@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include <ctype.h>
 #include <errno.h>
 
-#ifndef DEDICATED
+#ifndef SERVER
 #ifdef USE_LOCAL_HEADERS
 #	include "SDL.h"
 #	include "SDL_cpuinfo.h"
@@ -112,7 +112,7 @@ Restart the input subsystem
 */
 void Sys_In_Restart_f( void )
 {
-#ifndef DEDICATED
+#ifndef SERVER
 	IN_Restart( );
 #endif
 }
@@ -136,7 +136,7 @@ Sys_GetClipboardData
 */
 char *Sys_GetClipboardData(void)
 {
-#ifdef DEDICATED
+#ifdef SERVER
 	return NULL;
 #else
 	char *data = NULL;
@@ -158,7 +158,7 @@ char *Sys_GetClipboardData(void)
 #endif
 }
 
-#ifdef DEDICATED
+#ifdef SERVER
 #	define PID_FILENAME PRODUCT_NAME "_server.pid"
 #else
 #	define PID_FILENAME PRODUCT_NAME ".pid"
@@ -249,7 +249,7 @@ Sys_InitPIDFile
 */
 void Sys_InitPIDFile( const char *gamedir ) {
 	if( Sys_WritePIDFile( gamedir ) ) {
-#ifndef DEDICATED
+#ifndef SERVER
 		char message[1024];
 		char modName[MAX_OSPATH];
 
@@ -278,7 +278,7 @@ static __attribute__ ((noreturn)) void Sys_Exit( int exitCode )
 {
 	CON_Shutdown( );
 
-#ifndef DEDICATED
+#ifndef SERVER
 	SDL_Quit( );
 #endif
 
@@ -314,7 +314,7 @@ cpuFeatures_t Sys_GetProcessorFeatures( void )
 {
 	cpuFeatures_t features = 0;
 
-#ifndef DEDICATED
+#ifndef SERVER
 	if( SDL_HasRDTSC( ) )      features |= CF_RDTSC;
 	if( SDL_Has3DNow( ) )      features |= CF_3DNOW;
 	if( SDL_HasMMX( ) )        features |= CF_MMX;
@@ -647,7 +647,7 @@ void Sys_ParseArgs( int argc, char **argv )
 				!strcmp( argv[1], "-v" ) )
 		{
 			const char* date = PRODUCT_DATE;
-#ifdef DEDICATED
+#ifdef SERVER
 			fprintf( stdout, Q3_VERSION " dedicated server (%s)\n", date );
 #else
 			fprintf( stdout, Q3_VERSION " client (%s)\n", date );
@@ -683,7 +683,7 @@ void Sys_SigHandler( int signal )
 	{
 		signalcaught = qtrue;
 		VM_Forced_Unload_Start();
-#ifndef DEDICATED
+#ifndef SERVER
 		CL_Shutdown(va("Received signal %d", signal), qtrue, qtrue);
 #endif
 		SV_Shutdown(va("Received signal %d", signal) );
@@ -706,7 +706,7 @@ int main( int argc, char **argv )
 	int   i;
 	char  commandLine[ MAX_STRING_CHARS ] = { 0 };
 
-#ifndef DEDICATED
+#ifndef SERVER
 	// SDL version check
 
 	// Compile time
@@ -777,7 +777,7 @@ int main( int argc, char **argv )
 
 	while( 1 )
 	{
-#ifndef DEDICATED
+#ifndef SERVER
 		IN_Frame( );
 #endif
 		Com_Frame( );

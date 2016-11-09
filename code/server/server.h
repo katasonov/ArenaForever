@@ -302,7 +302,7 @@ extern	cvar_t	*sv_voip;
 extern	cvar_t	*sv_voipProtocol;
 #endif
 
-#ifdef DEDICATED
+#ifdef SERVER
 //needs for msg.c
 extern cvar_t	*cl_shownet;
 #endif

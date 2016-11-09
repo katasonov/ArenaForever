@@ -599,7 +599,7 @@ issues.
 
 #define	MAX_FILE_HANDLES	64
 
-#ifdef DEDICATED
+#ifdef SERVER
 #	define Q3CONFIG_CFG "q3config_server.cfg"
 #else
 #	define Q3CONFIG_CFG "q3config.cfg"

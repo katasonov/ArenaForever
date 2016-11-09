@@ -182,7 +182,7 @@ void QDECL Com_Printf( const char *fmt, ... ) {
 		return;
 	}
 
-#ifndef DEDICATED
+#ifndef SERVER
 	CL_ConsolePrint( msg );
 #endif
 
@@ -306,7 +306,7 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 	if (code == ERR_DISCONNECT || code == ERR_SERVERDISCONNECT) {
 		VM_Forced_Unload_Start();
 		SV_Shutdown( "Server disconnected" );
-#ifndef DEDICATED
+#ifndef SERVER
 		if ( restartClient ) {
 			CL_Init();
 		}
@@ -322,7 +322,7 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 		Com_Printf ("********************\nERROR: %s\n********************\n", com_errorMessage);
 		VM_Forced_Unload_Start();
 		SV_Shutdown (va("Server crashed: %s",  com_errorMessage));
-#ifndef DEDICATED
+#ifndef SERVER
 		if ( restartClient ) {
 			CL_Init();
 		}
@@ -336,7 +336,7 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 	} else if ( code == ERR_NEED_CD ) {
 		VM_Forced_Unload_Start();
 		SV_Shutdown( "Server didn't have CD" );
-#ifndef DEDICATED
+#ifndef SERVER
 		if ( restartClient ) {
 			CL_Init();
 		}
@@ -358,7 +358,7 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 		longjmp (abortframe, -1);
 	} else {
 		VM_Forced_Unload_Start();
-#ifndef DEDICATED
+#ifndef SERVER
 		CL_Shutdown(va("Client fatal crashed: %s", com_errorMessage), qtrue, qtrue);
 #endif
 		SV_Shutdown(va("Server fatal crashed: %s", com_errorMessage));
@@ -389,7 +389,7 @@ void Com_Quit_f( void ) {
 		// a corrupt call stack makes no difference
 		VM_Forced_Unload_Start();
 		SV_Shutdown(p[0] ? p : "Server quit");
-#ifndef DEDICATED
+#ifndef SERVER
 		CL_Shutdown(p[0] ? p : "Client quit", qtrue, qtrue);
 #endif
 		VM_Forced_Unload_Done();
@@ -1666,12 +1666,12 @@ The server calls this before shutting down or loading a new map
 */
 void Hunk_Clear( void ) {
 
-#ifndef DEDICATED
+#ifndef SERVER
 	CL_ShutdownCGame();
 	CL_ShutdownUI();
 #endif
 	SV_ShutdownGameProgs();
-#ifndef DEDICATED
+#ifndef SERVER
 	CIN_CloseAllVideos();
 #endif
 	hunk_low.mark = 0;
@@ -2197,7 +2197,7 @@ int Com_EventLoop( void ) {
 		// if no more events are available
 		if ( ev.evType == SE_NONE ) {
 			// manually send packet events for the loopback channel
-#ifndef DEDICATED
+#ifndef SERVER
 			while ( NET_GetLoopPacket( NS_CLIENT, &evFrom, &buf ) ) {
 				CL_PacketEvent( evFrom, &buf );
 			}
@@ -2213,7 +2213,7 @@ int Com_EventLoop( void ) {
 			return ev.evTime;
 		}
 
-#ifndef DEDICATED
+#ifndef SERVER
 		switch(ev.evType)
 		{
 			case SE_KEY:
@@ -2398,7 +2398,7 @@ void Com_GameRestart(int checksumFeed, qboolean disconnect)
 		// Kill server if we have one
 		if(com_sv_running->integer)
 			SV_Shutdown("Game directory changed");
-#ifndef DEDICATED
+#ifndef SERVER
 		if(com_gameClientRestarting)
 		{
 			if(disconnect)
@@ -2420,7 +2420,7 @@ void Com_GameRestart(int checksumFeed, qboolean disconnect)
 			// new network settings might make the connection fail.
 			NET_Restart_f();
 		}
-#ifndef DEDICATED
+#ifndef SERVER
 		if(com_gameClientRestarting)
 		{
 			CL_Init();
@@ -2461,7 +2461,7 @@ void Com_GameRestart_f(void)
 // TTimo: centralizing the cl_cdkey stuff after I discovered a buffer overflow problem with the dedicated server version
 //   not sure it's necessary to have different defaults for regular and dedicated, but I don't want to risk it
 //   https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=470
-#ifndef DEDICATED
+#ifndef SERVER
 char	cl_cdkey[34] = "                                ";
 #else
 char	cl_cdkey[34] = "123456789";
@@ -2528,7 +2528,7 @@ void Com_AppendCDKey( const char *filename ) {
 	}
 }
 
-#ifndef DEDICATED
+#ifndef SERVER
 /*
 =================
 Com_WriteCDKey
@@ -2705,7 +2705,7 @@ void Com_Init( char *commandLine ) {
 	com_developer = Cvar_Get("developer", "0", CVAR_TEMP);
 
 	// done early so bind command exists
-#ifndef DEDICATED
+#ifndef SERVER
 	CL_InitKeyCommands();
 #endif
 	com_standalone = Cvar_Get("com_standalone", "0", CVAR_ROM);
@@ -2739,7 +2739,7 @@ void Com_Init( char *commandLine ) {
 	Com_StartupVariable( NULL );
 
   // get dedicated here for proper hunk megs initialization
-#ifdef DEDICATED
+#ifdef SERVER
 	com_dedicated = Cvar_Get ("dedicated", "1", CVAR_INIT);
 	Cvar_CheckRange( com_dedicated, 1, 2, qtrue );
 #else
@@ -2816,7 +2816,7 @@ void Com_Init( char *commandLine ) {
 	SV_Init();
 
 	com_dedicated->modified = qfalse;
-#ifndef DEDICATED
+#ifndef SERVER
 	CL_Init();
 #endif
 
@@ -2843,7 +2843,7 @@ void Com_Init( char *commandLine ) {
 
 	// start in full screen ui mode
 	Cvar_Set("r_uiFullScreen", "1");
-#ifndef DEDICATED
+#ifndef SERVER
 	CL_StartHunkUsers( qfalse );
 #endif
 	// make sure single player is off by default
@@ -2920,7 +2920,7 @@ void Com_ReadFromPipe( void )
 //==================================================================
 
 void Com_WriteConfigToFile( const char *filename ) {
-#ifndef DEDICATED
+#ifndef SERVER
 	fileHandle_t	f;
 
 	f = FS_FOpenFileWrite( filename );
@@ -2945,7 +2945,7 @@ Writes key bindings and archived cvars to config file if modified
 ===============
 */
 void Com_WriteConfiguration( void ) {
-#if !defined(DEDICATED) && !defined(STANDALONE)
+#if !defined(SERVER) && !defined(STANDALONE)
 	cvar_t	*fs;
 #endif
 	// if we are quiting without fully initializing, make sure
@@ -2962,7 +2962,7 @@ void Com_WriteConfiguration( void ) {
 	Com_WriteConfigToFile( Q3CONFIG_CFG );
 
 	// not needed for dedicated or standalone
-#if !defined(DEDICATED) && !defined(STANDALONE)
+#if !defined(SERVER) && !defined(STANDALONE)
 	fs = Cvar_Get ("fs_game", "", CVAR_INIT|CVAR_SYSTEMINFO );
 
 	if(!com_standalone->integer)
@@ -3192,13 +3192,13 @@ void Com_Frame( void ) {
 		com_dedicated->modified = qfalse;
 		if ( !com_dedicated->integer ) {
 			SV_Shutdown( "dedicated set to 0" );
-#ifndef DEDICATED
+#ifndef SERVER
 			CL_FlushMemory();
 #endif
 		}
 	}
 
-#ifndef DEDICATED
+#ifndef SERVER
 	//
 	// client system
 	//
@@ -3427,7 +3427,7 @@ static qboolean Field_Complete( void )
 	return qfalse;
 }
 
-#ifndef DEDICATED
+#ifndef SERVER
 /*
 ===============
 Field_CompleteKeyname
@@ -3487,7 +3487,7 @@ void Field_CompleteCommand( char *cmd,
 	else
 		completionString = Cmd_Argv( completionArgument - 1 );
 
-#ifndef DEDICATED
+#ifndef SERVER
 	// Unconditionally add a '\' to the start of the buffer
 	if( completionField->buffer[ 0 ] &&
 			completionField->buffer[ 0 ] != '\\' )
@@ -3514,7 +3514,7 @@ void Field_CompleteCommand( char *cmd,
 		const char *baseCmd = Cmd_Argv( 0 );
 		char *p;
 
-#ifndef DEDICATED
+#ifndef SERVER
 		// This should always be true
 		if( baseCmd[ 0 ] == '\\' || baseCmd[ 0 ] == '/' )
 			baseCmd++;
