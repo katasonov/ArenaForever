@@ -696,6 +696,10 @@ void SV_Init (void)
 #endif
 	sv_banFile = Cvar_Get("sv_banFile", "serverbans.dat", CVAR_ARCHIVE);
 
+#ifdef SERVER
+	sv_loadmap = Cvar_Get ("sv_loadmap", "", CVAR_LATCH | CVAR_INIT); //map to load on server start-up in console mode.
+#endif
+
 	// initialize bot cvars so they are listed and can be set before loading the botlib
 	SV_BotInitCvars();
 

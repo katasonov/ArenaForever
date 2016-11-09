@@ -305,6 +305,7 @@ extern	cvar_t	*sv_voipProtocol;
 #ifdef SERVER
 //needs for msg.c
 extern cvar_t	*cl_shownet;
+extern cvar_t  *sv_loadmap;
 #endif
 
 //===========================================================
