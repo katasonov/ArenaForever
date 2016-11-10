@@ -22,9 +22,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #include "ui_local.h"
 
+
 #define ART_FRAMEL			"menu/art/frame2_l"
 #define ART_FRAMER			"menu/art/frame1_r"
 #define ART_MODEL0			"menu/art/model_0"
+
+#ifdef QLYMP
+#define ART_CONNECT0		"menu/art/fight_0"
+#define ART_CONNECT1		"menu/art/fight_1"
+#endif
+
 #define ART_MODEL1			"menu/art/model_1"
 #define ART_BACK0			"menu/art/back_0"
 #define ART_BACK1			"menu/art/back_1"
@@ -42,6 +49,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ID_EFFECTS		12
 #define ID_BACK			13
 #define ID_MODEL		14
+#ifdef QLYMP
+#define ID_CONNECT		15
+#endif
 
 #define MAX_NAMELENGTH	20
 
@@ -60,6 +70,9 @@ typedef struct {
 
 	menubitmap_s		back;
 	menubitmap_s		model;
+#ifdef QLYMP
+	menubitmap_s		go;
+#endif
 	menubitmap_s		item_null;
 
 	qhandle_t			fxBasePic;
@@ -165,9 +178,11 @@ static void PlayerSettings_DrawName( void *self ) {
 	}
 
 	// draw at bottom also using proportional font
+#ifndef QLYMP
 	Q_strncpyz( name, f->field.buffer, sizeof(name) );
 	Q_CleanStr( name );
 	UI_DrawProportionalString( 320, 440, name, UI_CENTER|UI_BIGFONT, text_color_normal );
+#endif
 }
 
 
@@ -317,6 +332,20 @@ static void PlayerSettings_SetMenuItems( void ) {
 }
 
 
+#ifdef QLYMP
+
+/*
+=================
+PlayerSettings_Fight
+=================
+*/
+static void PlayerSettings_Fight(void) {
+
+	//servernode = g_arenaservers.table[g_arenaservers.list.curvalue].servernode;
+	trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n", "192.168.56.1:27960"));
+}
+#endif
+
 /*
 =================
 PlayerSettings_MenuEvent
@@ -341,6 +370,12 @@ static void PlayerSettings_MenuEvent( void* ptr, int event ) {
 		PlayerSettings_SaveChanges();
 		UI_PopMenu();
 		break;
+#ifdef QLYMP
+	case ID_CONNECT:
+		PlayerSettings_Fight();
+		break;
+#endif
+
 	}
 }
 
@@ -423,24 +458,51 @@ static void PlayerSettings_MenuInit( void ) {
 	s_playersettings.effects.generic.bottom		= y + 2* PROP_HEIGHT;
 	s_playersettings.effects.numitems			= 7;
 
-	s_playersettings.model.generic.type			= MTYPE_BITMAP;
-	s_playersettings.model.generic.name			= ART_MODEL0;
-	s_playersettings.model.generic.flags		= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_playersettings.model.generic.id			= ID_MODEL;
-	s_playersettings.model.generic.callback		= PlayerSettings_MenuEvent;
-	s_playersettings.model.generic.x			= 640;
-	s_playersettings.model.generic.y			= 480-64;
-	s_playersettings.model.width				= 128;
-	s_playersettings.model.height				= 64;
-	s_playersettings.model.focuspic				= ART_MODEL1;
+#ifdef QLYMP
+	s_playersettings.go.generic.type = MTYPE_BITMAP;
+	s_playersettings.go.generic.name = ART_CONNECT0;
+	s_playersettings.go.generic.flags = QMF_RIGHT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_playersettings.go.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.go.generic.id = ID_CONNECT;
+	s_playersettings.go.generic.x = 640;
+	s_playersettings.go.generic.y = 480 - 64;
+	s_playersettings.go.width = 128;
+	s_playersettings.go.height = 64;
+	s_playersettings.go.focuspic = ART_CONNECT1;
 
-	s_playersettings.player.generic.type		= MTYPE_BITMAP;
-	s_playersettings.player.generic.flags		= QMF_INACTIVE;
-	s_playersettings.player.generic.ownerdraw	= PlayerSettings_DrawPlayer;
-	s_playersettings.player.generic.x			= 400;
-	s_playersettings.player.generic.y			= -40;
-	s_playersettings.player.width				= 32*10;
-	s_playersettings.player.height				= 56*10;
+	s_playersettings.player.generic.type = MTYPE_BITMAP;
+	s_playersettings.player.generic.flags = QMF_PULSEIFFOCUS;
+	s_playersettings.player.generic.ownerdraw = PlayerSettings_DrawPlayer;
+	s_playersettings.player.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.player.generic.id = ID_MODEL;
+	s_playersettings.player.generic.x = 400;
+	s_playersettings.player.generic.y = -40;
+	s_playersettings.player.width = 32 * 10;
+	s_playersettings.player.height = 56 * 10;
+
+#else
+	s_playersettings.model.generic.type = MTYPE_BITMAP;
+	s_playersettings.model.generic.name = ART_MODEL0;
+	s_playersettings.model.generic.flags = QMF_RIGHT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_playersettings.model.generic.id = ID_MODEL;
+	s_playersettings.model.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.model.generic.x = 640;
+	s_playersettings.model.generic.y = 480 - 64;
+	s_playersettings.model.width = 128;
+	s_playersettings.model.height = 64;
+	s_playersettings.model.focuspic = ART_MODEL1;
+
+	s_playersettings.player.generic.type = MTYPE_BITMAP;
+	s_playersettings.player.generic.flags = QMF_INACTIVE;
+	s_playersettings.player.generic.ownerdraw = PlayerSettings_DrawPlayer;
+	s_playersettings.player.generic.x = 400;
+	s_playersettings.player.generic.y = -40;
+	s_playersettings.player.width = 32 * 10;
+	s_playersettings.player.height = 56 * 10;
+
+#endif
+
+
 
 	s_playersettings.back.generic.type			= MTYPE_BITMAP;
 	s_playersettings.back.generic.name			= ART_BACK0;
@@ -467,7 +529,11 @@ static void PlayerSettings_MenuInit( void ) {
 	Menu_AddItem( &s_playersettings.menu, &s_playersettings.name );
 	Menu_AddItem( &s_playersettings.menu, &s_playersettings.handicap );
 	Menu_AddItem( &s_playersettings.menu, &s_playersettings.effects );
+#ifndef QLYMP
 	Menu_AddItem( &s_playersettings.menu, &s_playersettings.model );
+#else
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.go);
+#endif
 	Menu_AddItem( &s_playersettings.menu, &s_playersettings.back );
 
 	Menu_AddItem( &s_playersettings.menu, &s_playersettings.player );
@@ -476,7 +542,6 @@ static void PlayerSettings_MenuInit( void ) {
 
 	PlayerSettings_SetMenuItems();
 }
-
 
 /*
 =================
