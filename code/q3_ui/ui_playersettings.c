@@ -342,7 +342,7 @@ PlayerSettings_Fight
 static void PlayerSettings_Fight(void) {
 
 	//servernode = g_arenaservers.table[g_arenaservers.list.curvalue].servernode;
-	trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n", "192.168.56.1:27960"));
+	trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n", "192.168.56.1:27000"));
 }
 #endif
 
