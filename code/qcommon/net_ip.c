@@ -1425,7 +1425,7 @@ static qboolean NET_GetCvars( void ) {
 #else
 	/* End users have it enabled so they can connect to ipv6-only hosts, but ipv4 will be
 	 * used if available due to ping */
-	net_enabled = Cvar_Get( "net_enabled", "3", CVAR_LATCH | CVAR_ARCHIVE );
+	net_enabled = Cvar_Get( "net_enabled", "3", CVAR_LATCH/*CVAR_LATCH | CVAR_ARCHIVE */);
 #endif
 	modified = net_enabled->modified;
 	net_enabled->modified = qfalse;
