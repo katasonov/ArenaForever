@@ -74,3 +74,5 @@ syntax: glob
 
 misc/winquake.res
 *.orig
+
+*VC.*
