@@ -102,9 +102,16 @@ static cvar_t	*net_socksPort;
 static cvar_t	*net_socksUsername;
 static cvar_t	*net_socksPassword;
 
+
 static cvar_t	*net_ip;
 static cvar_t	*net_ip6;
 static cvar_t	*net_port;
+
+#if !SERVER
+cvar_t	*net_remote_ip;
+cvar_t  *net_remote_port;
+#endif
+
 static cvar_t	*net_port6;
 static cvar_t	*net_mcast6addr;
 static cvar_t	*net_mcast6iface;
@@ -1431,14 +1438,21 @@ static qboolean NET_GetCvars( void ) {
 	net_enabled->modified = qfalse;
 
 	net_ip = Cvar_Get( "net_ip", "0.0.0.0", CVAR_LATCH );
+#if !SERVER
+	net_remote_ip = Cvar_Get("net_remote_ip", "127.0.0.1", CVAR_LATCH);
+	net_remote_port = Cvar_Get("net_remote_port", va("%i", 27001), CVAR_LATCH);
+#endif
+
 	modified += net_ip->modified;
 	net_ip->modified = qfalse;
-	
+
 	net_ip6 = Cvar_Get( "net_ip6", "::", CVAR_LATCH );
 	modified += net_ip6->modified;
 	net_ip6->modified = qfalse;
-	
-	net_port = Cvar_Get( "net_port", va( "%i", PORT_SERVER ), CVAR_LATCH );
+
+	net_port = Cvar_Get("net_port", va("%i", PORT_SERVER), CVAR_LATCH);
+
+
 	modified += net_port->modified;
 	net_port->modified = qfalse;
 	

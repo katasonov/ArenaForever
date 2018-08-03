@@ -339,12 +339,16 @@ static void PlayerSettings_SetMenuItems( void ) {
 PlayerSettings_Fight
 =================
 */
+extern cvar_t *net_remote_ip;
+extern cvar_t *net_remote_port;
+
 static void PlayerSettings_Fight(void) {
 
 	//servernode = g_arenaservers.table[g_arenaservers.list.curvalue].servernode;
 	//trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n", "192.168.56.1:27000"));
 	//trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n", "193.124.64.201:27000"));
-	trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n", "127.0.0.1:27001"));
+	trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s:%i\n", net_remote_ip->string, net_remote_port->integer));
+	//trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n", "127.0.0.1:27001"));
 	//trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n", "192.168.30.181:27000"));
 }
 #endif
