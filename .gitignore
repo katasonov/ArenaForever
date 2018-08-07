@@ -76,3 +76,14 @@ misc/winquake.res
 *.orig
 
 *VC.*
+/installer/arenaforever.zip
+/installer/baseq3/pak0.pk3
+/installer/baseq3/pak1-maps.pk3
+/installer/baseq3/pak2-players.pk3
+/installer/baseq3/pak2-players-mature.pk3
+/installer/baseq3/pak4-textures.pk3
+/installer/baseq3/pak5-TA.pk3
+/installer/baseq3/pak6-misc.pk3
+/installer/baseq3/pak6-patch085.pk3
+/installer/baseq3/pak6-patch088.pk3
+/installer/ioquake3.x86.exe
