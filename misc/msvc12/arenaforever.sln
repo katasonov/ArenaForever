@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "quake3", "quake3.vcxproj", "{81CB51C4-B434-4E12-B69B-BAEE102F2852}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "arenaforever", "arenaforever.vcxproj", "{81CB51C4-B434-4E12-B69B-BAEE102F2852}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F7B397A4-8111-421B-A23B-B9A2CE509183} = {F7B397A4-8111-421B-A23B-B9A2CE509183}
 		{81CE8DAF-EBB2-4761-8E45-B71ABCCA8C68} = {81CE8DAF-EBB2-4761-8E45-B71ABCCA8C68}
@@ -19,6 +19,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL2main", "..\..\SDL2-2.0.4\VisualC\SDLmain\SDLmain.vcxproj", "{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "server.vcxproj", "{0637C019-F03E-4854-9C8F-291494D1E82C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F7B397A4-8111-421B-A23B-B9A2CE509183} = {F7B397A4-8111-421B-A23B-B9A2CE509183}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,5 +106,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4C9A5BEF-FC85-4751-B947-94B6919FCBBB}
 	EndGlobalSection
 EndGlobal

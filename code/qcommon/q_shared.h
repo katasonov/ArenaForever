@@ -29,16 +29,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define STANDALONE
 
 #ifdef STANDALONE
-	#define PRODUCT_NAME				"Qlympia"
-	#define BASEGAME					"baseq3"
-	#define CLIENT_WINDOW_TITLE		"Qlympia"
-	#define CLIENT_WINDOW_MIN_TITLE	"QL"
-	#define HOMEPATH_NAME_UNIX		".qlmp"
-	#define HOMEPATH_NAME_WIN			"Qlympia"
+	#define PRODUCT_NAME				"ArenaForever"
+	#define BASEGAME					"baseaf"
+	#define CLIENT_WINDOW_TITLE		"Arena Forever"
+	#define CLIENT_WINDOW_MIN_TITLE	"AF"
+	#define HOMEPATH_NAME_UNIX		".arenaf"
+	#define HOMEPATH_NAME_WIN			"ArenaForever"
 	#define HOMEPATH_NAME_MACOSX		HOMEPATH_NAME_WIN
-	#define STEAMPATH_NAME			"Qlimpia Arena"
-	#define STEAMPATH_APPID			"2300"
-	#define GAMENAME_FOR_MASTER		"Qlympia"
+	#define STEAMPATH_NAME			"Arena Forever"
+	#define STEAMPATH_APPID			"10000"
+	#define GAMENAME_FOR_MASTER		"Arena Forever"
 	#define CINEMATICS_LOGO		"idlogo.RoQ"
 	#define CINEMATICS_INTRO		"intro.RoQ"
 	#define LEGACY_PROTOCOL

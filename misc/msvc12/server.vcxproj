@@ -73,7 +73,7 @@
     <OutDir>..\..\build\release-msvc12-x86\</OutDir>
     <IntDir>..\..\build\release-msvc12-x86\client\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>ioquake3.x86</TargetName>
+    <TargetName>arenaforever</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
