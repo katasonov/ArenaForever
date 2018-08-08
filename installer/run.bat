@@ -1,1 +1,0 @@
-ioquake3.x86.exe +set r_fullscreen 0 +set sv_pure 0 +set r_mode 6 +set cg_drawFPS 1 +set net_remote_ip "212.237.50.11" +set net_remote_port 27001
