@@ -38,7 +38,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	#define HOMEPATH_NAME_MACOSX		HOMEPATH_NAME_WIN
 	#define STEAMPATH_NAME			"Arena Forever"
 	#define STEAMPATH_APPID			"10000"
-	#define GAMENAME_FOR_MASTER		"Arena Forever"
+	#define GAMENAME_FOR_MASTER		"ArenaForever"
 	#define CINEMATICS_LOGO		"idlogo.RoQ"
 	#define CINEMATICS_INTRO		"intro.RoQ"
 	#define LEGACY_PROTOCOL
