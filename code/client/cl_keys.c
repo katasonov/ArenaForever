@@ -1265,6 +1265,15 @@ void CL_KeyDownEvent( int key, unsigned time )
 
 	// escape is always handled special
 	if ( key == K_ESCAPE ) {
+
+		//If Console is active then ESC should close console
+		if (Key_GetCatcher() & KEYCATCH_CONSOLE)
+		{
+			Con_ToggleConsole_f();
+			Key_ClearStates();
+			return;
+		}
+
 		if ( Key_GetCatcher( ) & KEYCATCH_MESSAGE ) {
 			// clear message mode
 			Message_Key( key );
@@ -1335,6 +1344,14 @@ void CL_KeyUpEvent( int key, unsigned time )
 	// don't process key-up events for the console key
 	if ( key == K_CONSOLE || ( key == K_ESCAPE && keys[K_SHIFT].down ) )
 		return;
+
+	//If Console is active then ESC should close console
+	if (Key_GetCatcher() & KEYCATCH_CONSOLE && key == K_ESCAPE)
+	{
+		Con_ToggleConsole_f();
+		Key_ClearStates();
+		return;
+	}
 
 	//
 	// key up events only perform actions if the game key binding is
