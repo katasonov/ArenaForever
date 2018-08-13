@@ -50,7 +50,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifdef RANDOMIZE
 #define UNDECIDEDFUZZY
 #endif //RANDOMIZE
-#define DROPPEDWEIGHT
+//#define DROPPEDWEIGHT
 //minimum avoid goal time
 #define AVOID_MINIMUM_TIME		10
 //default avoid goal time
