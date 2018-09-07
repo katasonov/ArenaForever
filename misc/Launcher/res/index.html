@@ -1,31 +1,63 @@
 <html>
-<head>
-	<style>
-		h1 { color: blue; font-size: 30px; }
-		div { size: 200px; behavior: SampleBehavior; }// attach our SampleBehavior
-	</style>
-	
-	<script type="text/tiscript">
-		$(h1).text = view.Host_HelloWorld();
-		
-		var version_major = Sciter.VERSION >> 16;
-		var version_minor = Sciter.VERSION & 0xFFFF;
-		var revision_major = Sciter.REVISION >> 16;
-		var revision_minor = Sciter.REVISION & 0xFFFF;
-		$(h2).text = "Sciter version: " + String.printf("%d.%d.%d.%d", version_major, version_minor, revision_major, revision_minor);
-
-		if(view.connectToInspector)
-			view.connectToInspector();
-	</script>
-</head>
-
+  <head>
+    <title></title>
+    <style>
+    
+      div#tabs { flow:horizontal; border-spacing:1em; }
+      div#tabs > label { display:block; width:max-content; border:1px solid; behavior:check; }
+      div#tabs > label:checked { background:gold; }
+      
+      
+      html[state="view-1"] { background: #eaffff; }
+      html[state="view-2"] { background: #f3ffd6; }
+    
+    </style>
+    <script type="text/tiscript">
+    
+      const tabs = $(div#tabs);
+      const frameContent = $(frame#content); 
+      const footer = $(footer);
+      
+      var currentViewId = null;
+      var currentViewDoc = null;
+      var currentLabel = null;
+    
+      function selectView(viewId) {
+        if( currentLabel )
+          currentLabel.state.checked = false; // deselect previous
+          
+        frameContent.load(viewId + ".htm");
+        currentLabel = $(#tabs > label#{viewId});
+        currentLabel.state.checked = true;
+        currentViewId = viewId;
+        // getting reference to document loaded into the view
+        currentViewDoc = frameContent[0];  
+        // calling setup() function declared in the document
+        currentViewDoc.ns.setup();
+        footer.text = viewId;
+        // setting <html state="..."> attribute 
+        // so host view can be styled differently for each view (if needed)
+        self.attributes["state"] = viewId;
+      }
+      
+      self.on("click", "#tabs>label", function() {
+        var viewId = this.attributes["id"]; 
+        selectView(viewId);
+      })
+	  
+	  selectView("lobby")
+    
+    </script>
+  </head>
 <body>
-	<img src="http://misoftware.com.br/Content/img/logo_mi.png" />
-	<h1 />
-	<h2 />
-	
-	<p>A triangle drawn with a native behavior (C++ code):</p>
-	<div></div>
-	<p>See file <b>SampleBehavior.cpp</b> for defining a native behavior. Behaviors can do many things, not just drawing.</p>
+
+  <!--<div#tabs>
+    <label#lobby>First view</label>
+    <label#view-2>Second view</label>
+  </div>-->
+
+  <frame#content>    
+  </frame>
+  <footer>.</footer>
 </body>
 </html>

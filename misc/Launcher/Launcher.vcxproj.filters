@@ -52,6 +52,9 @@
     <ClCompile Include="src\SampleBehavior.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AFServerAppClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Window.hpp">
@@ -96,6 +99,9 @@
     <ClInclude Include="SciterDebugOutputHandler.hpp">
       <Filter>SciterSharpCPP</Filter>
     </ClInclude>
+    <ClInclude Include="src\AFServerAppClient.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ProgramOSX.mm">
@@ -111,6 +117,15 @@
       <Filter>res</Filter>
     </None>
     <None Include="sciter.dll" />
+    <None Include="res\lobby.htm">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\view-2.htm">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\main.css">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\SciterSharpCPP\README.txt">

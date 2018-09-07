@@ -181,6 +181,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\code\AF\af_service.c" />
     <ClCompile Include="..\..\code\botlib\be_aas_bspq3.c" />
     <ClCompile Include="..\..\code\botlib\be_aas_cluster.c" />
     <ClCompile Include="..\..\code\botlib\be_aas_debug.c" />

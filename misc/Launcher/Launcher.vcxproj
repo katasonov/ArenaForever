@@ -88,7 +88,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LOCAL_SERVER;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\sciter-sdk\include;src\SciterSharpCPP</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -159,6 +159,9 @@
     <ResourceCompile Include="rc\Launcher.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AFServerAppClient.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\ProgramWIN.cpp" />
     <ClCompile Include="src\SampleBehavior.cpp" />
@@ -177,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SciterDebugOutputHandler.hpp" />
+    <ClInclude Include="src\AFServerAppClient.hpp" />
     <ClInclude Include="src\App.hpp" />
     <ClInclude Include="src\BaseHost.hpp" />
     <ClInclude Include="src\Consts.hpp" />
@@ -192,6 +196,13 @@
     <ClInclude Include="src\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\lobby.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="res\main.css" />
+    <None Include="res\view-2.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="sciter.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

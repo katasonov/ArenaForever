@@ -340,8 +340,11 @@ void SV_DirectConnect( netadr_t from ) {
 	qboolean	compat = qfalse;
 #endif
 
+
+
 	Com_DPrintf ("SVC_DirectConnect ()\n");
-	
+
+
 	// Check whether this client is banned.
 	if(SV_IsBanned(&from, qfalse))
 	{
@@ -367,6 +370,26 @@ void SV_DirectConnect( netadr_t from ) {
 			return;
 		}
 	}
+
+#ifdef SERVER
+	//AF: checking access of the client
+	char		*af_player_data_enc;
+	char		*af_srv_access_code;
+	af_srv_access_code = Info_ValueForKey(userinfo, "af_srv_access_code");
+
+	if (!AF_ClientHasAccess(af_srv_access_code))
+	{
+		NET_OutOfBandPrint(NS_SERVER, from, "print\nInvalid server access code.\n");
+		return;
+	}
+
+	if (!AF_LoadUserInfo(af_player_data_enc, userinfo))
+	{
+		NET_OutOfBandPrint(NS_SERVER, from, "print\nCannot load player data.\n");
+		return;
+	}
+#endif
+
 
 	challenge = atoi( Info_ValueForKey( userinfo, "challenge" ) );
 	qport = atoi( Info_ValueForKey( userinfo, "qport" ) );
@@ -475,6 +498,7 @@ void SV_DirectConnect( netadr_t from ) {
 			goto gotnewcl;
 		}
 	}
+
 
 	// find a client slot
 	// if "sv_privateClients" is set > 0, then that number
