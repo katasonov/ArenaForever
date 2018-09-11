@@ -371,28 +371,30 @@ void SV_DirectConnect( netadr_t from ) {
 		}
 	}
 
+	challenge = atoi(Info_ValueForKey(userinfo, "challenge"));
+	qport = atoi(Info_ValueForKey(userinfo, "qport"));
+
+
 #ifdef SERVER
 	//AF: checking access of the client
-	char		*af_player_data_enc;
-	char		*af_srv_access_code;
-	af_srv_access_code = Info_ValueForKey(userinfo, "af_srv_access_code");
+	char		*srv_access_code;
+	char		*player_data_enc;
+	srv_access_code = Info_ValueForKey(userinfo, "af_srv_access_code");
+	player_data_enc = Info_ValueForKey(userinfo, "af_player_data_enc");
 
-	if (!AF_ClientHasAccess(af_srv_access_code))
+	if (!AF_ClientHasAccess(srv_access_code))
 	{
 		NET_OutOfBandPrint(NS_SERVER, from, "print\nInvalid server access code.\n");
 		return;
 	}
 
-	if (!AF_LoadUserInfo(af_player_data_enc, userinfo))
+	if (!AF_LoadUserInfo(player_data_enc, userinfo))
 	{
 		NET_OutOfBandPrint(NS_SERVER, from, "print\nCannot load player data.\n");
 		return;
 	}
 #endif
 
-
-	challenge = atoi( Info_ValueForKey( userinfo, "challenge" ) );
-	qport = atoi( Info_ValueForKey( userinfo, "qport" ) );
 
 	// quick reject
 	for (i=0,cl=svs.clients ; i < sv_maxclients->integer ; i++,cl++) {

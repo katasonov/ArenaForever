@@ -223,10 +223,10 @@ void UI_DrawConnectScreen( qboolean overlay ) {
 
 	switch ( cstate.connState ) {
 	case CA_CONNECTING:
-		s = va("Awaiting challenge...%i", cstate.connectPacketCount);
+		s = va("Awaiting connection...%i", cstate.connectPacketCount);
 		break;
 	case CA_CHALLENGING:
-		s = va("Awaiting connection...%i", cstate.connectPacketCount);
+		s = va("Awaiting challenge...%i", cstate.connectPacketCount);
 		break;
 	case CA_CONNECTED: {
 		char downloadName[MAX_INFO_VALUE];
