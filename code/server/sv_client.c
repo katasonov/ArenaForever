@@ -340,8 +340,11 @@ void SV_DirectConnect( netadr_t from ) {
 	qboolean	compat = qfalse;
 #endif
 
+
+
 	Com_DPrintf ("SVC_DirectConnect ()\n");
-	
+
+
 	// Check whether this client is banned.
 	if(SV_IsBanned(&from, qfalse))
 	{
@@ -368,8 +371,30 @@ void SV_DirectConnect( netadr_t from ) {
 		}
 	}
 
-	challenge = atoi( Info_ValueForKey( userinfo, "challenge" ) );
-	qport = atoi( Info_ValueForKey( userinfo, "qport" ) );
+	challenge = atoi(Info_ValueForKey(userinfo, "challenge"));
+	qport = atoi(Info_ValueForKey(userinfo, "qport"));
+
+
+#ifdef SERVER
+	//AF: checking access of the client
+	char		*srv_access_code;
+	char		*player_data_enc;
+	srv_access_code = Info_ValueForKey(userinfo, "af_srv_access_code");
+	player_data_enc = Info_ValueForKey(userinfo, "af_player_data_enc");
+
+	if (!AF_ClientHasAccess(srv_access_code))
+	{
+		NET_OutOfBandPrint(NS_SERVER, from, "print\nInvalid server access code.\n");
+		return;
+	}
+
+	if (!AF_LoadUserInfo(player_data_enc, userinfo))
+	{
+		NET_OutOfBandPrint(NS_SERVER, from, "print\nCannot load player data.\n");
+		return;
+	}
+#endif
+
 
 	// quick reject
 	for (i=0,cl=svs.clients ; i < sv_maxclients->integer ; i++,cl++) {
@@ -475,6 +500,7 @@ void SV_DirectConnect( netadr_t from ) {
 			goto gotnewcl;
 		}
 	}
+
 
 	// find a client slot
 	// if "sv_privateClients" is set > 0, then that number

@@ -2375,7 +2375,7 @@ void CL_CheckForResend( void ) {
 		// sending back the challenge
 		port = Cvar_VariableValue ("net_qport");
 
-		Q_strncpyz( info, Cvar_InfoString( CVAR_USERINFO ), sizeof( info ) );
+		Q_strncpyz( info, Cvar_InfoString(CVAR_MANAGED_USERINFO), sizeof( info ) );
 		
 #ifdef LEGACY_PROTOCOL
 		if(com_legacyprotocol->integer == com_protocol->integer)
