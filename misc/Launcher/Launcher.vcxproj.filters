@@ -113,17 +113,8 @@
     <None Include="src\SciterSharpCPP\SciterWindow.mm">
       <Filter>SciterSharpCPP</Filter>
     </None>
-    <None Include="res\index.html">
-      <Filter>res</Filter>
-    </None>
     <None Include="sciter.dll" />
-    <None Include="res\lobby.htm">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\view-2.htm">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\main.css">
+    <None Include="res\login.htm">
       <Filter>res</Filter>
     </None>
   </ItemGroup>
@@ -131,5 +122,21 @@
     <Text Include="src\SciterSharpCPP\README.txt">
       <Filter>SciterSharpCPP</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="res\lobby.htm">
+      <Filter>res</Filter>
+    </Xml>
+    <Xml Include="res\main.css">
+      <Filter>res</Filter>
+    </Xml>
+    <Xml Include="res\view-2.htm">
+      <Filter>res</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="res\index.html">
+      <Filter>res</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

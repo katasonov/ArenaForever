@@ -1,0 +1,62 @@
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    
+    <style>
+
+        html {
+            background-color: transparent;
+        }
+    </style>
+    <script type="text/tiscript">
+
+
+        $(button#OnRegister).on("click", function(){
+                var el = $(#OnRegister);
+                el.@#flash = true;
+                el.timer(10ms, ::el.@#flash = undefined);
+        });
+
+    </script>
+</head> 
+<body>
+
+        <div class="login-widget">
+            <div class="title">
+                Please Login
+            </div>
+            <div style="height:20px;"></div>
+            <div class="input-line">
+                <input type="text" id="nick-input" name="nick-input" required
+                       minlength="5" maxlength="10"
+                       novalue="Nickname"
+                       title="Game name that will be seen by other players." />
+            </div>
+            <div class="input-line">
+                <input type="text" id="email-input" name="email-input" required
+                       minlength="5" maxlength="32"
+                       novalue="Email"
+                       title="Email that will be used to restore your passwords." />
+            </div>
+            <div class="input-line">
+                <input type="password" id="pass-input" name="pass-input" required
+                       minlength="5" maxlength="32"
+                       novalue="Password"
+                       title="Password to access game" />
+            </div>
+            <div class="input-line">
+                <input type="password" id="rpass-input" name="rpass-input" required
+                       minlength="5" maxlength="32"
+                       novalue="Repeat password"
+                       title="Repeat password" />
+            </div>
+
+            <div id="registerdiv" class="submit-line">
+                <button id="OnRegister">Register</button>
+            </div>
+        </div>
+    
+
+</body>
+</html>

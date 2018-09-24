@@ -14,12 +14,15 @@
 class SciterWindow
 {
 private:
+	//static constexpr UINT DefaultCreateFlags =
+	//	SW_MAIN |
+	//	SW_TITLEBAR |
+	//	SW_RESIZEABLE |
+	//	SW_CONTROLS |
+	//	SW_ENABLE_DEBUG;
 	static constexpr UINT DefaultCreateFlags =
-		SW_MAIN |
-		SW_TITLEBAR |
-		SW_RESIZEABLE |
-		SW_CONTROLS |
-		SW_ENABLE_DEBUG;
+
+		SW_MAIN | SW_ALPHA | SW_POPUP | SW_ENABLE_DEBUG;
 	
 	HWINDOW _hwnd;
 

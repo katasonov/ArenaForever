@@ -1,20 +1,31 @@
 <html>
-  <head>
+<head>
     <title></title>
-    <style>
-      html { background-color:transparent; }
-    </style>
-    <script type="text/tiscript">
+    <link rel="stylesheet" type="text/css" href="main.css">
 
-        $(button#btnLaunchGame).on("click", function(){
+    <style>
+
+        html {
+            background-color: transparent;
+        }
+    </style>
+    <script type="text/tiscript"> 
+
+        $(button#btnLaunchGame).on("click", function(){   
                     view.Host_HelloWorld();
                 });
 
     </script>
-  </head>
+</head> 
 <body>
 
-    <button id="btnLaunchGame">Launch</button>
+    <div class="header">
+    </div>
+    <div class="content">
+        <button id="btnLaunchGame" class="launcher">Launch</button>
+    </div>
+    <div class="footer">
+    </div>
 
 </body>
 </html>

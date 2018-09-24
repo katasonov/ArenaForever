@@ -7,7 +7,7 @@
 #if __OBJC__ // when compiling App.mm only
 #import <Cocoa/Cocoa.h>
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate> 
 
 @end
 #endif
