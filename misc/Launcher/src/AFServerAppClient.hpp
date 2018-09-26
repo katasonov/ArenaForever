@@ -16,5 +16,7 @@ public:
 	AFServerAppClient();
 
 	void RequestGameArenaAsync(GameArenaResponseClbk &&responseClbk);
-	
+
+	void RegisterNewPlayer(wstring nick, wstring email, wstring pass, std::function<void(int, wstring)> clbk);
+	void LoginPlayer(wstring email, wstring pass, function<void(int, wstring)> clbk);
 };

@@ -13,3 +13,4 @@ with open(mypath + '../src/App.cpp', 'w') as f:
 		if "timestamp:=[" in line:
 			line = "//timestamp:=[" + str(datetime.datetime.now()) + "]\n"
 		f.write(line)
+	

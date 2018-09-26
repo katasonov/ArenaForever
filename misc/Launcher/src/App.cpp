@@ -1,5 +1,5 @@
 //Need for auto rebuild sciter resources. Maybe it could be done better???
-//timestamp:=[2018-09-24 16:03:13.197000]
+//timestamp:=[2018-09-26 15:16:58.006000]
 #include "stdafx.h"
 #include "App.hpp"
 #include "sciter-x.h"

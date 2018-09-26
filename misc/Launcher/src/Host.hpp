@@ -7,6 +7,8 @@
 
 #include "AFServerAppClient.hpp"
 
+#include "Player.h"
+
 using namespace std;
 
 
@@ -14,7 +16,46 @@ class HostEvh : public SciterEventHandler
 {
 	virtual bool on_script_call(HELEMENT he, LPCSTR name, UINT argc, const SCITER_VALUE* argv, SCITER_VALUE& retval) override
 	{
-		if(std::string(name) == "Host_HelloWorld")
+		if (std::string(name) == "LoginPlayer")
+		{
+			auto email = argv[0];
+			auto pass = argv[1];
+			auto func = argv[2];
+
+			AFServerAppClient::Instance().LoginPlayer(
+				email.to_string(),
+				pass.to_string(),
+				[=](int errCode, wstring authCode) {
+				if (errCode == 0)
+				{
+					Player::Instance().AuthCode = authCode;
+				}
+				func.call(errCode);
+			});
+		}
+
+		if (std::string(name) == "RegisterPlayer")	
+		{
+			auto nick = argv[0];
+			auto email = argv[1];
+			auto pass = argv[2];
+			auto func = argv[3];
+
+			AFServerAppClient::Instance().RegisterNewPlayer(
+				nick.to_string(), 
+				email.to_string(), 
+				pass.to_string(), 
+				[=](int errCode, wstring authCode) {
+					if (errCode == 0) 
+					{
+						Player::Instance().AuthCode = authCode;
+						Player::Instance().Nick = nick.to_string();
+						Player::Instance().Email = email.to_string();
+					}
+					func.call(errCode);
+			});
+		}
+		else if(std::string(name) == "Host_Register") 
 		{
 			//retval = sciter::value(WSTR("Hello World! (from native side)"));
 			

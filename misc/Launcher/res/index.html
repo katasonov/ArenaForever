@@ -5,6 +5,18 @@
     
         <script type="text/tiscript">
 
+            const apiErrorUnknown = 0xFFFF;
+
+            const apiErrorGeneralInvalidRequest = 0x0001;
+            const apiErrorPlayerRegisterNickExists = 0x0102;
+            const apiErrorPlayerRegisterEmailExists = 0x0103;
+
+
+            const apiErrorPlayerLoginNoPlayerWithEmail = 0x0201;
+            const apiErrorPlayerLoginInvalidCredentials = 0x0202;
+
+
+
 
              const tabs = $(div#tabs);
              const frameContent = $(frame#content);
@@ -39,7 +51,7 @@
 
              selectView("login")
 
- 
+
 
         </script>
   </head>
