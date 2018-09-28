@@ -2911,7 +2911,9 @@ void CL_CheckUserinfo( void ) {
 	if(cvar_modifiedFlags & CVAR_USERINFO)
 	{
 		cvar_modifiedFlags &= ~CVAR_USERINFO;
-		CL_AddReliableCommand(va("userinfo \"%s\"", Cvar_InfoString( CVAR_USERINFO ) ), qfalse);
+		//AF:
+		//CL_AddReliableCommand(va("userinfo \"%s\"", Cvar_InfoString( CVAR_USERINFO ) ), qfalse);
+		//FA
 	}
 }
 
@@ -3609,10 +3611,14 @@ void CL_Init( void ) {
 	cl_consoleKeys = Cvar_Get( "cl_consoleKeys", "~ ` 0x7e 0x60", CVAR_ARCHIVE);
 
 	// userinfo
-	Cvar_Get ("name", "UnnamedPlayer", CVAR_USERINFO | CVAR_ARCHIVE );
+	//AF:
+	//Cvar_Get ("name", "UnnamedPlayer", CVAR_USERINFO | CVAR_ARCHIVE );
+	//FA
 	cl_rate = Cvar_Get ("rate", "25000", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("snaps", "20", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("model", "sarge", CVAR_USERINFO | CVAR_ARCHIVE );
+	//AF:
+	//Cvar_Get ("model", "sarge", CVAR_USERINFO | CVAR_ARCHIVE );
+	//FA
 	Cvar_Get ("headmodel", "sarge", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("team_model", "james", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("team_headmodel", "*james", CVAR_USERINFO | CVAR_ARCHIVE );
@@ -3622,7 +3628,9 @@ void CL_Init( void ) {
 	Cvar_Get ("color2", "5", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("handicap", "100", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("teamtask", "0", CVAR_USERINFO );
-	Cvar_Get ("sex", "male", CVAR_USERINFO | CVAR_ARCHIVE );
+	//AF:
+	//Cvar_Get ("sex", "male", CVAR_USERINFO | CVAR_ARCHIVE );
+	//FA
 	Cvar_Get ("cl_anonymous", "0", CVAR_USERINFO | CVAR_ARCHIVE );
 
 	Cvar_Get ("password", "", CVAR_USERINFO);
