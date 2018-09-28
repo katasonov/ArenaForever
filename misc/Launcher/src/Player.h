@@ -14,6 +14,8 @@ public:
 	wstring AuthCode;
 	wstring Nick;
 	wstring Email;
+	wstring Model;
+	wstring Sex;
 };
 
 #endif

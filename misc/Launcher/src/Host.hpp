@@ -22,7 +22,7 @@ class HostEvh : public SciterEventHandler
 			auto pass = argv[1];
 			auto func = argv[2];
 
-			AFServerAppClient::Instance().LoginPlayer(
+			AFServerAppClient::Instance().LoginPlayerAsync(
 				email.to_string(),
 				pass.to_string(),
 				[=](int errCode, wstring authCode) {
@@ -41,7 +41,7 @@ class HostEvh : public SciterEventHandler
 			auto pass = argv[2];
 			auto func = argv[3];
 
-			AFServerAppClient::Instance().RegisterNewPlayer(
+			AFServerAppClient::Instance().RegisterNewPlayerAsync(
 				nick.to_string(), 
 				email.to_string(), 
 				pass.to_string(), 
@@ -55,15 +55,17 @@ class HostEvh : public SciterEventHandler
 					func.call(errCode);
 			});
 		}
-		else if(std::string(name) == "Host_Register") 
+		else if(std::string(name) == "LaunchGame") 
 		{
 			//retval = sciter::value(WSTR("Hello World! (from native side)"));
-			
-			AFServerAppClient::Instance().RequestGameArenaAsync(
-			[](int errCode, wstring srvIp, int port, wstring accessCode, wstring playerDataEnc) {
+			auto func = argv[0];
+			AFServerAppClient::Instance().ConnectToArenaAsync(Player::Instance().AuthCode, 
+				Player::Instance().Model, 
+				Player::Instance().Sex,
+			[=](int errCode, wstring srvIp, int port, wstring accessCode, wstring playerDataEnc) {
 				if (errCode != 0)
 				{
-					//TODO:
+					func.call(errCode);
 					return;
 				}
 
@@ -81,6 +83,7 @@ class HostEvh : public SciterEventHandler
 				path = buffer;
 
 				int result = _wsystem(path.c_str());
+				func.call(0);
 			});
 
 			return true;

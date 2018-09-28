@@ -5,8 +5,6 @@
 
 using namespace std;
 
-typedef void(*GameArenaResponseClbk)(int errCode, wstring srvIp, int port, wstring accessCode, wstring playerDataEnc);
-
 class AFServerAppClient
 {
 public:
@@ -15,8 +13,13 @@ public:
 
 	AFServerAppClient();
 
-	void RequestGameArenaAsync(GameArenaResponseClbk &&responseClbk);
+	void ConnectToArenaAsync(
+		wstring authCode,
+		wstring model, 
+		wstring sex, 
+		function<void(int errCode, wstring srvIp, int port, wstring accessCode, wstring playerDataEnc)> clbk);
 
-	void RegisterNewPlayer(wstring nick, wstring email, wstring pass, std::function<void(int, wstring)> clbk);
-	void LoginPlayer(wstring email, wstring pass, function<void(int, wstring)> clbk);
+	void RegisterNewPlayerAsync(wstring nick, wstring email, wstring pass, std::function<void(int, wstring)> clbk);
+	void LoginPlayerAsync(wstring email, wstring pass, function<void(int, wstring)> clbk);
+
 };
