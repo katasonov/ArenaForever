@@ -27,7 +27,7 @@ int JsonValueString(const string &key, const string &json, string &val)
 	return 0;
 }
 
-int JsonValueInt(const string &key, const string &json, int &val)
+int JsonValueInt(const string &key, const string &json, intmax_t &val)
 {
 	size_t pos = json.find(key, 0);
 
@@ -56,6 +56,57 @@ int JsonValueInt(const string &key, const string &json, int &val)
 		val += json[pos] - '0';
 		pos++;
 	}
+
+	return 0;
+}
+
+
+int ReadNextJsonObject(const char *json, string &obj)
+{
+	int openCounter = 0;
+	int closeCounter = 0;
+
+	char ch;
+	int offset = 0;
+	do
+	{
+		if (*json == '\0')
+			break;
+		if (openCounter == closeCounter && (openCounter > 0))
+			break;
+		if (openCounter > 0) 
+		{
+			obj += *json;
+		}
+		if (*json == '{')
+		{
+			obj += *json;
+			openCounter++;
+		}
+		if (*json == '}')
+			closeCounter++;
+		json++;
+		offset++;
+	} while (true);
+
+	return offset;
+}
+
+int JsonObjectsArray(const string &json, vector<string> &objects)
+{
+	string obj;
+	int offset = 0;
+
+	do 
+	{
+		obj = "";
+		offset += ReadNextJsonObject(json.c_str() + offset, obj);
+		if (obj.size() > 0)
+		{
+			objects.push_back(obj);
+		}
+	} while (obj.size() > 0 && offset < json.size());
+
 
 	return 0;
 }

@@ -185,12 +185,24 @@
     <ResourceCompile Include="rc\Launcher.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\AFCommon\HttpRequest.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\AFCommon\json.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\AFCommon\wstrf.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\AFServerAppClient.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\App.cpp" />
-    <ClCompile Include="src\HttpRequest.cpp" />
-    <ClCompile Include="src\json.cpp">
+    <ClCompile Include="src\Config.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\HostEvh.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -212,19 +224,23 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\wstrf.cpp">
+    <ClCompile Include="src\UpdatesManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\AFCommon\HttpRequest.h" />
+    <ClInclude Include="..\AFCommon\json.h" />
+    <ClInclude Include="..\AFCommon\wstrf.h" />
     <ClInclude Include="SciterDebugOutputHandler.hpp" />
     <ClInclude Include="src\AFServerAppClient.hpp" />
     <ClInclude Include="src\App.hpp" />
     <ClInclude Include="src\BaseHost.hpp" />
+    <ClInclude Include="src\Config.h" />
     <ClInclude Include="src\Consts.hpp" />
     <ClInclude Include="src\Host.hpp" />
-    <ClInclude Include="src\HttpRequest.h" />
-    <ClInclude Include="src\json.h" />
+    <ClInclude Include="src\HostEvh.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Resource.h" />
     <ClInclude Include="src\SciterSharpCPP\SciterArchive.hpp" />
@@ -234,8 +250,8 @@
     <ClInclude Include="src\SciterSharpCPP\SciterWindow.hpp" />
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\targetver.h" />
+    <ClInclude Include="src\UpdatesManager.h" />
     <ClInclude Include="src\Window.hpp" />
-    <ClInclude Include="src\wstrf.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="res\lobby.htm">
@@ -249,6 +265,9 @@
       <DeploymentContent>true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </Xml>
+    <None Include="res\console.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="res\login.htm">
       <DeploymentContent>true</DeploymentContent>
     </None>

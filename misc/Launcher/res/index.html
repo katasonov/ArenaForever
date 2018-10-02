@@ -1,55 +1,56 @@
-<html  custom-frame="layered" window-resizable>
+﻿<html  custom-frame="layered" window-resizable>
   <head>
     <title></title>
         <link rel="stylesheet" type="text/css" href="main.css" >
     
         <script type="text/tiscript">
 
-            const apiErrorUnknown = 0xFFFF;
+                const apiErrorUnknown = 0xFFFF;
 
-            const apiErrorGeneralInvalidRequest = 0x0001;
-            const apiErrorPlayerRegisterNickExists = 0x0102;
-            const apiErrorPlayerRegisterEmailExists = 0x0103;
-
-
-            const apiErrorPlayerLoginNoPlayerWithEmail = 0x0201;
-            const apiErrorPlayerLoginInvalidCredentials = 0x0202;
+                const apiErrorGeneralInvalidRequest = 0x0001;
+                const apiErrorPlayerRegisterNickExists = 0x0102;
+                const apiErrorPlayerRegisterEmailExists = 0x0103;
 
 
+                const apiErrorPlayerLoginNoPlayerWithEmail = 0x0201;
+                const apiErrorPlayerLoginInvalidCredentials = 0x0202;
 
 
-             const tabs = $(div#tabs);
-             const frameContent = $(frame#content);
-             const footer = $(footer);
 
-             var currentViewId = null;
-             var currentViewDoc = null;
-             var currentLabel = null;
 
-             function selectView(viewId) {
-               if( currentLabel )
-                 currentLabel.state.checked = false; // deselect previous
+                 const tabs = $(div#tabs);
+                 const frameContent = $(frame#content);
+                 const footer = $(footer);
 
-               frameContent.load(viewId + ".htm");
-               currentLabel = $(#tabs > label#{viewId});
-               currentLabel.state.checked = true;
-               currentViewId = viewId;
-               // getting reference to document loaded into the view
-               currentViewDoc = frameContent[0];
-               // calling setup() function declared in the document
-               currentViewDoc.ns.setup();
-               footer.text = viewId;
-               // setting <html state="..."> attribute
-               // so host view can be styled differently for each view (if needed)
-               self.attributes["state"] = viewId;
-             }
+                 var currentViewId = null;
+                 var currentViewDoc = null;
+                 var currentLabel = null;
 
-             self.on("click", "#tabs>label", function() {
-               var viewId = this.attributes["id"];
-               selectView(viewId);
-             })
+                 function selectView(viewId) {
+                   if( currentLabel )
+                     currentLabel.state.checked = false; // deselect previous
 
-             selectView("login")
+                   frameContent.load(viewId + ".htm");
+                   currentLabel = $(#tabs > label#{viewId});
+                   currentLabel.state.checked = true;
+                   currentViewId = viewId;
+                   // getting reference to document loaded into the view
+                   currentViewDoc = frameContent[0];
+                   // calling setup() function declared in the document
+                   currentViewDoc.ns.setup();
+                   footer.text = viewId;
+                   // setting <html state="..."> attribute
+                   // so host view can be styled differently for each view (if needed)
+                   self.attributes["state"] = viewId;
+                 }
+
+                 self.on("click", "#tabs>label", function() {
+                   var viewId = this.attributes["id"];
+                   selectView(viewId);
+                 })
+
+                 //selectView("login");
+                selectView("console");
 
 
 

@@ -1,7 +1,7 @@
 #include "AFServerAppClient.hpp"
-#include "wstrf.h"
-#include "HttpRequest.h"
-#include "json.h"
+#include "../../AFCommon/wstrf.h"
+#include "../../AFCommon/HttpRequest.h"
+#include "../../AFCommon/json.h"
 
 AFServerAppClient afServerClient;
 
@@ -42,13 +42,13 @@ void AFServerAppClient::ConnectToArenaAsync(
 			10);
 		auto body = HTTPBody(response.c_str());
 		string ip, payload, accessCode;
-		int port;
+		intmax_t port;
 		wstring wval;
 		auto err1 = JsonValueString("IP", body, ip);
 		auto err2 = JsonValueInt("Port", body, port);
 		auto err3 = JsonValueString("Payload", body, payload);
 		auto err4 = JsonValueString("AccessCode", body, accessCode);
-		int errCode = 0;
+		intmax_t errCode = 0;
 		if ((err1+err2+err3+err4) != 0)
 		{
 			err1 = JsonValueInt("ErrorCode", body, errCode);
@@ -78,7 +78,7 @@ void AFServerAppClient::RegisterNewPlayerAsync(wstring nick, wstring email, wstr
 			10);
 		auto body = HTTPBody(response.c_str());
 		string val;
-		int errCode = 0;
+		intmax_t errCode = 0;
 		wstring wval;
 		auto err = JsonValueString("AuthCode", body, val);
 		if (err == 0)
@@ -99,7 +99,6 @@ void AFServerAppClient::LoginPlayerAsync(wstring email, wstring pass, function<v
 {
 	thread([email, pass, clbk]
 	{
-
 		auto response = HttpGetStringResponse(Host, Port,
 			StrF("/api/v1/player/login?email=%s&pass=%s",
 				WtoUtf8(email).c_str(),
@@ -108,7 +107,7 @@ void AFServerAppClient::LoginPlayerAsync(wstring email, wstring pass, function<v
 			10);
 		auto body = HTTPBody(response.c_str());
 		string val;
-		int errCode = 0;
+		intmax_t errCode = 0;
 		wstring wval;
 		auto err = JsonValueString("AuthCode", body, val);
 		if (err == 0)
@@ -122,5 +121,43 @@ void AFServerAppClient::LoginPlayerAsync(wstring email, wstring pass, function<v
 				errCode = 0xFFFF;
 		}
 		clbk(errCode, wval);
+	}).detach();
+}
+
+void AFServerAppClient::GetCurrentResourcesTableAsync(function<void(int, vector<FileTableItem>&&)> clbk)
+{
+	thread([clbk]
+	{
+		vector<FileTableItem> filesTable;
+		auto response = HttpGetStringResponse(Host, Port,
+			StrF("/api/v1/update/resource"),
+			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + "api.arenaforever.com" + "\r\nAccept: */*",
+			10);
+		auto body = HTTPBody(response.c_str());
+		intmax_t errCode = 0;
+		vector<string> jsonObjects;		
+		auto err = JsonObjectsArray(body, jsonObjects);
+
+		if (err == 0)
+		{
+			for (auto &obj : jsonObjects) 
+			{
+				string name;
+				intmax_t hash, size;
+				auto err = JsonValueString("Name", obj, name);
+				err += JsonValueInt("Hash", obj, hash);
+				err += JsonValueInt("Size", obj, size);
+
+				filesTable.push_back({ UTF8ToW(name), (uint32_t)hash, (uintmax_t)size });
+			}
+		}
+		else
+		{
+			err = JsonValueInt("ErrorCode", body, errCode);
+			if (err != 0)
+				errCode = 0xFFFF;
+		}
+		//vector<vector<wstring>> table;
+		clbk(errCode, move(filesTable));
 	}).detach();
 }

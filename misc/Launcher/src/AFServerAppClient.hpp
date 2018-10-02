@@ -1,7 +1,11 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <thread>
+
+#include "UpdatesManager.h"
+
 
 using namespace std;
 
@@ -21,5 +25,7 @@ public:
 
 	void RegisterNewPlayerAsync(wstring nick, wstring email, wstring pass, std::function<void(int, wstring)> clbk);
 	void LoginPlayerAsync(wstring email, wstring pass, function<void(int, wstring)> clbk);
+
+	void GetCurrentResourcesTableAsync(function<void(int, vector<FileTableItem>&&)> clbk);
 
 };

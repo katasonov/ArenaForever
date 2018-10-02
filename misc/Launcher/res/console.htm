@@ -1,0 +1,68 @@
+﻿<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    
+    <style>
+
+        html {
+            background-color: transparent;
+        }
+
+    </style>
+    <script type="text/tiscript">
+
+        var showProgress = false;
+        $(.console-container).timer(100,function () {
+
+            if (showProgress) {
+                //var a = self.select(".console-line");
+                var size = $$([class = "console-line"]).length;
+                var i = 0;
+                for (var (pos, a) in $$([class = "console-line"]))
+                {
+                    if (i == size-1)
+                    {
+                        //view.msgbox(#alert, a);
+                        a.text = a.text + " .";
+                    }
+                    i++;
+                }
+            }
+            return true;
+        });
+
+        function ConsolePrintLine(line) {
+            //var div = new Element("div");
+            //div.text = "> "+line;
+            //$(.console-container).append(div);
+            //$(.console-container).text = line;
+            $(.console-container).html = $(.console-container).html + "<div class='console-line'> >" + line + "</div>";
+            //view.msgbox(#alert,  $(.console-container).text);
+        }
+
+        ConsolePrintLine("Проверка обновлений ресурсных файлов");
+
+        showProgress = true;
+
+        view.CheckResourceUpdateStatus( function (errCode, needUpdate) {
+            showProgress = false;
+            if (errCode != 0) {
+                //TODO: show fail message and repeate after timeout.
+                return;
+            }
+            if (needUpdate) {
+                ConsolePrintLine("Доступны новые ресурсы");
+                return;
+            }
+            ConsolePrintLine("Новых ресурсов не обнаружено");
+        });
+
+
+    </script>
+</head> 
+<body>
+    <div class="console-container">     
+    </div>
+</body>
+</html>

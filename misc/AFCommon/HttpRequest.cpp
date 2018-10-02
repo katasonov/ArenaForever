@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include <winsock2.h>
 
 #include "HttpRequest.h"
