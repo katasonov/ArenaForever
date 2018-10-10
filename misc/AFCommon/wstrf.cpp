@@ -171,7 +171,7 @@ void GetUnicodeFromUTF8(const std::vector<unsigned char>& in_str, std::wstring &
 	GetUnicodeFromUTF8(str, out_str);
 }
 
-std::wstring UTF8ToW(std::string &utf8)
+std::wstring UTF8ToW(const std::string &utf8)
 {
 	std::wstring outstr;
 	GetUnicodeFromUTF8(utf8, outstr);

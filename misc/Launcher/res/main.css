@@ -31,6 +31,9 @@ body {
     word-wrap: break-word;
 }
 
+.console-line.error {
+    color:red;
+}
 
 button.launcher {
     width: 255px;

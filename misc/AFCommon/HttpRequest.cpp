@@ -38,7 +38,7 @@ int HTTPBodyLength(char *httpMsg)
 	return len;
 }
 
-int HTTPHeaderIntValue(char *name, char *httpMsg)
+int HTTPHeaderIntValue(const char *name, char *httpMsg)
 {
 	auto where = strstr(httpMsg, "Content-Length:");
 	if (where == nullptr)

@@ -1,19 +1,84 @@
-#include "HostEvh.h"
+﻿#include "HostEvh.h"
 
 #include "UpdatesManager.h"
 
 #include "Config.h"
+#include "DownloadUpdatesCallback.h"
+
+#include "utils.h"
+#include "../../AFCommon/wstrf.h"
 
 bool HostEvh::on_script_call(HELEMENT he, LPCSTR name, UINT argc, const SCITER_VALUE* argv, SCITER_VALUE& retval)
 {
 
-	if (std::string(name) == "CheckResourceUpdateStatus")
+	if (std::string(name) == "RunAvailableUpdateCommands")
+	{
+		auto printFn = argv[0];
+		auto resultFn = argv[1];
+
+		thread (
+			[=]
+		{
+//			auto retValue = sciter::value(0);
+//			Config::Instance().ResourcesPath();
+//
+//			if (!utils::DirExists(Config::Instance().ResourcesPath()))
+//			{
+//				if (utils::CreateDirectoryRecursively(Config::Instance().ResourcesPath().c_str(), false)
+//					!= ERROR_SUCCESS)
+//				{
+//					retValue = sciter::value(0xFFFF);
+//					goto FINISH;
+//				}
+//			}
+//
+//			if (UpdatesManager::Instance().UpdateCommands.size() < 1)
+//			{
+//				retValue = sciter::value(0xFFFF);
+//				goto FINISH;
+//			}
+//
+//
+//			//TODO: remove resource files
+//			bool ok = true;
+//			for each (auto file in UpdatesManager::Instance().UpdateCommands)
+//			{
+//				if (file.cmd != UpdateCommand_Download || file.type != UpdateCommandType_Resource)
+//				{
+//					continue;
+//				}
+//				wstring pathToSaveFile;
+//				ok = AFServerAppClient::Instance().DownloadResourceFile(file.sarg0, Config::Instance().ResourcesPath(),
+//					[printFn](int downloaded, int total)
+//				{
+//					printFn.call(sciter::value(WStrF(L"Прогресс %d", downloaded)));
+//					return true;
+//				});
+//
+//				if (!ok)
+//					break;
+//
+//			}
+//
+//			if (!ok)
+//			{
+//				retValue = sciter::value(0xFFFF);
+//				goto FINISH;
+//			}
+//FINISH:
+//			int a = 10;
+
+			//resultFn.call(retValue);
+		});
+
+	} else if (std::string(name) == "CheckResourceUpdateStatus")
 	{
 		//App::AppWindow
 		auto func = argv[0];
 		
 		AFServerAppClient::Instance().GetCurrentResourcesTableAsync(
-			[=](int errCode, vector<FileTableItem> &&remoteTable) {
+			[=](int errCode, vector<FileTableItem> &&remoteTable) 
+		{
 				if (errCode == 0)
 				{
 					//compare current folder with remote resource table
@@ -24,16 +89,16 @@ bool HostEvh::on_script_call(HELEMENT he, LPCSTR name, UINT argc, const SCITER_V
 
 					if (updateCommands.size() > 0)
 					{
-						UpdatesManager::Instance().UpdateResourcesCommands = std::move(updateCommands);
+						UpdatesManager::Instance().UpdateCommands = std::move(updateCommands);
 						func.call(sciter::value(0), sciter::value(true));
 						return;
 					}
 					func.call(sciter::value(0), sciter::value(false));
 				}
-				else {
+				else 
+				{
 					func.call(sciter::value(errCode), sciter::value(false));
 				}
-				
 		});
 		//thread([=]
 		//{

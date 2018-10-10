@@ -1,0 +1,132 @@
+﻿function consolePrintLine(line) {
+	//var div = new Element("div");
+	//div.text = "> "+line;
+	//$(.console-container).append(div);
+	//$(.console-container).text = line;
+	$(.console-container).html = $(.console-container).html + "<div class='console-line'> >" + line + "</div>";
+	//view.msgbox(#alert,  $(.console-container).text);
+}
+
+function consolePrintLastLine(line) {
+	var size = $$([class = "console-line"]).length;
+		var i = 0;
+		for (var (pos, a) in $$([class = "console-line"]))
+		{
+			if (i == size-1)
+			{
+				//view.msgbox(#alert, a);
+				a.text = line;
+				break;
+			}
+			i++;
+		}
+}
+
+function ConsolePrintErrorLine(line) {
+	//var div = new Element("div");
+	//div.text = "> "+line;
+	//$(.console-container).append(div);
+	//$(.console-container).text = line;
+	$(.console-container).html = $(.console-container).html + "<div class='console-line error'> >" + line + "</div>";
+	//view.msgbox(#alert,  $(.console-container).text);
+}
+
+function self.ready() {
+	//view.msgbox(#alert,  view.settings.window.height);	
+	
+	//view.consolePrintLine = self.consolePrintLine;
+
+	// view.getResourceEtalonMap(
+		// function (errCode, remoteMap) {
+			// if (remoteMap == 0 || errCode != 0)
+			// {
+				// ConsolePrintErrorLine("Произошла ошибка");
+				// return;
+			// }
+			// for (var fmItem in remoteMap) {
+				// consolePrintLine(fmItem.name + "\t" + fmItem.size + "\t" + fmItem.hash);
+			// }
+			// consolePrintLine("Получаем карту локальных ресурсов");
+			// view.getResourceDirectoryFilesMap(
+				// function (errCode, localMap) {
+					// if (localMap == 0 || errCode != 0)
+					// {
+						// ConsolePrintErrorLine("Произошла ошибка");
+						// return;
+					// }
+					// for (var fmItem in localMap) {
+						// consolePrintLine(fmItem.name + "\t" + fmItem.size + "\t" + fmItem.hash);
+					// }
+				// });
+		// });	
+		
+	consolePrintLine("Обновление ресурсов: ");
+	view.ntvResourceUpdate(
+		function (errCode, progress) {
+			if (errCode != 0) {
+				//ConsolePrintErrorLine("Произошла ошибка обновления ресурсных файлов");
+				view.msgbox(#alert,  "Произошла ошибка обновления ресурсных файлов");
+				view.ntvExit();
+			}
+			
+			consolePrintLastLine("Обновление ресурсов: " + progress);
+		});
+
+	
+}
+
+
+/*
+var showProgress = false;
+
+$(.console-container).timer(100,function () {
+
+	if (showProgress) {
+		//var a = self.select(".console-line");
+		var size = $$([class = "console-line"]).length;
+		var i = 0;
+		for (var (pos, a) in $$([class = "console-line"]))
+		{
+			if (i == size-1)
+			{
+				//view.msgbox(#alert, a);
+				a.text = a.text + " .";
+			}
+			i++;
+		}
+	}
+	return true;
+});
+
+
+
+ConsolePrintLine("Проверка обновлений ресурсных файлов");
+
+//showProgress = true;
+
+view.startUpdates(function (errCode, isStopped, progress, desc) {
+	ConsolePrintLine(desc);
+});
+
+
+/*view.CheckResourceUpdateStatus( function (errCode, needUpdate ) {
+	showProgress = false;
+	if (errCode != 0) {
+		//TODO: show fail message and repeat after timeout.
+		ConsolePrintErrorLine("Не удалось получить данные с сервера");				
+		return;
+	}
+	if (needUpdate) {
+		ConsolePrintLine("Доступны новые ресурсы");
+		ConsolePrintLine("Загрузка ресурсов");
+		//view.RunAvailableUpdateCommands(ConsolePrintLine, function (errCode) {
+			//ConsolePrintLine("Произошла ошибка");
+			//view.msgbox(#alert,  "1");
+		//});
+		return;
+	}
+	ConsolePrintLine("Новых ресурсов не обнаружено");
+});*/
+
+
+

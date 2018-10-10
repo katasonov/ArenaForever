@@ -3,6 +3,9 @@
 #include "../../AFCommon/HttpRequest.h"
 #include "../../AFCommon/json.h"
 
+#include "DownloadUpdatesCallback.h"
+#include "utils.h"
+
 AFServerAppClient afServerClient;
 
 #ifdef LOCAL_SERVER
@@ -134,6 +137,13 @@ void AFServerAppClient::GetCurrentResourcesTableAsync(function<void(int, vector<
 			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + "api.arenaforever.com" + "\r\nAccept: */*",
 			10);
 		auto body = HTTPBody(response.c_str());
+
+		if (body.empty() || body.size() < 2 || body[0] != '[')
+		{
+			clbk(0xFFFF, {});
+			return;
+		}
+
 		intmax_t errCode = 0;
 		vector<string> jsonObjects;		
 		auto err = JsonObjectsArray(body, jsonObjects);
@@ -160,4 +170,46 @@ void AFServerAppClient::GetCurrentResourcesTableAsync(function<void(int, vector<
 		//vector<vector<wstring>> table;
 		clbk(errCode, move(filesTable));
 	}).detach();
+}
+
+
+bool AFServerAppClient::DownloadResourceFile(wstring fileName, wstring savePath, function<bool(int, int)> clbk)
+{
+	HANDLE downloadFinishedEvent = CreateEvent(
+		NULL,         // default security attributes
+		TRUE,         // manual-reset event
+		FALSE,         // initial state is not signaled
+		NULL  // object name
+	);
+
+	bool ok = false;;
+	HRESULT ret;
+	do {
+		DownloadUpdatesCallback callback(downloadFinishedEvent, clbk);
+	
+		if (S_OK != (ret = URLDownloadToFile(NULL, WStrF(L"http://%s/bin_win32/baseaf/%s", Host.c_str(),
+			fileName.c_str()).c_str(), WStrF(L"%s\\%s", savePath.c_str(), fileName.c_str()).c_str(), 
+			0, &callback)))
+		{
+			DWORD err = GetLastError();
+			break;
+		}
+
+		WaitForSingleObject(downloadFinishedEvent, INFINITE);
+
+		if (callback.IsDownloadSuccess() == FALSE)
+		{
+			break;
+		}
+
+		ok = true;
+
+	} while (false);
+
+	if (downloadFinishedEvent != NULL)
+	{
+		CloseHandle(downloadFinishedEvent);
+	}
+
+	return ok;
 }

@@ -40,25 +40,39 @@
             $(.console-container).html = $(.console-container).html + "<div class='console-line'> >" + line + "</div>";
             //view.msgbox(#alert,  $(.console-container).text);
         }
+		
+		function ConsolePrintErrorLine(line) {
+            //var div = new Element("div");
+            //div.text = "> "+line;
+            //$(.console-container).append(div);
+            //$(.console-container).text = line;
+            $(.console-container).html = $(.console-container).html + "<div class='console-line error'> >" + line + "</div>";
+            //view.msgbox(#alert,  $(.console-container).text);
+        }
 
         ConsolePrintLine("Проверка обновлений ресурсных файлов");
 
         showProgress = true;
 
-        view.CheckResourceUpdateStatus( function (errCode, needUpdate) {
+        view.CheckResourceUpdateStatus( function (errCode, needUpdate ) {
             showProgress = false;
             if (errCode != 0) {
-                //TODO: show fail message and repeate after timeout.
+                //TODO: show fail message and repeat after timeout.
+				ConsolePrintErrorLine("Не удалось получить данные с сервера");				
                 return;
             }
             if (needUpdate) {
                 ConsolePrintLine("Доступны новые ресурсы");
+				ConsolePrintLine("Загрузка ресурсов");
+				//view.RunAvailableUpdateCommands(ConsolePrintLine, function (errCode) {
+					//ConsolePrintLine("Произошла ошибка");
+					//view.msgbox(#alert,  "1");
+				//});
                 return;
             }
             ConsolePrintLine("Новых ресурсов не обнаружено");
         });
-
-
+		
     </script>
 </head> 
 <body>

@@ -37,7 +37,7 @@ class UpdatesManager
 {
 public:
 
-	vector<UpdateCommand> UpdateResourcesCommands;
+	vector<UpdateCommand> UpdateCommands;
 
 	static UpdatesManager& Instance();
 

@@ -28,4 +28,6 @@ public:
 
 	void GetCurrentResourcesTableAsync(function<void(int, vector<FileTableItem>&&)> clbk);
 
+	bool DownloadResourceFile(wstring fileName, wstring savePath, function<bool(int, int)> clbk);
+
 };

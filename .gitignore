@@ -3,7 +3,7 @@ Makefile.local
 *.swp
 *tags
 *~
-
+*.bak
 # OS X
 ####################
 .Spotlight-V100/

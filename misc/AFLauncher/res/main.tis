@@ -1,0 +1,73 @@
+ include "config.tis";
+ include "libs/settings.tis";
+
+ const tabs = $(div#tabs);
+ const frameContent = $(frame#content);
+ const footer = $(footer);
+
+ var currentViewId = null;
+ var currentViewDoc = null;
+ var currentLabel = null;
+ 
+
+
+
+
+function self.ready() 
+{
+	if( !view.api )
+	  view.api = view.nativeApi(); 
+	  
+	Settings.restore();
+	
+	view.settings = Settings.fetch();
+	//view.msgbox(#alert,  "1: " + view.settings);
+	
+	selectView("updates/updates");
+	/*pathname = dbPathFromArgs() || settings.dbpath || System.path(#USER_DOCUMENTS,DBNAME);
+	if(checkDatabase(pathname)) 
+	{
+	  if( View.db = openDatabase(pathname) ) {
+		view.load(self.url("main.htm")); 
+		return;
+	  }
+	}
+	var body = $(body);
+	body.attributes.addClass("presented");
+	body.value = {
+	  name: Sciter.userName(),
+	  defloc: pathname.trim()
+	};*/
+}
+
+
+
+ function selectView(viewId) {
+   if( currentLabel )
+	 currentLabel.state.checked = false; // deselect previous
+
+   frameContent.load(viewId + ".htm");
+   //currentLabel = $(#tabs > label#{viewId});
+   //currentLabel.state.checked = true;
+   currentViewId = viewId;
+   // getting reference to document loaded into the view
+   currentViewDoc = frameContent[0];
+   // calling setup() function declared in the document
+   //currentViewDoc.ns.setup();
+   //footer.text = viewId;
+   // setting <html state="..."> attribute
+   // so host view can be styled differently for each view (if needed)
+   //self.attributes["state"] = viewId;
+ }
+
+ // self.on("click", "#tabs>label", function() {
+   // var viewId = this.attributes["id"];
+   // selectView(viewId);
+ // })
+
+ 
+ function self.closing() {
+  this.sendEvent("shutdown");
+  //db.commit();
+  //db.close();
+}

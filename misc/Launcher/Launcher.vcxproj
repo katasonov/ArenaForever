@@ -96,7 +96,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Urlmon.lib;Shell32.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>call scripts\packWindows.bat</Command>
@@ -228,6 +228,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\AFCommon\HttpRequest.h" />
@@ -239,6 +240,7 @@
     <ClInclude Include="src\BaseHost.hpp" />
     <ClInclude Include="src\Config.h" />
     <ClInclude Include="src\Consts.hpp" />
+    <ClInclude Include="src\DownloadUpdatesCallback.h" />
     <ClInclude Include="src\Host.hpp" />
     <ClInclude Include="src\HostEvh.h" />
     <ClInclude Include="src\Player.h" />
@@ -251,6 +253,7 @@
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\targetver.h" />
     <ClInclude Include="src\UpdatesManager.h" />
+    <ClInclude Include="src\utils.h" />
     <ClInclude Include="src\Window.hpp" />
   </ItemGroup>
   <ItemGroup>

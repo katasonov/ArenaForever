@@ -1,33 +1,34 @@
 #include "json.h"
 
-int JsonValueString(const string &key, const string &json, string &val)
+string JsonValueString(const string &key, const string &json)
 {
 	size_t pos = json.find(key, 0);
 
 	if (pos == string::npos)
-		return -1;
+		throw std::exception("JsonValueString: failed");
 
 	pos = json.find_first_of(':', pos);
 
 	if (pos == string::npos)
-		return -1;
+		throw std::exception("JsonValueString: failed");
 
 	pos = json.find_first_of('"', pos);
 	if (pos == string::npos)
 	{
-		return -1;
+		throw std::exception("JsonValueString: failed");
 	}
 	pos++;
+	string ret;
 	while (pos < json.size() && json[pos] != '"') 
 	{
-		val += json[pos];
+		ret += json[pos];
 		pos++;
 	}
 
-	return 0;
+	return ret;
 }
 
-int JsonValueInt(const string &key, const string &json, intmax_t &val)
+int JsonValueInt(const string &key, const string &json)
 {
 	size_t pos = json.find(key, 0);
 
@@ -37,7 +38,7 @@ int JsonValueInt(const string &key, const string &json, intmax_t &val)
 	pos = json.find_first_of(':', pos);
 
 	if (pos == string::npos)
-		return -1;
+		throw std::exception("JsonValueInt: failed to parse int value");
 
 	//Trim spaces
 	pos++;
@@ -45,9 +46,9 @@ int JsonValueInt(const string &key, const string &json, intmax_t &val)
 		pos++;
 
 	if (!(pos < json.size()))
-		return -1;
+		throw std::exception("JsonValueInt: failed to parse int value");
 
-	val = 0;
+	int val = 0;
 	while (true)
 	{
 		if (json[pos] < '0' || json[pos] > '9')
@@ -57,7 +58,7 @@ int JsonValueInt(const string &key, const string &json, intmax_t &val)
 		pos++;
 	}
 
-	return 0;
+	return val;
 }
 
 
@@ -110,3 +111,24 @@ int JsonObjectsArray(const string &json, vector<string> &objects)
 
 	return 0;
 }
+
+//int JsonValue(const string &key, const string &json, string &valJson)
+//{
+//	size_t pos = json.find(key, 0);
+//
+//	if (pos == string::npos)
+//		return -1;
+//
+//	pos = json.find_first_of(':', pos);
+//
+//	if (pos == string::npos)
+//		return -1;
+//
+//	while (pos < json.size())
+//	{
+//		if (comma - 1 == opened)
+//	}
+//
+//
+//	return 0;
+//}

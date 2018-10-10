@@ -9,7 +9,7 @@ std::string WtoUtf8(const std::wstring& in_str);
 std::string GetAnsiMultibyteCharacterString(const std::wstring& in_str);
 
 std::wstring GetUnicodeCharacterString(const std::string& in_str);
-std::wstring UTF8ToW(std::string &utf8);
+std::wstring UTF8ToW(const std::string &utf8);
 std::wstring GetBinaryDataUnicodeString(const char* buff, long size);
 
 

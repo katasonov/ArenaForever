@@ -6,8 +6,9 @@
 
 using namespace std;
 
-int JsonValueString(const string &key, const string &json, string &val);
-int JsonValueInt(const string &key, const string &json, intmax_t &val);
+int JsonValue(const string &key, const string &json, string &valJson);
+string JsonValueString(const string &key, const string &json);
+int JsonValueInt(const string &key, const string &json);
 int JsonObjectsArray(const string &json, vector<string> &objects);
 
 
