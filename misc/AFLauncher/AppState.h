@@ -12,8 +12,12 @@ class AppState
 public:
 	static wstring GetResourcesPath()
 	{
-		auto dir = System::GetRealCurrentDirectory();
-		dir = WStrF(L"%s\\baseaf", dir.c_str());
-		return dir;
+		return WStrF(L"%s\\baseaf", GetAppPath().c_str());
 	}
+
+	static wstring GetAppPath()
+	{
+		return System::GetRealCurrentDirectory();
+	}
+	
 };

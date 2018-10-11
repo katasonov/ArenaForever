@@ -16,6 +16,10 @@ public:
 	static wstring JoinPath(const wstring &path1, const wstring &path2);
 	static wstring JoinURI(const wstring &path1, const wstring &path2);
 	static void RemoveFile(const wstring &path);
+	static void RunProcess(const wstring &path, const wstring &args);
+
+
+	static void UnZipContentFolder(const wstring &zip, const wstring &to, const string pass);
 };
 
 

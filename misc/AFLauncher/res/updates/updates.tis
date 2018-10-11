@@ -68,8 +68,30 @@ function self.ready() {
 				view.msgbox(#alert,  "Произошла ошибка обновления ресурсных файлов");
 				view.ntvExit();
 			}
-			
+			if (progress != 100)
+			{
+				consolePrintLastLine("Обновление ресурсов: " + progress);
+				return;
+			}
 			consolePrintLastLine("Обновление ресурсов: " + progress);
+			consolePrintLine("Обновление программы: ");
+			//Start main app files update
+			view.ntvCheckAndDownloadAppFiles(function (err, progress, folder){
+				if (err != 0){
+					view.msgbox(#alert,  "Произошла ошибка обновления файлов программы");
+					view.ntvExit();
+				}
+				if (progress != 100)
+				{
+					consolePrintLastLine("Обновление программы: " + progress);
+					return;
+				}
+				view.msgbox(#alert,  "Для продолжения работы программа будет автоматически перезагружена");
+				view.ntvRunAFMvBins(folder);
+				view.ntvExit();
+			});
+			
+			
 		});
 
 	

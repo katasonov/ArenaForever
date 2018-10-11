@@ -75,6 +75,12 @@
     <ClInclude Include="Commands\UpdateResourcesCommand.h">
       <Filter>Commands</Filter>
     </ClInclude>
+    <ClInclude Include="Commands\CheckAndDownloadNewAppFilesCommand.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AFCommon\unzip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -114,6 +120,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AFCommon\unzip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

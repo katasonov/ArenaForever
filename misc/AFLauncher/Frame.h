@@ -5,7 +5,7 @@
 #include "Switcher.h"
 
 #include "Commands\UpdateResourcesCommand.h"
-
+#include "Commands\CheckAndDownloadNewAppFilesCommand.h"
 
 static sciter::value native_api() 
 {
@@ -51,7 +51,10 @@ public:
 		//FUNCTION_0("helloWorld", helloWorld);
 		FUNCTION_0("nativeApi", native_api);
 		FUNCTION_0("ntvExit", NtvExit);
+		FUNCTION_0("ntvNeedCheckUpdates", NtvNeedCheckUpdates);
+		FUNCTION_1("ntvRunAFMvBins", NtvRunAFMvBins);
 		FUNCTION_1("ntvResourceUpdate", NtvResourceUpdate);
+		FUNCTION_1("ntvCheckAndDownloadAppFiles", NtvCheckAndDownloadAppFiles);
 		//FUNCTION_1("getResourceEtalonMap", GetResourceEtalonMap);
 		//FUNCTION_1("getResourceDirectoryFilesMap", GetResourceDirectoryFilesMap);
 	END_FUNCTION_MAP
@@ -59,6 +62,30 @@ public:
 	//sciter::string  helloWorld() {
 	//	return WSTR("Hello u-minimal World");
 	//}
+
+	int NtvCheckAndDownloadAppFiles(sciter::value clbk)
+	{
+		Switcher::Instance().AddCommand(new CheckAndDownloadNewAppFilesCommand([=](int err, int progress, const wstring &folder)
+		{ 
+			clbk.call(sciter::value(err), sciter::value(progress), sciter::value(folder));
+		}));
+		return 0;
+	}
+
+
+	int NtvRunAFMvBins(sciter::value folder)
+	{
+		System::RunProcess(System::JoinPath(AppState::GetAppPath(), L"afmvbins.exe"), folder.to_string());
+		return 0;
+	}
+
+	sciter::value  NtvNeedCheckUpdates()
+	{
+		wstring cmdline = GetCommandLine();
+		
+		return !(cmdline.find(L"-s") != wstring::npos);
+		//sciter::value(&etalonMap[0], etalonMap.size())
+	}
 
 	int NtvResourceUpdate(sciter::value clbk)
 	{

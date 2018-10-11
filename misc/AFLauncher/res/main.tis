@@ -21,9 +21,15 @@ function self.ready()
 	Settings.restore();
 	
 	view.settings = Settings.fetch();
-	//view.msgbox(#alert,  "1: " + view.settings);
+
+
+	if (cfgNeedCheckUpdates)
+		selectView("updates/updates");
+		
+	//view.msgbox(#alert,  false);
+	//var needCheckUpdates = true; 
 	
-	selectView("updates/updates");
+	//selectView("updates/updates");
 	/*pathname = dbPathFromArgs() || settings.dbpath || System.path(#USER_DOCUMENTS,DBNAME);
 	if(checkDatabase(pathname)) 
 	{

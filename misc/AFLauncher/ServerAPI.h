@@ -31,10 +31,33 @@ public:
 		
 	}
 
+	static wstring AppWin32BinsArchiveURI()
+	{
+		if (Port != 80 || Port != 8080)
+		{
+			return WStrF(L"http://%s:%d/appwin32bins.zip", UTF8ToW(Host).c_str(), Port);
+		}
+		else
+		{
+			return WStrF(L"http://%s/appwin32bins.zip", UTF8ToW(Host).c_str(), Port);
+		}
+	}
+
 	static string GetResourceUpdatesMap()
 	{
 		auto response = HttpGetStringResponse(Host, Port,
 			StrF("/api/v1/static/folder?name=baseaf"),
+			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + "api.arenaforever.com" + "\r\nAccept: */*",
+			10);
+		auto body = HTTPBody(response.c_str());
+
+		return body;
+	}
+
+	static string GetAppBinsUpdatesMap()
+	{
+		auto response = HttpGetStringResponse(Host, Port,
+			StrF("/api/v1/static/folder?name=win32"),
 			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + "api.arenaforever.com" + "\r\nAccept: */*",
 			10);
 		auto body = HTTPBody(response.c_str());

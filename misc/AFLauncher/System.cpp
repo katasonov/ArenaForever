@@ -1,13 +1,62 @@
 #include "System.h"
 
 #include <Windows.h>
+#include <LZExpand.h>
 #include <iostream>
 #include <functional>
 #include "../AFCommon/wstrf.h"
 
 #include "DownloadUpdatesCallback.h"
 
+#include "../AFCommon/unzip.h"
+
+#include <exception>
+
 using namespace std;
+
+bool ExtractZip(const std::wstring &zipFilePath, const std::wstring &wherePath, const string &password)
+{
+	bool ok = false;
+
+	//char pass[7] = ;
+	//memset(pass, 0, password.size());
+	////Skrdll
+	//pass[0] = 'a';
+	//pass[1] = 'r';
+	//pass[2] = 'e';
+	//pass[3] = 'n';
+	//pass[4] = 'a';
+	//pass[5] = 'f';
+	//pass[6] = '\0';
+
+	HZIP hz = NULL;
+	do
+	{
+		hz = OpenZip(zipFilePath.c_str(), password.c_str());
+		ZIPENTRY zeFull;
+		ZRESULT zr = GetZipItem(hz, -1, &zeFull);
+		if (zr != ZR_OK)
+			break;
+		for (int i = 0; i < zeFull.index; i++)
+		{
+			ZIPENTRY ze;
+			zr = GetZipItem(hz, i, &ze);
+			if (zr != ZR_OK)
+				continue;
+			if (ze.attr & FILE_ATTRIBUTE_DIRECTORY)
+				continue;
+
+			zr = UnzipItem(hz, i, (wherePath + L"\\" + ze.name).c_str());
+		}
+
+		ok = true;
+	} while (0);
+
+	if (hz != NULL)
+		CloseZip(hz);
+	return ok;
+}
+
 
 std::string GenRandomAnsiString(const int len)
 {
@@ -49,6 +98,55 @@ void System::MoveFileFromTo(const wstring &from, const wstring &to)
 	}
 }
 
+void System::RunProcess(const wstring &path, const wstring &args)
+{
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+
+	HANDLE g_hChildStd_OUT_Rd = NULL;
+	HANDLE g_hChildStd_OUT_Wr = NULL;
+
+	SECURITY_ATTRIBUTES saAttr;
+
+	saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+	saAttr.bInheritHandle = TRUE;
+	saAttr.lpSecurityDescriptor = NULL;
+
+
+
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+
+	si.cb = sizeof(STARTUPINFO);
+	si.hStdError = g_hChildStd_OUT_Wr;
+	si.hStdOutput = g_hChildStd_OUT_Wr;
+	si.dwFlags |= STARTF_USESTDHANDLES;
+
+
+	//wstring szCmdline = L"-s";
+	//wstring cmdLine = WStrF(L"\"%s\"", args.c_str());
+	//WCHAR buff[4096];
+	//wcscpy(buff, cmdLine.c_str());
+	wstring runPath = WStrF(L"%s %s", path.c_str(), args.c_str());
+	_wsystem(runPath.c_str());// "\"d:some path\\program.exe\" \"d:\\other path\\file name.ext\"");
+	/*BOOL ret = CreateProcess(path.c_str(), buff,
+		NULL,
+		NULL,
+		TRUE,
+		NULL,
+		NULL,
+		NULL,
+		&si,
+		&pi);
+
+	if (!ret)
+	{
+		throw exception("Failed to run process");
+	}*/
+}
+
+
 void System::RemoveFile(const wstring &path)
 {
 	if (!DeleteFile(path.c_str())) {    // delete the file
@@ -64,6 +162,14 @@ wstring System::JoinPath(const wstring &path1, const  wstring &path2)
 wstring System::JoinURI(const wstring &path1, const  wstring &path2)
 {
 	return WStrF(L"%s/%s", path1.c_str(), path2.c_str());
+}
+
+void System::UnZipContentFolder(const wstring &zip, const wstring &to, const string pass)
+{
+	if (!ExtractZip(zip, to, pass))
+	{
+		throw std::exception("failed to unzip");
+	}
 }
 
 bool System::DownloadFile(const std::wstring &fileUri, const std::wstring &toFile,
