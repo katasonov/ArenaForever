@@ -3,7 +3,7 @@
 	//div.text = "> "+line;
 	//$(.console-container).append(div);
 	//$(.console-container).text = line;
-	$(.console-container).html = $(.console-container).html + "<div class='console-line'> >" + line + "</div>";
+	$(.console-container).html = $(.console-container).html + "<div class='console-line'>$" + line + "</div>";
 	//view.msgbox(#alert,  $(.console-container).text);
 }
 
@@ -15,7 +15,7 @@ function consolePrintLastLine(line) {
 			if (i == size-1)
 			{
 				//view.msgbox(#alert, a);
-				a.text = line;
+				a.text = "#"+line;
 				break;
 			}
 			i++;
@@ -84,6 +84,11 @@ function self.ready() {
 				if (progress != 100)
 				{
 					consolePrintLastLine("Обновление программы: " + progress);
+					return;
+				}
+				consolePrintLastLine("Обновление программы: " + progress);
+				if (folder == "")
+				{
 					return;
 				}
 				view.msgbox(#alert,  "Для продолжения работы программа будет автоматически перезагружена");

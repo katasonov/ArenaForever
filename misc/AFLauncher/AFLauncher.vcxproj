@@ -193,7 +193,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\AFCommon\hash.h" />
-    <ClInclude Include="..\AFCommon\unzip.h" />
     <ClInclude Include="AFLauncher.h" />
     <ClInclude Include="AppState.h" />
     <ClInclude Include="Commands\CheckAndDownloadNewAppFilesCommand.h" />
@@ -218,7 +217,6 @@
     <ClCompile Include="..\AFCommon\hash.cpp" />
     <ClCompile Include="..\AFCommon\HttpRequest.cpp" />
     <ClCompile Include="..\AFCommon\json.cpp" />
-    <ClCompile Include="..\AFCommon\unzip.cpp" />
     <ClCompile Include="..\AFCommon\wstrf.cpp" />
     <ClCompile Include="..\sciter-sdk\include\sciter-win-main.cpp" />
     <ClCompile Include="AFLauncher.cpp" />

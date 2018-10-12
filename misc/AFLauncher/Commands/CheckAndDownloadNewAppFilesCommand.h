@@ -105,7 +105,7 @@ public:
 			auto now = std::chrono::system_clock::now();
 			auto uptFolder = WStrF(L"up-%d", std::chrono::system_clock::to_time_t(now));
 			auto toPath = System::JoinPath(AppState::GetAppPath(), uptFolder);
-			System::UnZipContentFolder(tmpFilePath, toPath, "arenaf");
+			System::UnZipContentFolder(tmpFilePath, toPath, L"arenaf");
 
 			//TODO: Start Sync in tis to copy app files
 

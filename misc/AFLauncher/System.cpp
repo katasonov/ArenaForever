@@ -8,54 +8,69 @@
 
 #include "DownloadUpdatesCallback.h"
 
-#include "../AFCommon/unzip.h"
-
 #include <exception>
+
 
 using namespace std;
 
-bool ExtractZip(const std::wstring &zipFilePath, const std::wstring &wherePath, const string &password)
+
+bool ExtractZip(const std::wstring &zipFilePath, const std::wstring &wherePath, const wstring &password)
 {
 	bool ok = false;
 
-	//char pass[7] = ;
-	//memset(pass, 0, password.size());
-	////Skrdll
-	//pass[0] = 'a';
-	//pass[1] = 'r';
-	//pass[2] = 'e';
-	//pass[3] = 'n';
-	//pass[4] = 'a';
-	//pass[5] = 'f';
-	//pass[6] = '\0';
+	wstring out;
+	System::RunProcessAndGetOutput(System::JoinPath(System::GetRealCurrentDirectory(), L"7za.exe"),
+		WStrF(L"e -o\"%s\" -p%s %s", wherePath.c_str(), password.c_str(), zipFilePath.c_str()), out);
 
-	HZIP hz = NULL;
-	do
-	{
-		hz = OpenZip(zipFilePath.c_str(), password.c_str());
-		ZIPENTRY zeFull;
-		ZRESULT zr = GetZipItem(hz, -1, &zeFull);
-		if (zr != ZR_OK)
-			break;
-		for (int i = 0; i < zeFull.index; i++)
-		{
-			ZIPENTRY ze;
-			zr = GetZipItem(hz, i, &ze);
-			if (zr != ZR_OK)
-				continue;
-			if (ze.attr & FILE_ATTRIBUTE_DIRECTORY)
-				continue;
+	if (out.find(L"Everything is Ok") == string::npos)
+		return false;
 
-			zr = UnzipItem(hz, i, (wherePath + L"\\" + ze.name).c_str());
-		}
-
-		ok = true;
-	} while (0);
-
-	if (hz != NULL)
-		CloseZip(hz);
-	return ok;
+	return true;
 }
+
+//
+//bool ExtractZip(const std::wstring &zipFilePath, const std::wstring &wherePath, const string &password)
+//{
+//	bool ok = false;
+//
+//	//char pass[7] = ;
+//	//memset(pass, 0, password.size());
+//	////Skrdll
+//	//pass[0] = 'a';
+//	//pass[1] = 'r';
+//	//pass[2] = 'e';
+//	//pass[3] = 'n';
+//	//pass[4] = 'a';
+//	//pass[5] = 'f';
+//	//pass[6] = '\0';
+//
+//	HZIP hz = NULL;
+//	do
+//	{
+//		hz = OpenZip(zipFilePath.c_str(), password.c_str());
+//		ZIPENTRY zeFull;
+//		ZRESULT zr = GetZipItem(hz, -1, &zeFull);
+//		if (zr != ZR_OK)
+//			break;
+//		for (int i = 0; i < zeFull.index; i++)
+//		{
+//			ZIPENTRY ze;
+//			zr = GetZipItem(hz, i, &ze);
+//			if (zr != ZR_OK)
+//				continue;
+//			if (ze.attr & FILE_ATTRIBUTE_DIRECTORY)
+//				continue;
+//
+//			zr = UnzipItem(hz, i, (wherePath + L"\\" + ze.name).c_str());
+//		}
+//
+//		ok = true;
+//	} while (0);
+//
+//	if (hz != NULL)
+//		CloseZip(hz);
+//	return ok;
+//}
 
 
 std::string GenRandomAnsiString(const int len)
@@ -98,6 +113,113 @@ void System::MoveFileFromTo(const wstring &from, const wstring &to)
 	}
 }
 
+void System::RunProcessAndGetOutput(const wstring &path, const wstring &args, wstring &out)
+{
+	bool ok = false;
+
+	do {
+
+		STARTUPINFO si;
+		PROCESS_INFORMATION pi;
+
+		HANDLE g_hChildStd_OUT_Rd = NULL;
+		HANDLE g_hChildStd_OUT_Wr = NULL;
+
+		SECURITY_ATTRIBUTES saAttr;
+
+		saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+		saAttr.bInheritHandle = TRUE;
+		saAttr.lpSecurityDescriptor = NULL;
+
+		if (!CreatePipe(&g_hChildStd_OUT_Rd, &g_hChildStd_OUT_Wr, &saAttr, 0))
+		{
+			break;
+		}
+
+		if (!SetHandleInformation(g_hChildStd_OUT_Rd, HANDLE_FLAG_INHERIT, 0))
+		{
+			break;
+		}
+
+		ZeroMemory(&si, sizeof(si));
+		si.cb = sizeof(si);
+		ZeroMemory(&pi, sizeof(pi));
+
+		si.cb = sizeof(STARTUPINFO);
+		si.hStdError = g_hChildStd_OUT_Wr;
+		si.hStdOutput = g_hChildStd_OUT_Wr;
+		si.dwFlags |= STARTF_USESTDHANDLES;
+
+		wstring cmdline = WStrF(L"\"%s\" %s", path.c_str(), args.c_str());
+
+		WCHAR buff[1<<12];
+		wcscpy(buff, cmdline.c_str());
+
+		BOOL ret = CreateProcess(NULL, buff,
+			NULL,
+			NULL,
+			TRUE,
+			CREATE_NO_WINDOW,
+			NULL,
+			NULL,
+			&si,
+			&pi);
+
+		if (!ret)
+		{
+			break;
+		}
+
+
+		WaitForSingleObject(pi.hProcess, INFINITE);
+
+		DWORD exitCode;
+		ret = GetExitCodeProcess(pi.hProcess, &exitCode);
+
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
+
+		if (!ret)
+		{
+			break;
+		}
+
+		CHAR chBuf[0x4000];
+		memset(chBuf, '\0', sizeof(chBuf));
+
+		DWORD dwRead = 0;
+		BOOL bSuccess = FALSE;
+
+		//for (;;) 
+		//{
+		bSuccess = ReadFile(g_hChildStd_OUT_Rd, chBuf, 0x4000, &dwRead, NULL);
+
+		CloseHandle(g_hChildStd_OUT_Rd);
+		CloseHandle(g_hChildStd_OUT_Wr);
+
+		//if( ! bSuccess || dwRead == 0 ) break;
+		if (bSuccess && dwRead > 0)
+		{
+			out = UTF8ToW(chBuf);			
+		}
+		else
+		{
+			break;
+		}
+
+		ok = true;
+
+	} while (0);
+
+	// Wait until child process exits.
+	//WaitForSingleObject( pi.hProcess, INFINITE );
+
+	if (!ok) 
+	{
+		throw exception("System::RunProcessAndGetOutput failed");
+	}
+}
+
 void System::RunProcess(const wstring &path, const wstring &args)
 {
 	STARTUPINFO si;
@@ -108,9 +230,11 @@ void System::RunProcess(const wstring &path, const wstring &args)
 
 	SECURITY_ATTRIBUTES saAttr;
 
+	ZeroMemory(&saAttr, sizeof(SECURITY_ATTRIBUTES));
+	memset(&saAttr, 0, sizeof(SECURITY_ATTRIBUTES));
 	saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
-	saAttr.bInheritHandle = TRUE;
-	saAttr.lpSecurityDescriptor = NULL;
+	//saAttr.bInheritHandle = TRUE;
+	//saAttr.lpSecurityDescriptor = NULL;
 
 
 
@@ -118,19 +242,17 @@ void System::RunProcess(const wstring &path, const wstring &args)
 	si.cb = sizeof(si);
 	ZeroMemory(&pi, sizeof(pi));
 
-	si.cb = sizeof(STARTUPINFO);
-	si.hStdError = g_hChildStd_OUT_Wr;
-	si.hStdOutput = g_hChildStd_OUT_Wr;
-	si.dwFlags |= STARTF_USESTDHANDLES;
+	//si.hStdError = g_hChildStd_OUT_Wr;
+	//si.hStdOutput = g_hChildStd_OUT_Wr;
+	//si.dwFlags |= STARTF_USESTDHANDLES;
 
 
-	//wstring szCmdline = L"-s";
-	//wstring cmdLine = WStrF(L"\"%s\"", args.c_str());
-	//WCHAR buff[4096];
-	//wcscpy(buff, cmdLine.c_str());
-	wstring runPath = WStrF(L"%s %s", path.c_str(), args.c_str());
-	_wsystem(runPath.c_str());// "\"d:some path\\program.exe\" \"d:\\other path\\file name.ext\"");
-	/*BOOL ret = CreateProcess(path.c_str(), buff,
+	
+	wstring cmdLine = WStrF(L"\"%s\" %s", path.c_str(), args.c_str());
+	WCHAR buff[4096];
+	wcscpy(buff, cmdLine.c_str());
+
+	BOOL ret = CreateProcess(NULL, buff,
 		NULL,
 		NULL,
 		TRUE,
@@ -138,12 +260,12 @@ void System::RunProcess(const wstring &path, const wstring &args)
 		NULL,
 		NULL,
 		&si,
-		&pi);
+		&pi); 
 
 	if (!ret)
 	{
 		throw exception("Failed to run process");
-	}*/
+	}
 }
 
 
@@ -164,7 +286,7 @@ wstring System::JoinURI(const wstring &path1, const  wstring &path2)
 	return WStrF(L"%s/%s", path1.c_str(), path2.c_str());
 }
 
-void System::UnZipContentFolder(const wstring &zip, const wstring &to, const string pass)
+void System::UnZipContentFolder(const wstring &zip, const wstring &to, const wstring pass)
 {
 	if (!ExtractZip(zip, to, pass))
 	{
@@ -192,7 +314,8 @@ bool System::DownloadFile(const std::wstring &fileUri, const std::wstring &toFil
 
 	try
 	{
-		if (S_OK != URLDownloadToFile(NULL, fileUri.c_str(), toFile.c_str(), 0, &callback))
+		wstring randomizedUrl = (fileUri + L"?" + UTF8ToW(GenRandomAnsiString(16)));
+		if (S_OK != URLDownloadToFile(NULL, randomizedUrl.c_str(), toFile.c_str(), 0, &callback))
 		{
 			DWORD err = GetLastError();
 			throw std::exception("System::DownloadFile: failed to download");
