@@ -65,14 +65,46 @@ public:
 		return body;
 	}
 
-	//static string GetStaticFileInfo(string fileName)
-	//{
-	//	auto response = HttpGetStringResponse(Host, Port,
-	//		StrF("/api/v1/static/file?name=%s", fileName.c_str()),
-	//		string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + "api.arenaforever.com" + "\r\nAccept: */*",
-	//		10);
-	//	auto body = HTTPBody(response.c_str());
+	static string GetLoginPlayer(wstring &email, wstring &pass)
+	{
+		auto response = HttpGetStringResponse(Host, Port,
+			StrF("/api/v1/player/login?email=%s&pass=%s",
+				WtoUtf8(email).c_str(),
+				WtoUtf8(pass).c_str()),
+			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + "api.arenaforever.com" + "\r\nAccept: */*",
+			10);
+		auto body = HTTPBody(response.c_str());
 
-	//	return body;
-	//}
+		return body;
+	}
+
+	static string GeRegisterPlayer(const wstring &nick, const wstring &email, const wstring &pass)
+	{
+		auto response = HttpGetStringResponse(Host, Port,
+			StrF("/api/v1/player/register?email=%s&pass=%s&nick=%s",
+				WtoUtf8(email).c_str(),
+				WtoUtf8(pass).c_str(),
+				WtoUtf8(nick).c_str()),
+			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + "api.arenaforever.com" + "\r\nAccept: */*",
+			10);
+		auto body = HTTPBody(response.c_str());
+
+		return body;
+	}
+
+	static string GeArenaToConnect(const wstring &model, const wstring &sex, const wstring &authCode)
+	{
+		auto response = HttpGetStringResponse(Host, Port,
+			StrF("/api/v1/arena/connect?authCode=%s&model=%s&sex=%s",
+				WtoUtf8(authCode).c_str(),
+				WtoUtf8(model).c_str(),
+				WtoUtf8(sex).c_str()),
+			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + "api.arenaforever.com" + "\r\nAccept: */*",
+			10);
+		auto body = HTTPBody(response.c_str());
+
+		return body;
+	}
+
+
 };

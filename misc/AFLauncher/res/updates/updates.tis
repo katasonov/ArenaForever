@@ -31,6 +31,27 @@ function ConsolePrintErrorLine(line) {
 	//view.msgbox(#alert,  $(.console-container).text);
 }
 
+
+function UpdateResources() {
+	
+	consolePrintLine("Обновление ресурсов: ");
+	view.ntvResourceUpdate(
+		function (errCode, progress) {
+			if (errCode != 0) {
+				//ConsolePrintErrorLine("Произошла ошибка обновления ресурсных файлов");
+				view.msgbox(#alert,  "Произошла ошибка обновления ресурсных файлов");
+				view.ntvExit();
+			}
+			if (progress != 100)
+			{
+				consolePrintLastLine("Обновление ресурсов: " + progress);
+				return;
+			}
+			consolePrintLastLine("Обновление ресурсов: " + progress);							
+			selectView("login/login");
+		});		
+}
+
 function self.ready() {
 	//view.msgbox(#alert,  view.settings.window.height);	
 	
@@ -60,22 +81,9 @@ function self.ready() {
 				// });
 		// });	
 		
-	consolePrintLine("Обновление ресурсов: ");
-	view.ntvResourceUpdate(
-		function (errCode, progress) {
-			if (errCode != 0) {
-				//ConsolePrintErrorLine("Произошла ошибка обновления ресурсных файлов");
-				view.msgbox(#alert,  "Произошла ошибка обновления ресурсных файлов");
-				view.ntvExit();
-			}
-			if (progress != 100)
-			{
-				consolePrintLastLine("Обновление ресурсов: " + progress);
-				return;
-			}
-			consolePrintLastLine("Обновление ресурсов: " + progress);
-			consolePrintLine("Обновление программы: ");
-			//Start main app files update
+		if (cfgNeedCheckUpdates)
+		{
+			consolePrintLine("Обновление программных библиотек: ");
 			view.ntvCheckAndDownloadAppFiles(function (err, progress, folder){
 				if (err != 0){
 					view.msgbox(#alert,  "Произошла ошибка обновления файлов программы");
@@ -89,16 +97,16 @@ function self.ready() {
 				consolePrintLastLine("Обновление программы: " + progress);
 				if (folder == "")
 				{
+					UpdateResources();
 					return;
 				}
 				view.msgbox(#alert,  "Для продолжения работы программа будет автоматически перезагружена");
 				view.ntvRunAFMvBins(folder);
 				view.ntvExit();
-			});
-			
-			
-		});
-
+			});			
+		} else {
+			UpdateResources();
+		}
 	
 }
 

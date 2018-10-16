@@ -6,6 +6,9 @@
 
 #include "Commands\UpdateResourcesCommand.h"
 #include "Commands\CheckAndDownloadNewAppFilesCommand.h"
+#include "Commands\LoginPlayerCommand.h"
+#include "Commands\RegisterPlayerCommand.h"
+#include "Commands\LaunchGameCommand.h"
 
 static sciter::value native_api() 
 {
@@ -55,6 +58,12 @@ public:
 		FUNCTION_1("ntvRunAFMvBins", NtvRunAFMvBins);
 		FUNCTION_1("ntvResourceUpdate", NtvResourceUpdate);
 		FUNCTION_1("ntvCheckAndDownloadAppFiles", NtvCheckAndDownloadAppFiles);
+		
+		FUNCTION_3("ntvLoginPlayer", NtvLoginPlayer);
+		FUNCTION_4("ntvRegisterPlayer", NtvRegisterPlayer);
+
+		FUNCTION_1("ntvLaunchGame", NtvLaunchGame);
+
 		//FUNCTION_1("getResourceEtalonMap", GetResourceEtalonMap);
 		//FUNCTION_1("getResourceDirectoryFilesMap", GetResourceDirectoryFilesMap);
 	END_FUNCTION_MAP
@@ -65,10 +74,18 @@ public:
 
 	int NtvCheckAndDownloadAppFiles(sciter::value clbk)
 	{
+#ifndef TURN_OFF_UPDATES
 		Switcher::Instance().AddCommand(new CheckAndDownloadNewAppFilesCommand([=](int err, int progress, const wstring &folder)
 		{ 
 			clbk.call(sciter::value(err), sciter::value(progress), sciter::value(folder));
 		}));
+#else
+		Switcher::Instance().AddCommand([=]()
+		{
+			clbk.call(sciter::value(0), sciter::value(100), sciter::value(L""));
+		});
+		
+#endif
 		return 0;
 	}
 
@@ -89,10 +106,17 @@ public:
 
 	int NtvResourceUpdate(sciter::value clbk)
 	{
+#ifndef TURN_OFF_UPDATES
 		Switcher::Instance().AddCommand(new UpdateResourcesCommand([=](int err, int progress)
 		{
 			clbk.call(sciter::value(err), sciter::value(progress));
 		}));
+#else
+		Switcher::Instance().AddCommand([=]()
+		{
+			clbk.call(sciter::value(0), sciter::value(100));
+		});
+#endif
 		return 0;
 	};
 
@@ -102,119 +126,42 @@ public:
 		return 0;
 	};
 
-	/*int GetResourceEtalonMap(sciter::value clbk)
+	int NtvLoginPlayer(sciter::value email, sciter::value pass, sciter::value clbk)
 	{
-		Switcher::Instance().AddCommand([=]() {
-
-			vector<sciter::value> etalonMap;
-
-			int err = 0;
-			try
+		Switcher::Instance().AddCommand(new LoginPlayerCommand(
+			email.to_string(), pass.to_string(),
+			[=](int err)
 			{
-				void *obj = nullptr;
-				string response = ServerAPI::GetResourceUpdatesMap();
-				FilesMap remote;
-				FilesMap::FromJson(response, remote);
-
-				for (auto item : remote.MapItems)
-				{
-					sciter::value fmItem;
-					fmItem.set_item("name", sciter::value(item.filename.c_str()));
-					fmItem.set_item("size", sciter::value((int)item.fileSize));
-					fmItem.set_item("hash", sciter::value((int)item.filehash));
-
-					etalonMap.push_back(fmItem);
-				}
-			
-			}
-			catch (...)
-			{
-				err = 1;
-			}
-
-			if (etalonMap.size() > 0)
-			{
-				clbk.call(sciter::value(0), sciter::value(&etalonMap[0], etalonMap.size()));
-			}				
-			else
-			{
-				clbk.call(sciter::value(0), sciter::value(NULL));
-			}
-		});
+				clbk.call(sciter::value(err));
+			}));
 
 		return 0;
-	};
-*/
-	//int GetResourceDirectoryFilesMap(sciter::value clbk)
-	//{
-	//	Switcher::Instance().AddCommand([=]() {
+	}
 
-	//		vector<sciter::value> map;
+	int NtvRegisterPlayer(sciter::value nick, sciter::value email, sciter::value pass, sciter::value clbk)
+	{
+		Switcher::Instance().AddCommand(new RegisterPlayerCommand(
+			nick.to_string(), email.to_string(), pass.to_string(),
+			[=](int err)
+		{
+			clbk.call(sciter::value(err));
+		}));
 
-	//		int err = 0;
-	//		try
-	//		{
-	//			auto path = AppState::GetResourcesPath();
-	//			for (auto& p : fs::directory_iterator(path))
-	//			{
-	//				if (fs::is_directory(p.status()))
-	//					continue;
-	//				auto sz = fs::file_size(p);
-	//				wstring name = p.path().filename().wstring();
-	//				auto hash = hashfile(p.path().c_str());
+		return 0;
+	}
 
-	//				sciter::value fmItem;
-	//				fmItem.set_item("name", sciter::value(name.c_str()));
-	//				fmItem.set_item("size", sciter::value((int)sz));
-	//				fmItem.set_item("hash", sciter::value((int)hash));
+	int NtvLaunchGame(sciter::value clbk)
+	{
+		Switcher::Instance().AddCommand(new LaunchGameCommand(
+			AppState::Instance().GetAuthCode(),
+			AppState::Instance().GetPlayerModelName(), 
+			AppState::Instance().GetPlayerSex(), 			
+			[=](int err)
+		{
+			clbk.call(sciter::value(err));
+		}));
 
-	//				map.push_back(fmItem);
-	//			}
-
-	//		}
-	//		catch (...)
-	//		{
-	//			err = 1;
-	//		}
-
-	//		if (map.size() > 0)
-	//		{
-	//			clbk.call(sciter::value(0), sciter::value(&map[0], map.size()));
-	//		}
-	//		else
-	//		{
-	//			clbk.call(sciter::value(0), sciter::value(NULL));
-	//		}
-	//	});
-
-	//	return 0;
-	//};
-
-	//int DownloadResourceFile(sciter::value clbk)
-	//{
-	//	Switcher::Instance().AddCommand([=]() {
-	//					
-	//	});
-
-	//	return 0;
-	//};
-
-	//int DeleteResourceFile(sciter::value clbk)
-	//{
-	//	Switcher::Instance().AddCommand([=]() {
-
-	//	});
-
-	//	return 0;
-	//};
-
-	//int ReplaceResourceFile(sciter::value clbk)
-	//{
-	//	Switcher::Instance().AddCommand([=]() {
-
-	//	});
-
-	//	return 0;
-	//};
+		return 0;
+	}
 
 };

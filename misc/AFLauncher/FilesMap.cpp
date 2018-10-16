@@ -2,6 +2,5 @@
 
 bool operator != (const FileInfo &lfi, const FileInfo &rfi)
 {
-	//TODO:
-	return false;
+	return !(lfi.FileHash == rfi.FileHash && lfi.FileSize == rfi.FileSize); 
 }

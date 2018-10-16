@@ -1,0 +1,17 @@
+﻿function self.ready() {
+        $(button#btnLaunchGame).on("click", function(){
+                view.ntvLaunchGame(function (errCode) {
+
+                        if (errCode == 0) {
+                            $(button#btnLaunchGame).style#visibility="hidden";
+                            return;
+                        }
+                        else {
+                            view.msgbox(#alert, errCode);
+                        }
+                    });
+            });
+
+
+}
+

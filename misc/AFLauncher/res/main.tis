@@ -23,8 +23,7 @@ function self.ready()
 	view.settings = Settings.fetch();
 
 
-	if (cfgNeedCheckUpdates)
-		selectView("updates/updates");
+	selectView("updates/updates");
 		
 	//view.msgbox(#alert,  false);
 	//var needCheckUpdates = true; 

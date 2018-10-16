@@ -1,0 +1,23 @@
+html {
+	background-color: transparent;
+}
+
+body {
+	border: 0px solid gray;
+}
+
+.console-container {
+    width:100%;
+    text-align:left;
+    vertical-align:top;
+    color:gold;
+}
+
+.console-line {
+    word-wrap: break-word;
+}
+
+.console-line.error {
+    color:red;
+}
+

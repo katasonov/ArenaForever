@@ -51,7 +51,7 @@ public:
 		int err = 0;
 		try
 		{
-			string response = ServerAPI::GetAppBinsUpdatesMap();
+			string response = ServerAPI::GetAppBinsUpdatesMap(); 
 			FilesMap remote;
 			FilesMap::FromJson(response, remote);
 			//fn(0, 10);
