@@ -10,6 +10,10 @@
 
 #include <exception>
 
+#include <process.h>
+#include <Tlhelp32.h>
+#include <winbase.h>
+
 
 using namespace std;
 
@@ -352,3 +356,27 @@ std::wstring System::GetTempFilePath()
 	return wstring(buff) + UTF8ToW(GenRandomAnsiString(16));
 }
 
+bool System::CheckProcessExists(wstring procName)
+{
+	bool found = false;
+	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
+	PROCESSENTRY32 pEntry;
+	pEntry.dwSize = sizeof(pEntry);
+	BOOL hRes = Process32First(hSnapShot, &pEntry);
+	while (hRes)
+	{
+		if (wcscmp(pEntry.szExeFile, procName.c_str()) == 0)
+		{
+			found = true;
+			break;
+		}
+		hRes = Process32Next(hSnapShot, &pEntry);
+	}
+
+
+
+	if (hSnapShot != NULL)
+		CloseHandle(hSnapShot);
+
+	return found;
+}

@@ -152,7 +152,7 @@ public:
 
 	int NtvLaunchGame(sciter::value clbk)
 	{
-		Switcher::Instance().AddCommand(new LaunchGameCommand(
+		Switcher::Instance().AddCommand(new LaunchGameCommand(get_hwnd(),
 			AppState::Instance().GetAuthCode(),
 			AppState::Instance().GetPlayerModelName(), 
 			AppState::Instance().GetPlayerSex(), 			

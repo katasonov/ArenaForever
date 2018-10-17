@@ -204,6 +204,7 @@
     <ClInclude Include="Commands\LoginPlayerCommand.h" />
     <ClInclude Include="Commands\MakeFileUpdateCommand.h" />
     <ClInclude Include="Commands\RegisterPlayerCommand.h" />
+    <ClInclude Include="Commands\TimeoutCommand.h" />
     <ClInclude Include="Commands\UpdateResourcesCommand.h" />
     <ClInclude Include="Frame.h" />
     <ClInclude Include="Log.h" />

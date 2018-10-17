@@ -2,6 +2,8 @@
 
 #include "Commands/ICommand.h"
 #include "Commands\FunctionCommand.h"
+#include "Commands\TimeoutCommand.h"
+
 #include "SharedQueue.h"
 #include <utility>
 #include <thread>
@@ -48,10 +50,28 @@ public:
 				ICommand* cmd = _commands.front();
 				cmd->Execute();
 				_commands.pop_front();
-				delete cmd;
+
+				bool deleteCmd = true;
+				//Check if TimeoutCommand behaviour
+				auto tmCmd = dynamic_cast<TimeoutCommand*>(cmd);
+				if (tmCmd != NULL)
+				{
+					if (!tmCmd->Done)
+					{
+						_commands.push_back(cmd);
+						deleteCmd = false;
+					}
+				}
+				if (deleteCmd)
+					delete cmd;
 				std::this_thread::sleep_for(10ms);
 
 			}
 		}).detach();
+	}
+
+	void RepeatOnTimeout(std::function<bool()> &&func, int timeout)
+	{
+		AddCommand(new TimeoutCommand(move(func), timeout));
 	}
 };

@@ -20,6 +20,8 @@ public:
 	static void RunProcessAndGetOutput(const wstring &path, const wstring &args, wstring &out);
 
 	static void UnZipContentFolder(const wstring &zip, const wstring &to, const wstring pass);
+
+	static bool CheckProcessExists(wstring procName);
 };
 
 

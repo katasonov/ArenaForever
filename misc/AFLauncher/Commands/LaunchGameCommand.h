@@ -18,15 +18,17 @@ class LaunchGameCommand : public ICommand
 {
 	std::function<void(int errCode)> clbk;
 	wstring authCode, model, sex;
+	HWND parentHwnd;
 
 public:
 
-	LaunchGameCommand(wstring authCode, wstring model, wstring sex, std::function<void(int errCode)> &&_fn)
+	LaunchGameCommand(HWND parentHwnd, wstring authCode, wstring model, wstring sex, std::function<void(int errCode)> &&_fn)
 	{
 		this->clbk = move(_fn);
 		this->authCode = authCode;
 		this->model = model;
 		this->sex = sex;
+		this->parentHwnd = parentHwnd;
 	}
 
 	void Execute() override
@@ -49,15 +51,31 @@ public:
 			wstring::size_type pos = path.find_last_of(L"\\/");
 			path = path.substr(0, pos);
 			path = path
-				+ L"\\af.exe +set r_fullscreen 0 +set sv_pure 0 +set r_mode 6 +set cg_drawFPS 1 +set net_remote_ip \"%s\" " \
+				+ L"\\afq3mod.exe";
+			wstring args = "+set r_fullscreen 0 +set sv_pure 0 +set r_mode 6 +set cg_drawFPS 1 +set net_remote_ip \"%s\" " \
 				L"+set net_remote_port %d +set af_srv_access_code %s +set af_player_data_enc %s";
 
 
-			std::swprintf(buffer, path.c_str(), IP.c_str(), Port, AccessCode.c_str(), Payload.c_str());
-			path = buffer;
+			std::swprintf(buffer, args.c_str(), IP.c_str(), Port, AccessCode.c_str(), Payload.c_str());
+			args = buffer;
 
-			int result = _wsystem(path.c_str());
-			
+			::ShowWindow(parentHwnd, SW_HIDE);
+			wstring out;
+			System::RunProcess(path, args);
+
+			HWND parentHwnd = this->parentHwnd;
+
+			Switcher::Instance().RepeatOnTimeout([parentHwnd]()->bool {
+				//check process q3mod.exe is ended
+				if (System::CheckProcessExists(L"afq3mod.exe"))
+				{
+					return true;
+				}
+				//if ended
+				::ShowWindow(parentHwnd, SW_SHOW);
+				return false;
+			}, 1000);
+
 
 			clbk(0);
 		}

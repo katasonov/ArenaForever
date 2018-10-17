@@ -73,13 +73,13 @@
     <OutDir>..\..\build\debug-msvc12-x86\</OutDir>
     <IntDir>..\..\build\debug-msvc12-x86\client\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>af</TargetName>
+    <TargetName>afq3mod</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\..\build\release-msvc12-x86\</OutDir>
     <IntDir>..\..\build\release-msvc12-x86\client\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>arenaforever</TargetName>
+    <TargetName>afq3mod</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug TA|Win32'">
     <OutDir>..\..\build\debug_ta-msvc12-x86\</OutDir>
