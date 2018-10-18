@@ -11,6 +11,7 @@
 #include "../FilesMap.h"
 
 #include <utility>
+#include <thread>
 
 using namespace std;
 
@@ -60,21 +61,37 @@ public:
 			args = buffer;
 
 			::ShowWindow(parentHwnd, SW_HIDE);
-			wstring out;
-			System::RunProcess(path, args);
-
+			
 			HWND parentHwnd = this->parentHwnd;
-
-			Switcher::Instance().RepeatOnTimeout([parentHwnd]()->bool {
-				//check process q3mod.exe is ended
-				if (System::CheckProcessExists(L"afq3mod.exe"))
+			std::thread([path, args, parentHwnd]()
+			{
+				try
 				{
-					return true;
+					wstring out;
+					System::RunProcessAndGetOutput(path, args, out);
+					::ShowWindow(parentHwnd, SW_SHOW);
 				}
-				//if ended
-				::ShowWindow(parentHwnd, SW_SHOW);
-				return false;
-			}, 1000);
+				catch (...)
+				{
+					//TODO:
+				}
+				
+			}).detach();
+			
+			//System::RunProcess(path, args);
+
+			//HWND parentHwnd = this->parentHwnd;
+
+			//Switcher::Instance().RepeatOnTimeout([parentHwnd]()->bool {
+			//	//check process q3mod.exe is ended
+			//	if (System::CheckProcessExists(L"afq3mod.exe"))
+			//	{
+			//		return true;
+			//	}
+			//	//if ended
+			//	::ShowWindow(parentHwnd, SW_SHOW);
+			//	return false;
+			//}, 1000);
 
 
 			clbk(0);

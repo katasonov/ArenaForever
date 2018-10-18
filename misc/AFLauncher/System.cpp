@@ -121,19 +121,20 @@ void System::RunProcessAndGetOutput(const wstring &path, const wstring &args, ws
 {
 	bool ok = false;
 
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+
+	HANDLE g_hChildStd_OUT_Rd = NULL;
+	HANDLE g_hChildStd_OUT_Wr = NULL;
+
+	SECURITY_ATTRIBUTES saAttr;
+
+	saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+	saAttr.bInheritHandle = TRUE;
+	saAttr.lpSecurityDescriptor = NULL;
+
+
 	do {
-
-		STARTUPINFO si;
-		PROCESS_INFORMATION pi;
-
-		HANDLE g_hChildStd_OUT_Rd = NULL;
-		HANDLE g_hChildStd_OUT_Wr = NULL;
-
-		SECURITY_ATTRIBUTES saAttr;
-
-		saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
-		saAttr.bInheritHandle = TRUE;
-		saAttr.lpSecurityDescriptor = NULL;
 
 		if (!CreatePipe(&g_hChildStd_OUT_Rd, &g_hChildStd_OUT_Wr, &saAttr, 0))
 		{
@@ -175,7 +176,7 @@ void System::RunProcessAndGetOutput(const wstring &path, const wstring &args, ws
 		}
 
 
-		WaitForSingleObject(pi.hProcess, INFINITE);
+		//WaitForSingleObject(pi.hProcess, INFINITE);
 
 		DWORD exitCode;
 		ret = GetExitCodeProcess(pi.hProcess, &exitCode);
@@ -194,27 +195,30 @@ void System::RunProcessAndGetOutput(const wstring &path, const wstring &args, ws
 		DWORD dwRead = 0;
 		BOOL bSuccess = FALSE;
 
-		//for (;;) 
-		//{
-		bSuccess = ReadFile(g_hChildStd_OUT_Rd, chBuf, 0x4000, &dwRead, NULL);
-
-		CloseHandle(g_hChildStd_OUT_Rd);
 		CloseHandle(g_hChildStd_OUT_Wr);
-
-		//if( ! bSuccess || dwRead == 0 ) break;
-		if (bSuccess && dwRead > 0)
+		g_hChildStd_OUT_Wr = NULL;
+		for (;;)
 		{
-			out = UTF8ToW(chBuf);			
-		}
-		else
-		{
-			break;
-		}
 
+			bSuccess = ReadFile(g_hChildStd_OUT_Rd, chBuf, 0x4000, &dwRead, NULL);
+
+			if (bSuccess && dwRead > 0)
+			{
+				out += UTF8ToW(chBuf);
+			}
+			else
+			{
+				break;
+			}
+		}
 		ok = true;
 
 	} while (0);
 
+	if (g_hChildStd_OUT_Rd != NULL)
+		CloseHandle(g_hChildStd_OUT_Rd);
+	if (g_hChildStd_OUT_Wr != NULL)
+		CloseHandle(g_hChildStd_OUT_Wr);
 	// Wait until child process exits.
 	//WaitForSingleObject( pi.hProcess, INFINITE );
 
