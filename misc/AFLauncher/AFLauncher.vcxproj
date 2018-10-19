@@ -196,14 +196,17 @@
     <ClInclude Include="AFLauncher.h" />
     <ClInclude Include="AppState.h" />
     <ClInclude Include="Commands\CheckAndDownloadNewAppFilesCommand.h" />
+    <ClInclude Include="Commands\CheckVKOAuthStatusCommand.h" />
     <ClInclude Include="Commands\DeleteFileCommand.h" />
     <ClInclude Include="Commands\DownloadFileCommand.h" />
     <ClInclude Include="Commands\ICommand.h" />
     <ClInclude Include="Commands\FunctionCommand.h" />
     <ClInclude Include="Commands\LaunchGameCommand.h" />
+    <ClInclude Include="Commands\LoadPlayerInfoCommand.h" />
     <ClInclude Include="Commands\LoginPlayerCommand.h" />
     <ClInclude Include="Commands\MakeFileUpdateCommand.h" />
     <ClInclude Include="Commands\RegisterPlayerCommand.h" />
+    <ClInclude Include="Commands\SetPlayerNickNameCommand.h" />
     <ClInclude Include="Commands\TimeoutCommand.h" />
     <ClInclude Include="Commands\UpdateResourcesCommand.h" />
     <ClInclude Include="Frame.h" />

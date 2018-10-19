@@ -22,6 +22,8 @@ public:
 	static void UnZipContentFolder(const wstring &zip, const wstring &to, const wstring pass);
 
 	static bool CheckProcessExists(wstring procName);
+
+	static std::wstring GenRandomWString(const int len);
 };
 
 

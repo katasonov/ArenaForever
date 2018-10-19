@@ -9,31 +9,23 @@
 #include "Commands\LoginPlayerCommand.h"
 #include "Commands\RegisterPlayerCommand.h"
 #include "Commands\LaunchGameCommand.h"
+#include "Commands\CheckVKOAuthStatusCommand.h"
+#include "Commands\LoadPlayerInfoCommand.h"
+#include "Commands\SetPlayerNickNameCommand.h"
+
+#include <map>
 
 static sciter::value native_api() 
 {
 
 	sciter::value api_map;
-	sciter::value api_math_map;
 
-	std::function<int(int, int)> native_sum = [](int a, int b) { return a + b; };
-	std::function<int(int, int)> native_sub = [](int a, int b) { return a - b; };
+	std::function<wstring()> vk_oauth_uri = []() { 
+		return AppState::Instance().GetVKOAuthUri();
+	};
 
+	api_map.set_item(sciter::value("vk_oauth_uri"), sciter::vfunc(vk_oauth_uri));
 
-	api_math_map.set_item(sciter::value("sum"), sciter::vfunc(native_sum));
-	api_math_map.set_item(sciter::value("sub"), sciter::vfunc(native_sub));
-	
-
-	api_map.set_item(sciter::value("math"), api_math_map);
-
-	/*
-	return {
-	math: {
-	sum: {native_sum},
-	sub: {native_sub},
-	}
-	}
-	*/
 	return api_map;
 }
 
@@ -63,6 +55,14 @@ public:
 		FUNCTION_4("ntvRegisterPlayer", NtvRegisterPlayer);
 
 		FUNCTION_1("ntvLaunchGame", NtvLaunchGame);
+
+		FUNCTION_1("ntvCheckVKOAuthStatus", NtvCheckVKOAuthStatus);
+
+
+
+		FUNCTION_1("ntvLoadPlayerInfo", NtvLoadPlayerInfo);
+
+		FUNCTION_2("ntvSetNickName", NtvSetNickName);
 
 		//FUNCTION_1("getResourceEtalonMap", GetResourceEtalonMap);
 		//FUNCTION_1("getResourceDirectoryFilesMap", GetResourceDirectoryFilesMap);
@@ -163,5 +163,61 @@ public:
 
 		return 0;
 	}
+
+	int NtvCheckVKOAuthStatus(sciter::value clbk)
+	{
+		Switcher::Instance().AddCommand(new CheckVKOAuthStatusCommand([=](bool logged, int err)
+		{
+			clbk.call(sciter::value(logged), sciter::value(err));
+		}));
+
+		return 0;
+	}
+
+
+	int NtvLoadPlayerInfo(sciter::value clbk)
+	{
+		Switcher::Instance().AddCommand(new LoadPlayerInfoCommand(
+			[=](int err, LoadPlayerInfoCommand::PlayerInfo &playerInfo)
+		{
+			sciter::value playerMap;
+
+			
+			playerMap.set_item("Nick", playerInfo.nickName);
+			playerMap.set_item("Score", playerInfo.score);
+
+
+			clbk.call(sciter::value(err), playerMap);
+		}));
+
+		return 0;
+	}
+
+	int NtvSetNickName(sciter::value nick, sciter::value clbk)
+	{
+		Switcher::Instance().AddCommand(new SetPlayerNickNameCommand(
+			nick.to_string(),
+			[=](int err, const wstring &msg)
+		{
+			clbk.call(sciter::value(err), sciter::value(msg));
+		}));
+
+		return 0;
+	}
+
+	//sciter::string ntvGetVKOAuthURI()
+	//{
+	//	Switcher::Instance().AddCommand(new LaunchGameCommand(get_hwnd(),
+	//		AppState::Instance().GetAuthCode(),
+	//		AppState::Instance().GetPlayerModelName(),
+	//		AppState::Instance().GetPlayerSex(),
+	//		[=](int err)
+	//	{
+	//		clbk.call(sciter::value(err));
+	//	}));
+
+	//	return 0;
+	//}
+
 
 };

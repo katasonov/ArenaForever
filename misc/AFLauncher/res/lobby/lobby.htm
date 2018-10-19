@@ -14,7 +14,52 @@
     <div class="header">
     </div>
     <div class="content">
-        <button id="btnLaunchGame" class="launcher">В Бой!</button>
+	
+		<div #MainContent style="visibility:collapse">
+			<button id="btnLaunchGame" class="launcher">В Бой!</button>
+			
+		</div>
+
+		<div #LoadingDataScreen style="visibility:collapse">
+			<div class="title">
+               Загрузка данных игрока
+            </div>
+			<div style="height:10px;"></div>
+			<div>
+				<img src="../images/progress.gif" style="height:48px;width:48px;" />
+            </div>
+            <div style="height:20px;"></div>
+
+		</div>
+		
+		<div #SetNickNameWidget class="input-widget" style="visibility:visible">			
+		<div class="widget-line">
+				<div class="title">
+				   Введите ваш Никнейм в игре
+				</div>
+				</div>
+			<!--<div>
+				<img src="../images/progress.gif" style="height:48px;width:48px;" />
+            </div>-->
+			<div class="widget-line">
+				<div class="input-line">
+					<input type="text" id="NickName" name="NickName" required
+						   minlength="5" maxlength="32"
+						   novalue="Никнейм"
+						   title="Введите никнейм для игры" />
+				</div>
+			</div>
+            <div style="height:20px;"></div>
+			<div class="widget-line">
+				<div id="NicknameErrorText" class="error-text" style="visibility:collapse;height:60px;">
+						No Error
+				</div>
+			</div>			
+			<div class="widget-line">
+				<button #SubmitButton >Сохранить</button>
+			</div>
+		</div>
+	
     </div>
     <div class="footer">
     </div>

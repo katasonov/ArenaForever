@@ -48,38 +48,11 @@ function UpdateResources() {
 				return;
 			}
 			consolePrintLastLine("Обновление ресурсов: " + progress);							
-			selectView("login/login");
+			selectView("login-vk/login");
 		});		
 }
 
 function self.ready() {
-	//view.msgbox(#alert,  view.settings.window.height);	
-	
-	//view.consolePrintLine = self.consolePrintLine;
-
-	// view.getResourceEtalonMap(
-		// function (errCode, remoteMap) {
-			// if (remoteMap == 0 || errCode != 0)
-			// {
-				// ConsolePrintErrorLine("Произошла ошибка");
-				// return;
-			// }
-			// for (var fmItem in remoteMap) {
-				// consolePrintLine(fmItem.name + "\t" + fmItem.size + "\t" + fmItem.hash);
-			// }
-			// consolePrintLine("Получаем карту локальных ресурсов");
-			// view.getResourceDirectoryFilesMap(
-				// function (errCode, localMap) {
-					// if (localMap == 0 || errCode != 0)
-					// {
-						// ConsolePrintErrorLine("Произошла ошибка");
-						// return;
-					// }
-					// for (var fmItem in localMap) {
-						// consolePrintLine(fmItem.name + "\t" + fmItem.size + "\t" + fmItem.hash);
-					// }
-				// });
-		// });	
 		
 		if (cfgNeedCheckUpdates)
 		{

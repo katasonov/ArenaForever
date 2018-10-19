@@ -17,7 +17,9 @@
 
 using namespace std;
 
-
+namespace {
+	std::string GenRandomAnsiString(const int len);
+}
 bool ExtractZip(const std::wstring &zipFilePath, const std::wstring &wherePath, const wstring &password)
 {
 	bool ok = false;
@@ -77,26 +79,32 @@ bool ExtractZip(const std::wstring &zipFilePath, const std::wstring &wherePath, 
 //}
 
 
-std::string GenRandomAnsiString(const int len)
+std::wstring System::GenRandomWString(const int len)
 {
-	srand(GetTickCount() ^ (unsigned long)GetDesktopWindow());
-
-	static const char alphanum[] =
-		"0123456789"
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-		"abcdefghijklmnopqrstuvwxyz";
-
-	std::string s;
-	s.reserve(len);
-	for (int i = 0; i < len; ++i)
-	{
-		s += alphanum[rand() % (sizeof(alphanum) - 1)];
-	}
-
-	return s;
+	return UTF8ToW(GenRandomAnsiString(len));
 }
 
+namespace {
+	std::string GenRandomAnsiString(const int len)
+	{
+		srand(GetTickCount() ^ (unsigned long)GetDesktopWindow());
 
+		static const char alphanum[] =
+			"0123456789"
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			"abcdefghijklmnopqrstuvwxyz";
+
+		std::string s;
+		s.reserve(len);
+		for (int i = 0; i < len; ++i)
+		{
+			s += alphanum[rand() % (sizeof(alphanum) - 1)];
+		}
+
+		return s;
+	}
+
+}
 std::wstring System::GetRealCurrentDirectory()
 {
 	TCHAR dir[4096];

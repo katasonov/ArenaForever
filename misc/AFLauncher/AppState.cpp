@@ -2,6 +2,8 @@
 
 #include <mutex>
 
+#include <map>
+
 namespace {
 
 
@@ -10,7 +12,7 @@ namespace {
 	wstring		_sex;
 	std::mutex	_mutex;
 
-
+	wstring _vkAuthCheckCode; //used to get auth status from api.
 }
 
 AppState AppState::appState;
@@ -21,6 +23,9 @@ AppState::AppState()
 	_authCode = L"";
 	_model = L"assassin/default";
 	_sex = L"male";
+
+	//Load persistent data from file
+	//TODO:
 }
 
 void AppState::SetAuthCode(const wstring &appCode)
@@ -66,4 +71,32 @@ wstring AppState::GetPlayerSex()
 	wstring sex = _sex;
 	_mutex.unlock();
 	return sex;
+}
+
+wstring AppState::GetVKOAuthUri()
+{
+	_mutex.lock();
+	_vkAuthCheckCode = System::GenRandomWString(16);
+
+#ifdef _DEBUG
+	wstring url = WStrF(
+		L"https://oauth.vk.com/authorize?client_id=6656867&display=page&" \
+		L"redirect_uri=http://127.0.0.1:8889/api/v1/vklogin/clbk&scope=email&response_type=code&v=5.63&state=%s", _vkAuthCheckCode.c_str());
+#else
+	wstring url = WStrF(
+		L"https://oauth.vk.com/authorize?client_id=6656867&display=page&" \
+		L"redirect_uri=http://arenaforever.com/api/v1/vklogin/clbk&scope=email&response_type=code&v=5.63&state=%s", _vkAuthCheckCode.c_str());
+#endif
+
+	_mutex.unlock();
+
+	return url;
+}
+
+wstring AppState::GetVKOAuthCheckStatusCode()
+{
+	_mutex.lock();
+	wstring code = _vkAuthCheckCode;
+	_mutex.unlock();
+	return code;
 }

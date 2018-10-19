@@ -92,7 +92,7 @@ public:
 		return body;
 	}
 
-	static string GeArenaToConnect(const wstring &model, const wstring &sex, const wstring &authCode)
+	static string GetArenaToConnect(const wstring &model, const wstring &sex, const wstring &authCode)
 	{
 		auto response = HttpGetStringResponse(Host, Port,
 			StrF("/api/v1/arena/connect?authCode=%s&model=%s&sex=%s",
@@ -106,5 +106,42 @@ public:
 		return body;
 	}
 
+	static string CheckVKOAuthStatus(const wstring &checkStatusCode)
+	{
+		auto response = HttpGetStringResponse(Host, Port,
+			StrF("/api/v1/vklogin/status?checkStatusCode=%s",
+				WtoUtf8(checkStatusCode).c_str()),
+			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + "api.arenaforever.com" + "\r\nAccept: */*",
+			10);
+		auto body = HTTPBody(response.c_str());
+
+		return body;
+	}
+
+	static string LoadPlayerInfo(const wstring &authCode)
+	{
+		auto response = HttpGetStringResponse(Host, Port,
+			StrF("/api/v1/player/get?authCode=%s",
+				WtoUtf8(authCode).c_str()),
+			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + "api.arenaforever.com" + "\r\nAccept: */*",
+			10);
+		auto body = HTTPBody(response.c_str());
+
+		return body;
+	}
+
+	static string SetPlayerNickName(const wstring &authCode, const wstring &nickName)
+	{
+		string url = StrF("/api/v1/player/setNick?authCode=%s&nick=%s",
+			WtoUtf8(authCode).c_str(),
+			WtoUtf8(nickName).c_str());
+		auto response = HttpGetStringResponse(Host, Port,
+			url,
+			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + "api.arenaforever.com" + "\r\nAccept: */*",
+			10);
+		auto body = HTTPBody(response.c_str());
+
+		return body;
+	}
 
 };

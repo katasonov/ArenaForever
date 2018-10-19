@@ -1,0 +1,52 @@
+﻿<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../main.css">
+	<link rel="stylesheet" type="text/css" href="login.css">
+
+	<script type="text/tiscript" src="login.tis" />
+    
+</head> 
+<body class="login">
+    <div class="widget-container">
+
+
+
+        <div id="LoginFormWidget" class="login-widget">
+            <div class="title">
+               Пожалуйста авторизуйтесь
+            </div>
+            <div style="height:20px;"></div>
+            <div id="ErrorTextDiv" class="error-text" style="visibility:hidden;height:60px;">
+                No Error
+            </div>
+            <div id="registerdiv" class="submit-line">
+                <button id="LoginButton">Войти через Вконтакте</button>
+            </div>
+            <div style="height:80px;"></div>
+            <div>
+                <a href="/">Забыли пароль?</a> | <a id="RegistrationLink" href="/">Регистрация</a>
+            </div>
+        </div>
+		
+		<div id="ProgressWidget" class="login-widget" style="visibility:collapse">
+            <div class="title">
+               В браузере, на открытой странице, подтвердите авторизацию и вернитесь в приложение.	   
+            </div>
+			<div style="height:10px;"></div>
+			<div>
+				<img src="../images/progress.gif" style="height:48px;width:48px;" />
+            </div>
+            <div style="height:20px;"></div>
+            <div id="ErrorTextDiv" class="error-text" style="visibility:hidden;height:60px;">
+                No Error
+            </div>
+            <div id="registerdiv" class="submit-line">
+                <button id="CancelButton">Отмена</button>
+            </div>
+            <div style="height:80px;"></div>
+        </div>
+
+    </div>
+</body>
+</html>

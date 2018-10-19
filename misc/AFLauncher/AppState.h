@@ -26,10 +26,13 @@ public:
 		return WStrF(L"%s\\baseaf", GetAppPath().c_str());
 	}
 
+
 	static wstring GetAppPath()
 	{
 		return System::GetRealCurrentDirectory();
 	}
+
+	wstring GetVKOAuthUri();
 
 	void SetAuthCode(const wstring &appCode);
 	wstring GetAuthCode();
@@ -37,4 +40,10 @@ public:
 	wstring GetPlayerModelName();
 	void SetPlayerSex(const wstring &sex);
 	wstring GetPlayerSex();
+
+	wstring GetVKOAuthCheckStatusCode();
+
+	void SetPersistentValue(const string &key, const int value);
+
+
 };

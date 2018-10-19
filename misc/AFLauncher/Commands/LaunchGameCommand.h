@@ -39,7 +39,7 @@ public:
 		string response;
 		try
 		{
-			response = ServerAPI::GeArenaToConnect(model, sex, authCode);
+			response = ServerAPI::GetArenaToConnect(model, sex, authCode);
 			
 			wstring IP = UTF8ToW(JsonValueString("IP", response));
 			int Port = JsonValueInt("Port", response);
