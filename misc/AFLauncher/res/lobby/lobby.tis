@@ -9,9 +9,17 @@ $(#LaunchGameButton).on("click", function (){
 				{
 					view.msgbox(#alert, "Произошла ошибка: " + msg);
 				}
-				LoadPlayerInfo();
+				$(#LaunchGameButton).state.disabled = false;				
 			});
 });
+
+
+function LoadLobby()
+{
+	errCounter = 0;
+	$(#LaunchGameButton).state.disabled = false;
+	LoadPlayerInfo();
+}
 
 function LoadPlayerInfo() 
 {
@@ -63,7 +71,7 @@ function self.ready() {
 		$(#MainContent).style#visibility = "collapse";
 		$(#LoadingDataScreen).style#visibility = "visible";
 		$(#SetNickNameWidget).style#visibility = "collapse";
-		LoadPlayerInfo();
+		LoadLobby();
 		
 		
 		//TEST{

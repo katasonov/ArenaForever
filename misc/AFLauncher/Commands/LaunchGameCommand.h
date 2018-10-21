@@ -102,7 +102,7 @@ public:
 			try
 			{
 				err = JsonValueInt("ErrorCode", response);
-				errMsg = UTF8ToW(JsonValueString("Message", response));				
+				errMsg = UTF8ToW(JsonValueString("Message", response));
 			}
 			catch (...)
 			{
