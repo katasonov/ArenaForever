@@ -2,6 +2,17 @@
 var errCounter = 0;
 
 
+
+$(#LaunchGameButton).on("click", function (){
+	 view.ntvLaunchGame(function (err, msg) {
+				if (err != 0)
+				{
+					view.msgbox(#alert, "Произошла ошибка: " + msg);
+				}
+				LoadPlayerInfo();
+			});
+});
+
 function LoadPlayerInfo() 
 {
 	view.ntvLoadPlayerInfo(function(err, playerMap) {

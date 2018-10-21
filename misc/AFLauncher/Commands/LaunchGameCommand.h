@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "ICommand.h"
 #include <functional>
@@ -17,13 +17,13 @@ using namespace std;
 
 class LaunchGameCommand : public ICommand
 {
-	std::function<void(int errCode)> clbk;
+	std::function<void(int errCode, wstring msg)> clbk;
 	wstring authCode, model, sex;
 	HWND parentHwnd;
 
 public:
 
-	LaunchGameCommand(HWND parentHwnd, wstring authCode, wstring model, wstring sex, std::function<void(int errCode)> &&_fn)
+	LaunchGameCommand(HWND parentHwnd, wstring authCode, wstring model, wstring sex, std::function<void(int errCode, wstring msg)> &&_fn)
 	{
 		this->clbk = move(_fn);
 		this->authCode = authCode;
@@ -36,6 +36,7 @@ public:
 	{
 
 		int err = 0xFFFF;
+		wstring errMsg = L"Неизвестная ошибка";
 		string response;
 		try
 		{
@@ -94,21 +95,22 @@ public:
 			//}, 1000);
 
 
-			clbk(0);
+			clbk(0, L"");
 		}
 		catch (...)
 		{
 			try
 			{
 				err = JsonValueInt("ErrorCode", response);
+				errMsg = UTF8ToW(JsonValueString("Message", response));				
 			}
 			catch (...)
 			{
-				clbk(err);
+				clbk(err, errMsg);
 				return;
 			}
 
-			clbk(err);
+			clbk(err, errMsg);
 		}
 	}
 

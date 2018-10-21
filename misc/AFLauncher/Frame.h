@@ -156,9 +156,9 @@ public:
 			AppState::Instance().GetAuthCode(),
 			AppState::Instance().GetPlayerModelName(), 
 			AppState::Instance().GetPlayerSex(), 			
-			[=](int err)
+			[=](int err, wstring msg)
 		{
-			clbk.call(sciter::value(err));
+			clbk.call(sciter::value(err), sciter::value(msg));
 		}));
 
 		return 0;
