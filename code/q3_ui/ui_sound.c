@@ -278,15 +278,15 @@ static void UI_SoundOptionsMenu_Init( void ) {
 	soundOptionsInfo.graphics.style				= UI_RIGHT;
 	soundOptionsInfo.graphics.color				= color_red;
 
-	soundOptionsInfo.display.generic.type		= MTYPE_PTEXT;
-	soundOptionsInfo.display.generic.flags		= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
-	soundOptionsInfo.display.generic.id			= ID_DISPLAY;
-	soundOptionsInfo.display.generic.callback	= UI_SoundOptionsMenu_Event;
-	soundOptionsInfo.display.generic.x			= 216;
-	soundOptionsInfo.display.generic.y			= 240 - PROP_HEIGHT;
-	soundOptionsInfo.display.string				= "DISPLAY";
-	soundOptionsInfo.display.style				= UI_RIGHT;
-	soundOptionsInfo.display.color				= color_red;
+	//soundOptionsInfo.display.generic.type		= MTYPE_PTEXT;
+	//soundOptionsInfo.display.generic.flags		= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
+	//soundOptionsInfo.display.generic.id			= ID_DISPLAY;
+	//soundOptionsInfo.display.generic.callback	= UI_SoundOptionsMenu_Event;
+	//soundOptionsInfo.display.generic.x			= 216;
+	//soundOptionsInfo.display.generic.y			= 240 - PROP_HEIGHT;
+	//soundOptionsInfo.display.string				= "DISPLAY";
+	//soundOptionsInfo.display.style				= UI_RIGHT;
+	//soundOptionsInfo.display.color				= color_red;
 
 	soundOptionsInfo.sound.generic.type			= MTYPE_PTEXT;
 	soundOptionsInfo.sound.generic.flags		= QMF_RIGHT_JUSTIFY;
@@ -298,15 +298,15 @@ static void UI_SoundOptionsMenu_Init( void ) {
 	soundOptionsInfo.sound.style				= UI_RIGHT;
 	soundOptionsInfo.sound.color				= color_red;
 
-	soundOptionsInfo.network.generic.type		= MTYPE_PTEXT;
-	soundOptionsInfo.network.generic.flags		= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
-	soundOptionsInfo.network.generic.id			= ID_NETWORK;
-	soundOptionsInfo.network.generic.callback	= UI_SoundOptionsMenu_Event;
-	soundOptionsInfo.network.generic.x			= 216;
-	soundOptionsInfo.network.generic.y			= 240 + PROP_HEIGHT;
-	soundOptionsInfo.network.string				= "NETWORK";
-	soundOptionsInfo.network.style				= UI_RIGHT;
-	soundOptionsInfo.network.color				= color_red;
+	//soundOptionsInfo.network.generic.type		= MTYPE_PTEXT;
+	//soundOptionsInfo.network.generic.flags		= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
+	//soundOptionsInfo.network.generic.id			= ID_NETWORK;
+	//soundOptionsInfo.network.generic.callback	= UI_SoundOptionsMenu_Event;
+	//soundOptionsInfo.network.generic.x			= 216;
+	//soundOptionsInfo.network.generic.y			= 240 + PROP_HEIGHT;
+	//soundOptionsInfo.network.string				= "NETWORK";
+	//soundOptionsInfo.network.style				= UI_RIGHT;
+	//soundOptionsInfo.network.color				= color_red;
 
 	y = 240 - 2 * (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.sfxvolume.generic.type		= MTYPE_SLIDER;
@@ -386,9 +386,9 @@ static void UI_SoundOptionsMenu_Init( void ) {
 	Menu_AddItem( &soundOptionsInfo.menu, ( void * ) &soundOptionsInfo.framel );
 	Menu_AddItem( &soundOptionsInfo.menu, ( void * ) &soundOptionsInfo.framer );
 	Menu_AddItem( &soundOptionsInfo.menu, ( void * ) &soundOptionsInfo.graphics );
-	Menu_AddItem( &soundOptionsInfo.menu, ( void * ) &soundOptionsInfo.display );
+	//Menu_AddItem( &soundOptionsInfo.menu, ( void * ) &soundOptionsInfo.display );
 	Menu_AddItem( &soundOptionsInfo.menu, ( void * ) &soundOptionsInfo.sound );
-	Menu_AddItem( &soundOptionsInfo.menu, ( void * ) &soundOptionsInfo.network );
+	//Menu_AddItem( &soundOptionsInfo.menu, ( void * ) &soundOptionsInfo.network );
 	Menu_AddItem( &soundOptionsInfo.menu, ( void * ) &soundOptionsInfo.sfxvolume );
 	Menu_AddItem( &soundOptionsInfo.menu, ( void * ) &soundOptionsInfo.musicvolume );
 	Menu_AddItem( &soundOptionsInfo.menu, ( void * ) &soundOptionsInfo.soundSystem );

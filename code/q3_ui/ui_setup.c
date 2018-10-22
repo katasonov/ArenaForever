@@ -184,17 +184,17 @@ static void UI_SetupMenu_Init( void ) {
 	setupMenuInfo.framer.height  					= 334;
 
 	y = 134;
-	setupMenuInfo.setupplayer.generic.type			= MTYPE_PTEXT;
-	setupMenuInfo.setupplayer.generic.flags			= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
-	setupMenuInfo.setupplayer.generic.x				= 320;
-	setupMenuInfo.setupplayer.generic.y				= y;
-	setupMenuInfo.setupplayer.generic.id			= ID_CUSTOMIZEPLAYER;
-	setupMenuInfo.setupplayer.generic.callback		= UI_SetupMenu_Event; 
-	setupMenuInfo.setupplayer.string				= "PLAYER";
-	setupMenuInfo.setupplayer.color					= color_red;
-	setupMenuInfo.setupplayer.style					= UI_CENTER;
+	//setupMenuInfo.setupplayer.generic.type			= MTYPE_PTEXT;
+	//setupMenuInfo.setupplayer.generic.flags			= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
+	//setupMenuInfo.setupplayer.generic.x				= 320;
+	//setupMenuInfo.setupplayer.generic.y				= y;
+	//setupMenuInfo.setupplayer.generic.id			= ID_CUSTOMIZEPLAYER;
+	//setupMenuInfo.setupplayer.generic.callback		= UI_SetupMenu_Event; 
+	//setupMenuInfo.setupplayer.string				= "PLAYER";
+	//setupMenuInfo.setupplayer.color					= color_red;
+	//setupMenuInfo.setupplayer.style					= UI_CENTER;
 
-	y += SETUP_MENU_VERTICAL_SPACING;
+	//y += SETUP_MENU_VERTICAL_SPACING;
 	setupMenuInfo.setupcontrols.generic.type		= MTYPE_PTEXT;
 	setupMenuInfo.setupcontrols.generic.flags		= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
 	setupMenuInfo.setupcontrols.generic.x			= 320;
@@ -216,27 +216,27 @@ static void UI_SetupMenu_Init( void ) {
 	setupMenuInfo.setupsystem.color					= color_red;
 	setupMenuInfo.setupsystem.style					= UI_CENTER;
 
-	y += SETUP_MENU_VERTICAL_SPACING;
-	setupMenuInfo.game.generic.type					= MTYPE_PTEXT;
-	setupMenuInfo.game.generic.flags				= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
-	setupMenuInfo.game.generic.x					= 320;
-	setupMenuInfo.game.generic.y					= y;
-	setupMenuInfo.game.generic.id					= ID_GAME;
-	setupMenuInfo.game.generic.callback				= UI_SetupMenu_Event; 
-	setupMenuInfo.game.string						= "GAME OPTIONS";
-	setupMenuInfo.game.color						= color_red;
-	setupMenuInfo.game.style						= UI_CENTER;
+	//y += SETUP_MENU_VERTICAL_SPACING;
+	//setupMenuInfo.game.generic.type					= MTYPE_PTEXT;
+	//setupMenuInfo.game.generic.flags				= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
+	//setupMenuInfo.game.generic.x					= 320;
+	//setupMenuInfo.game.generic.y					= y;
+	//setupMenuInfo.game.generic.id					= ID_GAME;
+	//setupMenuInfo.game.generic.callback				= UI_SetupMenu_Event; 
+	//setupMenuInfo.game.string						= "GAME OPTIONS";
+	//setupMenuInfo.game.color						= color_red;
+	//setupMenuInfo.game.style						= UI_CENTER;
 
-	y += SETUP_MENU_VERTICAL_SPACING;
-	setupMenuInfo.cdkey.generic.type				= MTYPE_PTEXT;
-	setupMenuInfo.cdkey.generic.flags				= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
-	setupMenuInfo.cdkey.generic.x					= 320;
-	setupMenuInfo.cdkey.generic.y					= y;
-	setupMenuInfo.cdkey.generic.id					= ID_CDKEY;
-	setupMenuInfo.cdkey.generic.callback			= UI_SetupMenu_Event; 
-	setupMenuInfo.cdkey.string						= "CD Key";
-	setupMenuInfo.cdkey.color						= color_red;
-	setupMenuInfo.cdkey.style						= UI_CENTER;
+	//y += SETUP_MENU_VERTICAL_SPACING;
+	//setupMenuInfo.cdkey.generic.type				= MTYPE_PTEXT;
+	//setupMenuInfo.cdkey.generic.flags				= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
+	//setupMenuInfo.cdkey.generic.x					= 320;
+	//setupMenuInfo.cdkey.generic.y					= y;
+	//setupMenuInfo.cdkey.generic.id					= ID_CDKEY;
+	//setupMenuInfo.cdkey.generic.callback			= UI_SetupMenu_Event; 
+	//setupMenuInfo.cdkey.string						= "CD Key";
+	//setupMenuInfo.cdkey.color						= color_red;
+	//setupMenuInfo.cdkey.style						= UI_CENTER;
 
 	if( !trap_Cvar_VariableValue( "cl_paused" ) ) {
 #if 0
@@ -289,11 +289,11 @@ static void UI_SetupMenu_Init( void ) {
 	Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.banner );
 	Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.framel );
 	Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.framer );
-	Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.setupplayer );
+	//Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.setupplayer );
 	Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.setupcontrols );
 	Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.setupsystem );
-	Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.game );
-	Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.cdkey );
+	//Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.game );
+	//Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.cdkey );
 //	Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.load );
 //	Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.save );
 	if( !trap_Cvar_VariableValue( "cl_paused" ) ) {

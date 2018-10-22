@@ -163,16 +163,16 @@ void Options_MenuInit( void ) {
 	s_options.graphics.color			= color_red;
 	s_options.graphics.style			= UI_CENTER;
 
-	y += VERTICAL_SPACING;
-	s_options.display.generic.type		= MTYPE_PTEXT;
-	s_options.display.generic.flags		= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_options.display.generic.callback	= Options_Event;
-	s_options.display.generic.id		= ID_DISPLAY;
-	s_options.display.generic.x			= 320;
-	s_options.display.generic.y			= y;
-	s_options.display.string			= "DISPLAY";
-	s_options.display.color				= color_red;
-	s_options.display.style				= UI_CENTER;
+	//y += VERTICAL_SPACING;
+	//s_options.display.generic.type		= MTYPE_PTEXT;
+	//s_options.display.generic.flags		= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
+	//s_options.display.generic.callback	= Options_Event;
+	//s_options.display.generic.id		= ID_DISPLAY;
+	//s_options.display.generic.x			= 320;
+	//s_options.display.generic.y			= y;
+	//s_options.display.string			= "DISPLAY";
+	//s_options.display.color				= color_red;
+	//s_options.display.style				= UI_CENTER;
 
 	y += VERTICAL_SPACING;
 	s_options.sound.generic.type		= MTYPE_PTEXT;
@@ -185,16 +185,16 @@ void Options_MenuInit( void ) {
 	s_options.sound.color				= color_red;
 	s_options.sound.style				= UI_CENTER;
 
-	y += VERTICAL_SPACING;
-	s_options.network.generic.type		= MTYPE_PTEXT;
-	s_options.network.generic.flags		= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_options.network.generic.callback	= Options_Event;
-	s_options.network.generic.id		= ID_NETWORK;
-	s_options.network.generic.x			= 320;
-	s_options.network.generic.y			= y;
-	s_options.network.string			= "NETWORK";
-	s_options.network.color				= color_red;
-	s_options.network.style				= UI_CENTER;
+	//y += VERTICAL_SPACING;
+	//s_options.network.generic.type		= MTYPE_PTEXT;
+	//s_options.network.generic.flags		= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
+	//s_options.network.generic.callback	= Options_Event;
+	//s_options.network.generic.id		= ID_NETWORK;
+	//s_options.network.generic.x			= 320;
+	//s_options.network.generic.y			= y;
+	//s_options.network.string			= "NETWORK";
+	//s_options.network.color				= color_red;
+	//s_options.network.style				= UI_CENTER;
 
 	s_options.back.generic.type	    = MTYPE_BITMAP;
 	s_options.back.generic.name     = ART_BACK0;
@@ -211,9 +211,9 @@ void Options_MenuInit( void ) {
 	Menu_AddItem( &s_options.menu, ( void * ) &s_options.framel );
 	Menu_AddItem( &s_options.menu, ( void * ) &s_options.framer );
 	Menu_AddItem( &s_options.menu, ( void * ) &s_options.graphics );
-	Menu_AddItem( &s_options.menu, ( void * ) &s_options.display );
+	//Menu_AddItem( &s_options.menu, ( void * ) &s_options.display );
 	Menu_AddItem( &s_options.menu, ( void * ) &s_options.sound );
-	Menu_AddItem( &s_options.menu, ( void * ) &s_options.network );
+	//Menu_AddItem( &s_options.menu, ( void * ) &s_options.network );
 	Menu_AddItem( &s_options.menu, ( void * ) &s_options.back );
 }
 

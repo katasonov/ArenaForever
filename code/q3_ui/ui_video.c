@@ -993,15 +993,15 @@ void GraphicsOptions_MenuInit( void )
 	s_graphicsoptions.graphics.style			= UI_RIGHT;
 	s_graphicsoptions.graphics.color			= color_red;
 
-	s_graphicsoptions.display.generic.type		= MTYPE_PTEXT;
-	s_graphicsoptions.display.generic.flags		= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_graphicsoptions.display.generic.id		= ID_DISPLAY;
-	s_graphicsoptions.display.generic.callback	= GraphicsOptions_Event;
-	s_graphicsoptions.display.generic.x			= 216;
-	s_graphicsoptions.display.generic.y			= 240 - PROP_HEIGHT;
-	s_graphicsoptions.display.string			= "DISPLAY";
-	s_graphicsoptions.display.style				= UI_RIGHT;
-	s_graphicsoptions.display.color				= color_red;
+	//s_graphicsoptions.display.generic.type		= MTYPE_PTEXT;
+	//s_graphicsoptions.display.generic.flags		= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
+	//s_graphicsoptions.display.generic.id		= ID_DISPLAY;
+	//s_graphicsoptions.display.generic.callback	= GraphicsOptions_Event;
+	//s_graphicsoptions.display.generic.x			= 216;
+	//s_graphicsoptions.display.generic.y			= 240 - PROP_HEIGHT;
+	//s_graphicsoptions.display.string			= "DISPLAY";
+	//s_graphicsoptions.display.style				= UI_RIGHT;
+	//s_graphicsoptions.display.color				= color_red;
 
 	s_graphicsoptions.sound.generic.type		= MTYPE_PTEXT;
 	s_graphicsoptions.sound.generic.flags		= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
@@ -1013,15 +1013,15 @@ void GraphicsOptions_MenuInit( void )
 	s_graphicsoptions.sound.style				= UI_RIGHT;
 	s_graphicsoptions.sound.color				= color_red;
 
-	s_graphicsoptions.network.generic.type		= MTYPE_PTEXT;
-	s_graphicsoptions.network.generic.flags		= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_graphicsoptions.network.generic.id		= ID_NETWORK;
-	s_graphicsoptions.network.generic.callback	= GraphicsOptions_Event;
-	s_graphicsoptions.network.generic.x			= 216;
-	s_graphicsoptions.network.generic.y			= 240 + PROP_HEIGHT;
-	s_graphicsoptions.network.string			= "NETWORK";
-	s_graphicsoptions.network.style				= UI_RIGHT;
-	s_graphicsoptions.network.color				= color_red;
+	//s_graphicsoptions.network.generic.type		= MTYPE_PTEXT;
+	//s_graphicsoptions.network.generic.flags		= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
+	//s_graphicsoptions.network.generic.id		= ID_NETWORK;
+	//s_graphicsoptions.network.generic.callback	= GraphicsOptions_Event;
+	//s_graphicsoptions.network.generic.x			= 216;
+	//s_graphicsoptions.network.generic.y			= 240 + PROP_HEIGHT;
+	//s_graphicsoptions.network.string			= "NETWORK";
+	//s_graphicsoptions.network.style				= UI_RIGHT;
+	//s_graphicsoptions.network.color				= color_red;
 
 	y = 240 - 7 * (BIGCHAR_HEIGHT + 2);
 	s_graphicsoptions.list.generic.type     = MTYPE_SPINCONTROL;
@@ -1165,9 +1165,9 @@ void GraphicsOptions_MenuInit( void )
 	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.framer );
 
 	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.graphics );
-	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.display );
+	//Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.display );
 	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.sound );
-	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.network );
+	//Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.network );
 
 	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.list );
 	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.driver );

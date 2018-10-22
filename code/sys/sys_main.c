@@ -696,6 +696,10 @@ void Sys_SigHandler( int signal )
 		Sys_Exit( 2 );
 }
 
+
+extern cvar_t *net_remote_ip;
+extern cvar_t *net_remote_port;
+
 /*
 =================
 main
@@ -775,6 +779,7 @@ int main( int argc, char **argv )
 	signal( SIGTERM, Sys_SigHandler );
 	signal( SIGINT, Sys_SigHandler );
 
+	trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s:%i\n", net_remote_ip->string, net_remote_port->integer));
 	while( 1 )
 	{
 #ifndef SERVER

@@ -1292,9 +1292,9 @@ void CL_KeyDownEvent( int key, unsigned time )
 				VM_Call( uivm, UI_SET_ACTIVE_MENU, UIMENU_INGAME );
 			}
 			else if ( clc.state != CA_DISCONNECTED ) {
-				CL_Disconnect_f();
-				S_StopAllSounds();
-				VM_Call( uivm, UI_SET_ACTIVE_MENU, UIMENU_MAIN );
+				//CL_Disconnect_f();
+				//S_StopAllSounds();
+				//VM_Call( uivm, UI_SET_ACTIVE_MENU, UIMENU_MAIN );
 			}
 			return;
 		}
