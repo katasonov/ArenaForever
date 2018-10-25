@@ -143,6 +143,9 @@
     <ClCompile Include="AppState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\AFCommon\utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AFLauncher.rc">
@@ -154,6 +157,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="AFLauncher.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icon1.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

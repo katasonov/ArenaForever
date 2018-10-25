@@ -51,6 +51,9 @@ public:
 		int err = 0;
 		try
 		{
+			if (!utils::DirExists(AppState::GetResourcesPath()))
+				utils::CreateDirectoryRecursively(AppState::GetResourcesPath().c_str(), false);
+
 			string response = ServerAPI::GetResourceUpdatesMap();
 			FilesMap remote;
 			FilesMap::FromJson(response, remote);

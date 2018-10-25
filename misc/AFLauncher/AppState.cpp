@@ -85,7 +85,7 @@ wstring AppState::GetVKOAuthUri()
 #else
 	wstring url = WStrF(
 		L"https://oauth.vk.com/authorize?client_id=6656867&display=page&" \
-		L"redirect_uri=http://arenaforever.com/api/v1/vklogin/clbk&scope=email&response_type=code&v=5.63&state=%s", _vkAuthCheckCode.c_str());
+		L"redirect_uri=http://quaka.online/api/v1/vklogin/clbk&scope=email&response_type=code&v=5.63&state=%s", _vkAuthCheckCode.c_str());
 #endif
 
 	_mutex.unlock();

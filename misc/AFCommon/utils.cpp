@@ -1,4 +1,4 @@
-#include "stdafx.h"
+//#include "stdafx.h"
 
 
 //#include <afx.h>
@@ -17,7 +17,7 @@
 #include <map>
 
 #include <Shlobj.h>
-#include <shlobj_core.h>
+//#include <shlobj_core.h>
 #include <shellapi.h>
 
 #if _MSC_VER == 1900

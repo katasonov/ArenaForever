@@ -4,12 +4,15 @@ var errCounter = 0;
 
 
 $(#LaunchGameButton).on("click", function (){
-	 view.ntvLaunchGame(function (err, msg) {
+	$(#LaunchGameButton).state.disabled = true;
+	ShowScreen($(#SearchingArena));
+	view.ntvLaunchGame(function (err, msg) {
 				if (err != 0)
 				{
 					view.msgbox(#alert, "Произошла ошибка: " + msg);
 				}
-				$(#LaunchGameButton).state.disabled = false;				
+				$(#LaunchGameButton).state.disabled = false;
+				ShowScreen($(#MainContent));
 			});
 });
 
@@ -19,6 +22,20 @@ function LoadLobby()
 	errCounter = 0;
 	$(#LaunchGameButton).state.disabled = false;
 	LoadPlayerInfo();
+}
+
+function CollapseScreens()
+{
+	$(#MainContent).style#visibility = "collapse";
+	$(#LoadingDataScreen).style#visibility = "collapse";
+	$(#SetNickNameWidget).style#visibility = "collapse";			
+	$(#SearchingArena).style#visibility = "collapse";			
+}
+
+function ShowScreen(screen) 
+{
+	CollapseScreens();
+	screen.style#visibility = "visible";
 }
 
 function LoadPlayerInfo() 
@@ -48,16 +65,14 @@ function LoadPlayerInfo()
 			
 			if (cfgPlayer["Nick"] == "")
 			{
-				$(#MainContent).style#visibility = "collapse";
-				$(#LoadingDataScreen).style#visibility = "collapse";
+				CollapseScreens();
 				$(#SetNickNameWidget).style#visibility = "visible";								
 			}
 			else 
 			{
-				view.msgbox(#alert, cfgPlayer["Nick"]);
+				//view.msgbox(#alert, cfgPlayer["Nick"]);
+				CollapseScreens();
 				$(#MainContent).style#visibility = "visible";
-				$(#LoadingDataScreen).style#visibility = "collapse";
-				$(#SetNickNameWidget).style#visibility = "collapse";	
 			}
 			
 		}
@@ -68,9 +83,8 @@ function self.ready() {
 	
 	
 
-		$(#MainContent).style#visibility = "collapse";
+		CollapseScreens();
 		$(#LoadingDataScreen).style#visibility = "visible";
-		$(#SetNickNameWidget).style#visibility = "collapse";
 		LoadLobby();
 		
 		
@@ -100,9 +114,8 @@ function self.ready() {
 				}
 				cfgPlayer["nick"] = $(#NickName).text;
 
+				CollapseScreens();
 				$(#MainContent).style#visibility = "visible";
-				$(#LoadingDataScreen).style#visibility = "collapse";
-				$(#SetNickNameWidget).style#visibility = "collapse";	
 			});
 		   //view.msgbox(#alert, $(#NickName).text);
 		   

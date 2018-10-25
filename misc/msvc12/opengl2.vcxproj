@@ -30,8 +30,8 @@
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -76,10 +76,10 @@
     <TargetName>opengl2</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\..\build\release-msvc12-x86\</OutDir>
-    <IntDir>..\..\build\release-msvc12-x86\opengl2\</IntDir>
+    <OutDir>..\..\build\release\</OutDir>
+    <IntDir>..\..\build\release\opengl</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>renderer_opengl2_x86</TargetName>
+    <TargetName>opengl2</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug TA|Win32'">
     <OutDir>..\..\build\debug_ta-msvc12-x86\</OutDir>
@@ -303,12 +303,14 @@ cscript.exe glsl_stringify.vbs ..\..\code\renderergl2\glsl\tonemap_vp.glsl ..\..
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\code\SDL2\include;..\..\code\libcurl;..\..\code\AL;..\..\code\libspeex\include;..\..\code\zlib;..\..\code\jpeg-8c;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN32;WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;BOTLIB;USE_ICON;USE_CURL;USE_CURL_DLOPEN;USE_OPENAL;USE_OPENAL_DLOPEN;USE_VOIP;HAVE_CONFIG_H;USE_INTERNAL_JPEG;USE_RENDERER_DLOPEN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StringPooling>true</StringPooling>
+      <PreprocessorDefinitions>_WIN32;WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;BOTLIB;USE_ICON;USE_CURL;USE_CURL_DLOPEN;USE_OPENAL;USE_OPENAL_DLOPEN;USE_VOIP;HAVE_CONFIG_H;USE_INTERNAL_JPEG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>
+      </StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
       <PrecompiledHeader />
       <PrecompiledHeaderOutputFile>$(IntDir)opengl2.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
@@ -318,6 +320,7 @@ cscript.exe glsl_stringify.vbs ..\..\code\renderergl2\glsl\tonemap_vp.glsl ..\..
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>CompileAsC</CompileAs>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
