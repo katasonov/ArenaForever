@@ -6,6 +6,9 @@
 #include <Windows.h>
 
 #include <iomanip>
+
+#include <vector>
+
 //creates vector with name "name" filled by byte array "data", \0 at the end of data is ignored
 #define CREATE_VECTOR_FROM_BYTE_ARRAY(name, data) \
     const char name##Str[] = data; \

@@ -1,13 +1,20 @@
 #pragma once
 
+#include "..\AFCommon\Logger.h"
+
+
 #include "Commands/ICommand.h"
 #include "Commands\FunctionCommand.h"
 #include "Commands\TimeoutCommand.h"
+
+#include "System.h"
+#include "AppState.h"
 
 #include "SharedQueue.h"
 #include <utility>
 #include <thread>
 #include <chrono>
+
 
 class Switcher
 {
@@ -42,12 +49,18 @@ public:
 	{
 		using namespace std::chrono_literals;
 
+		wstring appPath = AppState::GetLogsPath();
+
 		std::thread(
-			[this] 
+			[this, appPath]
 		{
+			DeleteFile(System::JoinPath(appPath, L"commads.log.txt").c_str());
+			Logger logger(appPath, L"commads.log.txt");
+
 			while (true)
 			{
 				ICommand* cmd = _commands.front();
+				cmd->SetLogger(&logger);
 				cmd->Execute();
 				_commands.pop_front();
 

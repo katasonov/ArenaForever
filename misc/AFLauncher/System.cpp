@@ -334,7 +334,7 @@ bool System::DownloadFile(const std::wstring &fileUri, const std::wstring &toFil
 		if (S_OK != URLDownloadToFile(NULL, randomizedUrl.c_str(), toFile.c_str(), 0, &callback))
 		{
 			DWORD err = GetLastError();
-			throw std::exception("System::DownloadFile: failed to download");
+			throw std::exception(StrF("System::DownloadFile: failed to download err = %d", err).c_str());
 		}
 
 		WaitForSingleObject(downloadFinishedEvent, INFINITE);
@@ -345,8 +345,9 @@ bool System::DownloadFile(const std::wstring &fileUri, const std::wstring &toFil
 		}
 		err = 0;
 	}
-	catch (...)
+	catch (std::exception &ex)
 	{
+		err = 2;
 	}
 
 	if (downloadFinishedEvent != NULL)

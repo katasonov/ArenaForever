@@ -73,6 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\build\debug-msvc12-x86\</OutDir>
+    <TargetName>quakal</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -81,6 +82,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\build\release</OutDir>
+    <TargetName>quakal</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -92,7 +94,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_NON_CONFORMING_SWPRINTFS;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;LOCAL_SERVER;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_LOGGING;_CRT_NON_CONFORMING_SWPRINTFS;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;LOCAL_SERVER;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\sciter-sdk\include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -143,7 +145,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_NON_CONFORMING_SWPRINTFS;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_LOGGING;_CRT_NON_CONFORMING_SWPRINTFS;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\sciter-sdk\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -163,7 +165,7 @@
       <Command>pack-resources.bat</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y "..\..\build\release\AFLauncher.exe" "..\..\installer"
+      <Command>xcopy /Y "..\..\build\release\quakal.exe" "..\..\installer"
 touch_cpp.py touchable.cpp</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -197,6 +199,8 @@ touch_cpp.py touchable.cpp</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\AFCommon\hash.h" />
+    <ClInclude Include="..\AFCommon\ILogger.h" />
+    <ClInclude Include="..\AFCommon\Logger.h" />
     <ClInclude Include="AFLauncher.h" />
     <ClInclude Include="AppState.h" />
     <ClInclude Include="Commands\CheckAndDownloadNewAppFilesCommand.h" />
@@ -228,6 +232,7 @@ touch_cpp.py touchable.cpp</Command>
     <ClCompile Include="..\AFCommon\hash.cpp" />
     <ClCompile Include="..\AFCommon\HttpRequest.cpp" />
     <ClCompile Include="..\AFCommon\json.cpp" />
+    <ClCompile Include="..\AFCommon\Logger.cpp" />
     <ClCompile Include="..\AFCommon\utils.cpp" />
     <ClCompile Include="..\AFCommon\wstrf.cpp" />
     <ClCompile Include="..\sciter-sdk\include\sciter-win-main.cpp" />

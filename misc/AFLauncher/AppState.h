@@ -4,6 +4,7 @@
 
 #include "System.h"
 #include "..\AFCommon\wstrf.h"
+#include "..\AFCommon\utils.h"
 
 using namespace std;
 
@@ -23,9 +24,20 @@ public:
 
 	static wstring GetResourcesPath()
 	{
-		return WStrF(L"%s\\baseaf", GetAppPath().c_str());
+		auto path = WStrF(L"%s\\baseaf", GetAppPath().c_str());
+		if (!utils::DirExists(path))
+			utils::CreateDirectoryRecursively(path.c_str(), false);
+		return path;
+		//return WStrF(L"%s\\baseaf", GetAppPath().c_str());
 	}
 
+	static wstring GetLogsPath()
+	{
+		auto path = WStrF(L"%s\\logs", GetAppPath().c_str());
+		if (!utils::DirExists(path))
+			utils::CreateDirectoryRecursively(path.c_str(), false);
+		return path;
+	}
 
 	static wstring GetAppPath()
 	{
