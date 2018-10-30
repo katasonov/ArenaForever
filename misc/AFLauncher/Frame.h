@@ -48,7 +48,7 @@ public:
 		FUNCTION_0("ntvExit", NtvExit);
 		FUNCTION_0("ntvNeedCheckUpdates", NtvNeedCheckUpdates);
 		FUNCTION_1("ntvRunAFMvBins", NtvRunAFMvBins);
-		FUNCTION_1("ntvResourceUpdate", NtvResourceUpdate);
+		FUNCTION_3("ntvResourceUpdate", NtvResourceUpdate);
 		FUNCTION_1("ntvCheckAndDownloadAppFiles", NtvCheckAndDownloadAppFiles);
 		
 		FUNCTION_3("ntvLoginPlayer", NtvLoginPlayer);
@@ -74,7 +74,7 @@ public:
 
 	int NtvCheckAndDownloadAppFiles(sciter::value clbk)
 	{
-#ifndef TURN_OFF_UPDATES
+#ifndef TURN_OFF_APP_UPDATES
 		Switcher::Instance().AddCommand(new CheckAndDownloadNewAppFilesCommand([=](int err, int progress, const wstring &folder)
 		{ 
 			clbk.call(sciter::value(err), sciter::value(progress), sciter::value(folder));
@@ -104,12 +104,22 @@ public:
 		//sciter::value(&etalonMap[0], etalonMap.size())
 	}
 
-	int NtvResourceUpdate(sciter::value clbk)
+	int NtvResourceUpdate(sciter::value clbkProgress, sciter::value clbkDone, sciter::value clbkFailed)
 	{
-#ifndef TURN_OFF_UPDATES
-		Switcher::Instance().AddCommand(new UpdateResourcesCommand([=](int err, int progress)
+#ifndef TURN_OFF_RESOURCE_UPDATES
+		Switcher::Instance().AddCommand(new UpdateResourcesCommand(
+			[=](wstring &fileName, unsigned int totalSize, unsigned int gotSize)
 		{
-			clbk.call(sciter::value(err), sciter::value(progress));
+			clbkProgress.call(sciter::value(fileName), sciter::value((double)totalSize), sciter::value((double)gotSize));
+		},
+			[=]()
+		{
+			clbkDone.call();
+		},
+			
+			[=]()
+		{
+			clbkFailed.call();
 		}));
 #else
 		Switcher::Instance().AddCommand([=]()

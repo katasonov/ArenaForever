@@ -35,8 +35,9 @@ function ConsolePrintErrorLine(line) {
 function UpdateResources() {
 	
 	consolePrintLine("Обновление ресурсов: ");
+	var lastFile = "";
 	view.ntvResourceUpdate(
-		function (errCode, progress) {
+		/*function (errCode, progress) {
 			if (errCode != 0) {
 				//ConsolePrintErrorLine("Произошла ошибка обновления ресурсных файлов");
 				view.msgbox(#alert,  "Произошла ошибка обновления ресурсных файлов");
@@ -49,7 +50,28 @@ function UpdateResources() {
 			}
 			consolePrintLastLine("Обновление ресурсов: " + progress);							
 			selectView("login-vk/login");
-		});		
+		});		*/
+		function (fileName, totalSize, gotSize)
+		{
+			if (lastFile == fileName)
+			{
+				consolePrintLastLine("Загрузка файла: " + fileName + " (" + ((gotSize/totalSize) * 100).toInteger() + "%)");
+			}
+			else
+			{
+				lastFile = fileName;
+				consolePrintLine("Загрузка файла: " + fileName + " (0%)");
+			}
+		},
+		function()
+		{
+			selectView("login-vk/login");
+		},
+		function () 
+		{
+			view.msgbox(#alert,  "Произошла ошибка обновления ресурсных файлов");
+			view.ntvExit();
+		});
 }
 
 function self.ready() {

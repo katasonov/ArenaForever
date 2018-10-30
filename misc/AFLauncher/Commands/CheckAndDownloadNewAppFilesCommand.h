@@ -123,12 +123,16 @@ public:
 					throw exception("Failed to download file");
 				}
 
-
-				//TODO: CHECK hash 
-				// and size of arc
 				logger.PrintLine(L"Checking file size %s", tmpArchFileName.c_str());
-				if (fs::file_size(tmpArchFileName) != arcBytes)
+				//IE downloads files first to the temp folder then copies it to destination.
+				//But we can get to here while file is not copied yet, so check and wait some time
+				int waitCounter = 0;
+				while (fs::file_size(tmpArchFileName) != arcBytes)
 				{
+					logger.PrintLine(L"Checking retry %d", waitCounter);
+					Sleep(1000);
+					if (waitCounter++ < 10)
+						continue;
 					throw exception("Invalid file size. Download is corrupted.");
 				}
 

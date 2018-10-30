@@ -38,8 +38,6 @@ Logger::~Logger()
 void Logger::PrintLine(const wchar_t *fmt, ...)
 {
 #ifdef _LOGGING
-	assert(gInitialized);
-	assert(gFiles.size() > 0);
     va_list ap;
     va_start(ap, fmt);
     vfwprintf(m_f, fmt, ap);

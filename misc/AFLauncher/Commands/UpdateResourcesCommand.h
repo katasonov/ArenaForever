@@ -24,8 +24,9 @@ using namespace std;
 
 class UpdateResourcesCommand : public ICommand
 {
-	std::function<void(int errCode, int progress)> clbk;
-
+	std::function<void(wstring &fileName, unsigned int totalSize, unsigned int gotSize)> clbkProgress;
+	std::function<void()> clbkDone;
+	std::function<void()> clbkFailed;
 
 	//ResourceInfo ParseResourceFileInfo(string jsonInfo)
 	//{
@@ -40,9 +41,14 @@ class UpdateResourcesCommand : public ICommand
 
 public:
 
-	UpdateResourcesCommand(std::function<void(int errCode, int progress)> &&_fn)
+	UpdateResourcesCommand(
+		std::function<void(wstring &fileName, unsigned int totalSize, unsigned int gotSize)> &&clbkProgress,
+		std::function<void()> &&clbkDone,
+		std::function<void()> &&clbkFailed)
 	{
-		this->clbk = move(_fn);
+		this->clbkProgress = move(clbkProgress);
+		this->clbkDone = move(clbkDone);
+		this->clbkFailed = move(clbkFailed);
 	}
 
 	void Execute() override
@@ -115,47 +121,79 @@ public:
 				}
 				logger.PrintLine(L"Total size: %d", totalSize);
 
+				int test = 0;
+
 				//Download and replace files
 				unsigned int totalDownloaded = 0;
-				for (auto fi : resources) 
+				for (auto fi : resources)
 				{
-					auto toPath = System::JoinPath(AppState::GetResourcesPath(), fi.FileName);
-					if (utils::FileExists(toPath))
-						DeleteFile(toPath.c_str());
+					int errRetries = 0;
+					while (errRetries++ < 3)
+					{
+						try
+						{
+							auto toPath = System::JoinPath(AppState::GetResourcesPath(), fi.FileName);
+							if (utils::FileExists(toPath))
+								DeleteFile(toPath.c_str());
 
-					//auto tmpFilePath = System::GetTempFilePath();
-					wstring uri = System::JoinURI(ServerAPI::ResourceFilesURI(), fi.FileName);
-					logger.PrintLine(L"Download: %s", uri.c_str());
-					if (!System::DownloadFile(
-						uri, /*tmpFilePath*/toPath,
-						[&totalDownloaded, &totalSize, this](unsigned int downloadedBytes, unsigned int totalBytes)->bool
-					{
-						totalDownloaded += downloadedBytes;
-						unsigned int progress = (int)floor(((float)totalDownloaded / totalSize) * 100);
-						if (progress > 99)
-							progress = 99;
-						this->clbk(0, progress);
-						return true;
-					}))
-					{
-						throw exception("Failed to download file");
+							//auto tmpFilePath = System::GetTempFilePath();
+							wstring uri = System::JoinURI(ServerAPI::ResourceFilesURI(), fi.FileName);
+							logger.PrintLine(L"Download: %s", uri.c_str());
+							unsigned int fileDownloadedBytes = 0;
+							if (!System::DownloadFile(
+								uri, /*tmpFilePath*/toPath,
+								[&fi, &totalDownloaded, &fileDownloadedBytes, &totalSize, this](unsigned int downloadedBytes, unsigned int totalBytes)->bool
+							{
+								fileDownloadedBytes = totalBytes;
+								unsigned int progress = (int)floor(((float)(totalDownloaded + downloadedBytes) / totalSize) * 100);
+								if (progress > 100)
+									progress = 100;
+								this->clbkProgress(fi.FileName, totalBytes, downloadedBytes);
+								return true;
+							}))
+							{
+								throw exception("Failed to download file");
+							}
+
+							/*logger.PrintLine(L"Move file from %s to %s", tmpFilePath.c_str(), toPath.c_str());
+							System::MoveFileFromTo(tmpFilePath, toPath);*/
+
+							if (test++ == 3)
+								throw exception("Failed to download file");
+
+							//CHECK hash and size of moved file
+
+							//IE downloads files first to the temp folder then copies it to destination.
+							//But we can get to here while file is not copied yet, so check and wait some time
+							int waitCounter = 0;
+							while (fs::file_size(toPath) != fi.FileSize)
+							{
+								Sleep(1000);
+								if (waitCounter++ < 10)
+									continue;
+								throw exception("Invalid file size. Download is corrupted.");
+							}
+
+							if (hashfile(toPath.c_str()) != fi.FileHash)
+							{
+								throw exception("Invalid file hash. Download is corrupted.");
+							}
+							totalDownloaded += fileDownloadedBytes;
+						}
+						catch (std::exception &ex)
+						{
+							logger.PrintLine(L"Failed to download:\r\n %s retry %d", UTF8ToW(ex.what()).c_str(), errRetries);
+							continue;
+						}
+
+						errRetries = 0;
+						break; //Stop retries loop
 					}
 
-
-					/*logger.PrintLine(L"Move file from %s to %s", tmpFilePath.c_str(), toPath.c_str());
-					System::MoveFileFromTo(tmpFilePath, toPath);*/
-
-					//CHECK hash and size of moved file
-					if (fs::file_size(toPath) != fi.FileSize)
+					if (errRetries != 0)
 					{
-						throw exception("Invalid file size. Download is corrupted.");
+						throw std::exception(StrF("Failed to download %s", WtoUtf8(fi.FileName).c_str()).c_str());
 					}
-
-					if (hashfile(toPath.c_str()) != fi.FileHash)
-					{
-						throw exception("Invalid file hash. Download is corrupted.");
-					}
-
 				}
 
 				for (auto fi : removeFiles) {
@@ -175,11 +213,11 @@ public:
 		}
 
 		if (errCounter > 0) {
-			clbk(1, 0);
+			this->clbkFailed();
 		}
 		else
 		{
-			clbk(0, 100);
+			clbkDone();
 		}
 
 		logger.PrintLine(L"UpdateResourcesCommand End");
