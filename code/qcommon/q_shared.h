@@ -31,10 +31,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifdef STANDALONE
 	#define PRODUCT_NAME				"ArenaForever"
 	#define BASEGAME					"baseaf"
-	#define CLIENT_WINDOW_TITLE		"Arena Forever"
-	#define CLIENT_WINDOW_MIN_TITLE	"AF"
+	#define CLIENT_WINDOW_TITLE		"Quaka.Online"
+	#define CLIENT_WINDOW_MIN_TITLE	"QO"
 	#define HOMEPATH_NAME_UNIX		".arenaf"
-	#define HOMEPATH_NAME_WIN			"ArenaForever"
+	#define HOMEPATH_NAME_WIN			"Quaka.Online"
 	#define HOMEPATH_NAME_MACOSX		HOMEPATH_NAME_WIN
 	#define STEAMPATH_NAME			"Arena Forever"
 	#define STEAMPATH_APPID			"10000"

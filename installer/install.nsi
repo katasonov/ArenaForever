@@ -248,7 +248,7 @@ Call openLinkNewWindow
 
 
 !define MUI_BGCOLOR 00A3FF
-!define MUI_ICON "icon128.ico"
+!define MUI_ICON "QuakaWin.ico"
 
 ;!insertmacro MUI_HEADER_TEXT "" ""
 !define MUI_HEADERIMAGE
@@ -758,7 +758,7 @@ Quit
   SetOverwrite on
 
   ${File} "" "quakal.exe"
-  ${File} "" "icon128.ico"
+  ${File} "" "QuakaWin.ico"
   ${File} "" "afmvbins.exe"
   ${File} "" "afq3mod.exe"
 
@@ -766,7 +766,7 @@ Quit
 
   WriteRegStr HKCU "${uninstkey}" "DisplayName" "Квака Онлайн"
   WriteRegStr HKCU "${uninstkey}" "UninstallString" "$INSTDIR\${uninstaller}"
-  WriteRegStr HKCU "${uninstkey}" "DisplayIcon" "$INSTDIR\icon128.ico"
+  WriteRegStr HKCU "${uninstkey}" "DisplayIcon" "$INSTDIR\QuakaWin.ico"
   WriteRegStr HKCU "${uninstkey}" "Publisher" "Alexander Katasonov"
   ;WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Run" \
    ; "Federal.tv" "$INSTDIR\Federal.tv.exe -h"

@@ -35,7 +35,8 @@ public:
 				std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) - m_sTime);
 		}
 #else
-		Timer(const wchar_t *id)
+		Timer(const wchar_t *id, Logger &logger)
+			: m_logger(logger)
 		{
 		}
 	

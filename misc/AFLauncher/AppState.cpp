@@ -78,7 +78,7 @@ wstring AppState::GetVKOAuthUri()
 	_mutex.lock();
 	_vkAuthCheckCode = System::GenRandomWString(16);
 
-#ifdef _DEBUG
+#ifdef LOCAL_SERVER
 	wstring url = WStrF(
 		L"https://oauth.vk.com/authorize?client_id=6656867&display=page&" \
 		L"redirect_uri=http://127.0.0.1:8889/api/v1/vklogin/clbk&scope=email&response_type=code&v=5.63&state=%s", _vkAuthCheckCode.c_str());
