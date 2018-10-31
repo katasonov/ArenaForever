@@ -27,6 +27,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AFLauncher", "..\AFLauncher
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AFBinUpdate", "..\AFBinUpdate\AFBinUpdate.vcxproj", "{F71AE328-545D-4553-9CF1-4A1D7AA60676}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBD98C7A-B418-4048-8E45-0FB6FC90DA2F}"
+	ProjectSection(SolutionItems) = preProject
+		NOTES.txt = NOTES.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug TA|Win32 = Debug TA|Win32

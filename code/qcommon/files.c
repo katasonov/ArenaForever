@@ -510,6 +510,26 @@ char *FS_BuildOSPath( const char *base, const char *game, const char *qpath ) {
 	return ospath[toggle];
 }
 
+/*
+============
+FS_BuildOSPath
+
+TODO:
+============
+*/
+char *FS_BuildOSBasePath(const char *base, const char *qpath) {
+	char	temp[MAX_OSPATH];
+	static char ospath[2][MAX_OSPATH];
+	static int toggle;
+
+	toggle ^= 1;		// flip-flop to allow two returns without clash
+
+	Com_sprintf(ospath[toggle], sizeof(ospath[0]), "%s/%s", base, qpath);
+	FS_ReplaceSeparators(ospath[toggle]);
+
+	return ospath[toggle];
+}
+
 
 /*
 ============
@@ -894,7 +914,10 @@ fileHandle_t FS_FOpenFileWrite( const char *filename ) {
 	f = FS_HandleForFile();
 	fsh[f].zipFile = qfalse;
 
-	ospath = FS_BuildOSPath( fs_homepath->string, fs_gamedir, filename );
+	ospath = FS_BuildOSPath(fs_homepath->string, filename, "");
+	// remove trailing slash
+	ospath[strlen(ospath) - 1] = '\0';
+	
 
 	if ( fs_debug->integer ) {
 		Com_Printf( "FS_FOpenFileWrite: %s\n", ospath );

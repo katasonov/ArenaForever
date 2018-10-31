@@ -51,6 +51,18 @@ function CheckVKOAuthStatus(){
 			});
 			return;
 		}
+		view.msgbox{
+			type:#information, 
+			content:"Вы авторизованы!", 
+			caption:"",
+			onLoad: function(root)
+			{ 
+				self.timer(200, function()
+				{
+						root.view.close(null);
+				} );
+			}};
+
 		selectView("lobby/lobby");
 	});
 }

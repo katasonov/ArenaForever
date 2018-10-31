@@ -89,6 +89,7 @@ Sys_DefaultHomePath
 */
 char *Sys_DefaultHomePath( void )
 {
+	/*
 	TCHAR szPath[MAX_PATH];
 	FARPROC qSHGetFolderPath;
 	HMODULE shfolder = LoadLibrary("shfolder.dll");
@@ -126,7 +127,57 @@ char *Sys_DefaultHomePath( void )
 	}
 
 	FreeLibrary(shfolder);
-	return homePath;
+	return homePath;*/
+	TCHAR szPath[MAX_PATH];
+	FARPROC qGetModuleFileName;
+	HMODULE kernel32 = LoadLibrary("Kernel32.dll");
+	int len = 0;
+	TCHAR *p = NULL;
+
+	if (kernel32 == NULL)
+	{
+		Com_Printf("Unable to load kernel32.dll\n");
+		return NULL;
+	}
+
+	if (!*homePath && com_homepath)
+	{
+		qGetModuleFileName = GetProcAddress(kernel32, "GetModuleFileNameA");
+		if (qGetModuleFileName == NULL)
+		{
+			Com_Printf("Unable to find GetModuleFileNameA in kernel32.dll\n");
+			FreeLibrary(kernel32);
+			return 0;
+		}
+
+		if (!SUCCEEDED(qGetModuleFileName(NULL, szPath, MAX_PATH)))
+		{
+			Com_Printf("Unable to get current module path\n");
+			FreeLibrary(kernel32);
+			return NULL;
+		}
+
+		len = strlen(szPath);
+		p = szPath + len - 1;
+		while (p != szPath && *p != PATH_SEP)
+		{ 
+			p--;
+		}
+
+		if (p == szPath)
+		{
+			Com_Printf("Unable to get normal current module path\n");
+			FreeLibrary(kernel32);
+			return NULL;
+		}
+
+		*p = '\0';
+
+		Com_sprintf(homePath, sizeof(homePath), "%s", szPath);
+
+	}
+	FreeLibrary(kernel32);
+	return homePath; 
 }
 
 /*
