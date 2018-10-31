@@ -76,9 +76,9 @@ misc/winquake.res
 *.orig
 
 *VC.*
-/installer/arenaforever.zip
-/installer/baseaf
-/installer/af.zip
-/installer/af.exe
+/installer/QuakaOnlineSetup.exe
+/installer/quakal.exe
+/installer/afq3mod.exe
+/installer/afmvbins.exe
 /misc/Launcher/ArchiveResource.cpp
 nppBackup
