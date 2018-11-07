@@ -15,6 +15,13 @@
 #include <winbase.h>
 
 
+#include <wininet.h>
+
+#include "../AFCommon/Logger.h"
+#include "AppState.h"
+
+#include <cstdlib>
+
 using namespace std;
 
 namespace {
@@ -311,51 +318,147 @@ void System::UnZipContentFolder(const wstring &zip, const wstring &to, const wst
 }
 
 bool System::DownloadFile(const std::wstring &fileUri, const std::wstring &toFile,
-	std::function<bool(unsigned int downloaded, unsigned int total)> &&clbk)
+	std::function<bool(unsigned int downloadedBytes, unsigned int total)> &&clbk)
 {
-	HANDLE downloadFinishedEvent = CreateEvent(
-		NULL,         // default security attributes
-		TRUE,         // manual-reset event
-		FALSE,         // initial state is not signaled
-		NULL  // object name
-	);
+	const DWORD fileSize = 65535;
+	//HANDLE downloadFinishedEvent = CreateEvent(
+	//	NULL,         // default security attributes
+	//	TRUE,         // manual-reset event
+	//	FALSE,         // initial state is not signaled
+	//	NULL  // object name
+	//);
 
 
-	DownloadUpdatesCallback callback(downloadFinishedEvent, [&clbk](unsigned int downloaded, unsigned int total)->bool 
+	//DownloadUpdatesCallback callback(downloadFinishedEvent, [&clbk](unsigned int downloaded, unsigned int total)->bool 
+	//{
+	//	return clbk(downloaded, total);
+	//});
+
+	//int err = 1;
+
+	//try
+	//{
+	//	wstring randomizedUrl = (fileUri + L"?" + UTF8ToW(GenRandomAnsiString(16)));
+	//	if (S_OK != URLDownloadToFile(NULL, randomizedUrl.c_str(), toFile.c_str(), 0, &callback))
+	//	{
+	//		DWORD err = GetLastError();
+	//		throw std::exception(StrF("System::DownloadFile: failed to download err = %d", err).c_str());
+	//	}
+
+	//	WaitForSingleObject(downloadFinishedEvent, INFINITE);
+
+	//	if (callback.IsDownloadSuccess() == FALSE)
+	//	{
+	//		throw std::exception("System::DownloadFile: not downloaded successfully");
+	//	}
+	//	err = 0;
+	//}
+	//catch (std::exception &ex)
+	//{
+	//	err = 2;
+	//}
+
+	//if (downloadFinishedEvent != NULL)
+	//{
+	//	CloseHandle(downloadFinishedEvent);
+	//}
+
+	//return err == 0;
+
+	std::auto_ptr<ILogger> logger(Logger::CreateLogger(AppState::GetLogsPath(), L"System_DownloadFile_"));
+
+	
+	FILE *f = _wfopen(toFile.c_str(), L"wb+");
+
+	if (f == NULL)
 	{
-		return clbk(downloaded, total);
-	});
+		logger->PrintLine(L"Failed: _wfopen (%s)", toFile.c_str());
+		return false;
+	}
 
-	int err = 1;
+	HINTERNET hInternetOpen = InternetOpen(L"quaka.online launcher", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
 
-	try
+	if (hInternetOpen == NULL)
 	{
-		wstring randomizedUrl = (fileUri + L"?" + UTF8ToW(GenRandomAnsiString(16)));
-		if (S_OK != URLDownloadToFile(NULL, randomizedUrl.c_str(), toFile.c_str(), 0, &callback))
+		logger->PrintLine(L"Failed: hInternetOpen == NULL (err=%d)", GetLastError());
+		fclose(f);
+		return false;
+	}
+
+	HINTERNET hInternetOpenUrl = InternetOpenUrl(hInternetOpen, fileUri.c_str(), NULL, -1L,
+		INTERNET_FLAG_IGNORE_CERT_CN_INVALID | INTERNET_FLAG_IGNORE_CERT_DATE_INVALID | INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTP |
+		INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS | INTERNET_FLAG_NO_AUTH | INTERNET_FLAG_NO_CACHE_WRITE | INTERNET_FLAG_NO_UI |
+		INTERNET_FLAG_RELOAD, INTERNET_NO_CALLBACK);
+
+	if (hInternetOpenUrl == NULL)
+	{
+		logger->PrintLine(L"Failed: hInternetOpenUrl == NULL (err=%d)", GetLastError());
+		InternetCloseHandle(hInternetOpen);
+		fclose(f);
+		return false;
+	}
+
+	//Get File Size
+	char data[fileSize];
+	DWORD  readBytes = fileSize;
+	DWORD downloadedBytes = 0;
+	DWORD totalSize;
+	memset(data, 0, sizeof(data));
+
+	BOOL ok = HttpQueryInfo(hInternetOpenUrl, HTTP_QUERY_CONTENT_LENGTH | HTTP_QUERY_FLAG_NUMBER, data, &readBytes, NULL);
+	if (ok == FALSE || readBytes != 4)
+	{
+		logger->PrintLine(L"Failed: HttpQueryInfo == FALSE (err=%d)", GetLastError());
+		InternetCloseHandle(hInternetOpenUrl);
+		InternetCloseHandle(hInternetOpen);
+		fclose(f);
+		return false;
+	}
+
+	memcpy(&totalSize, data, 4);
+
+
+	bool downloaded = false;
+
+	int triesCounter = 0;
+
+	while (triesCounter < 10)
+	{
+		BOOL ok = InternetReadFile(hInternetOpenUrl, data, fileSize, &readBytes);
+		if (ok == FALSE)
 		{
-			DWORD err = GetLastError();
-			throw std::exception(StrF("System::DownloadFile: failed to download err = %d", err).c_str());
+			//err
+			logger->PrintLine(L"Failed: InternetReadFile (err=%d)", GetLastError());
+			triesCounter++;
+			Sleep(2000);
+			continue;
 		}
 
-		WaitForSingleObject(downloadFinishedEvent, INFINITE);
-
-		if (callback.IsDownloadSuccess() == FALSE)
+		if (readBytes == 0)
 		{
-			throw std::exception("System::DownloadFile: not downloaded successfully");
+			//finished download
+			downloaded = (totalSize == downloadedBytes);
+				
+			break;
 		}
-		err = 0;
-	}
-	catch (std::exception &ex)
-	{
-		err = 2;
+
+		//remove chunked separators \r\n
+
+		if (fwrite(data, 1, readBytes, f) != readBytes)
+		{
+			logger->PrintLine(L"Failed: fwrite");
+			break;
+		}
+
+		downloadedBytes += readBytes;
+		clbk(downloadedBytes, totalSize);
 	}
 
-	if (downloadFinishedEvent != NULL)
-	{
-		CloseHandle(downloadFinishedEvent);
-	}
+	InternetCloseHandle(hInternetOpenUrl);
+	InternetCloseHandle(hInternetOpen);
+	fclose(f);
 
-	return err == 0;
+	return downloaded;
 }
 
 std::wstring System::GetTempFilePath()

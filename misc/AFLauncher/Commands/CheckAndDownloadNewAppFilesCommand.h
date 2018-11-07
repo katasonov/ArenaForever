@@ -106,7 +106,7 @@ public:
 				logger.PrintLine(L"Downloading to %s", tmpArchFileName.c_str());
 
 				unsigned int arcBytes = 0;
-				if (!System::DownloadFile(
+				ServerAPI::DownloadHttpFile(logger, 
 					ServerAPI::AppWin32BinsArchiveURI(), tmpArchFileName,
 					[this, &arcBytes](unsigned int downloadedBytes, unsigned int totalBytes)->bool
 				{
@@ -118,10 +118,7 @@ public:
 						progress = 99;
 					this->clbk(0, progress, L"");
 					return true;
-				}))
-				{
-					throw exception("Failed to download file");
-				}
+				});
 
 				logger.PrintLine(L"Checking file size %s", tmpArchFileName.c_str());
 				//IE downloads files first to the temp folder then copies it to destination.
@@ -129,10 +126,10 @@ public:
 				int waitCounter = 0;
 				while (fs::file_size(tmpArchFileName) != arcBytes)
 				{
-					logger.PrintLine(L"Checking retry %d", waitCounter);
+					/*logger.PrintLine(L"Checking retry %d", waitCounter);
 					Sleep(1000);
 					if (waitCounter++ < 10)
-						continue;
+						continue;*/
 					throw exception("Invalid file size. Download is corrupted.");
 				}
 

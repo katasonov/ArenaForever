@@ -53,6 +53,11 @@ public:
 
 	void Execute() override
 	{	
+		//string header, chunk;
+		//ServerAPI::GetFileChunk(L"win32/baseaf/pak0.pk3", 0, header, chunk);
+
+
+
 		ILogger &logger = *GetLogger();
 		logger.PrintLine(L"UpdateResourcesCommand Begin");
 		int err = 0;
@@ -140,7 +145,7 @@ public:
 							wstring uri = System::JoinURI(ServerAPI::ResourceFilesURI(), fi.FileName);
 							logger.PrintLine(L"Download: %s", uri.c_str());
 							unsigned int fileDownloadedBytes = 0;
-							if (!System::DownloadFile(
+							ServerAPI::DownloadHttpFile(logger,
 								uri, /*tmpFilePath*/toPath,
 								[&fi, &totalDownloaded, &fileDownloadedBytes, &totalSize, this](unsigned int downloadedBytes, unsigned int totalBytes)->bool
 							{
@@ -150,10 +155,7 @@ public:
 									progress = 100;
 								this->clbkProgress(fi.FileName, totalBytes, downloadedBytes);
 								return true;
-							}))
-							{
-								throw exception("Failed to download file");
-							}
+							});
 
 							/*logger.PrintLine(L"Move file from %s to %s", tmpFilePath.c_str(), toPath.c_str());
 							System::MoveFileFromTo(tmpFilePath, toPath);*/

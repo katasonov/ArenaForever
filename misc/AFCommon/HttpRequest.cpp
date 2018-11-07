@@ -3,6 +3,10 @@
 #include "HttpRequest.h"
 #include <thread>
 
+
+#define TCP_IO_BUFFER_SIZE  65535
+
+
 using namespace std;
 
 
@@ -38,12 +42,12 @@ int HTTPBodyLength(char *httpMsg)
 	return len;
 }
 
-int HTTPHeaderIntValue(const char *name, char *httpMsg)
+int HTTPHeaderIntValue(const char *name, const char *httpMsg)
 {
 	auto where = strstr(httpMsg, "Content-Length:");
 	if (where == nullptr)
 		return -1;
-	char *ch = where;
+	const char *ch = where;
 	while (*ch != ':' && *ch != '\n') {
 		ch++;
 	}
@@ -57,6 +61,42 @@ int HTTPHeaderIntValue(const char *name, char *httpMsg)
 		ch++;
 	}
 	int val = atoi(ch);
+
+	return val;
+}
+
+std::string HTTPHeaderAsString(const string &header, const string &name)
+{
+	auto start = header.find(name, 0);
+	if (start == string::npos)
+		throw std::exception("Header not found");
+	auto end = header.find("\r\n", start);
+	if (end == string::npos)
+		throw std::exception("Header corrupted");
+
+	return header.substr(start + name.size() + 1, end - (start + name.size() + 1));
+}
+
+unsigned long HTTPHeaderContentLen(const string &header)
+{
+	
+	auto where = strstr(header.c_str(), "Content-Length:");
+	if (where == nullptr)
+		return -1;
+	const char *ch = where;
+	while (*ch != ':' && *ch != '\n') {
+		ch++;
+	}
+	//
+	if (*ch != ':') {
+		return -1;
+	}
+	ch++;
+	//trim all spaces
+	while (*ch == ' ') {
+		ch++;
+	}
+	unsigned long val = atoi(ch);
 
 	return val;
 }
@@ -145,12 +185,12 @@ std::string HttpGetStringResponse(
 
 		//shutdown the connection for sending since no more data will be sent
 		//the client can still use the ConenctSocket for receiving data					
-		char recvbuf[4096];
+		char recvbuf[TCP_IO_BUFFER_SIZE];
 		char *wrbuf = recvbuf;
 		int contentLen = -1;
 		iResult = 0;
 		do {
-			iResult = recv(ConnectSocket, wrbuf, 4096, 0);
+			iResult = recv(ConnectSocket, wrbuf, TCP_IO_BUFFER_SIZE, 0);
 			if (iResult <= 0)
 				break;
 			//*(wrbuf + iResult)  = '\0';
@@ -178,6 +218,134 @@ std::string HttpGetStringResponse(
 	} while (0);
 
 	return srvReturn;
+}
+
+
+void HttpGetRequest(
+	std::string host,
+	int port,
+	std::string &url,
+	const std::string &reqHeader,
+	std::string &respHeader,
+	std::string &respBody,
+	int waitTimeoutSec)
+{
+	std::string srvReturn;
+	time_t secs;
+	secs = time(NULL);
+
+	WSADATA wsaData;
+
+	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (iResult != NO_ERROR) {
+		throw std::exception("Failed to WSAStartup");
+	}
+	struct hostent *he;
+	struct in_addr **addr_list;
+	char ip[100];
+	string hostName = host;
+	if ((he = gethostbyname(hostName.c_str())) == NULL)
+	{
+		WSACleanup();
+		throw std::exception("Failed to get host by name");
+	}
+
+	addr_list = (struct in_addr **) he->h_addr_list;
+
+	for (int i = 0; addr_list[i] != NULL; i++)
+	{
+		//Return the first one;
+		strcpy(ip, inet_ntoa(*addr_list[i]));
+	}
+
+	//----------------------
+	// Create a SOCKET for connecting to server
+	SOCKET ConnectSocket;
+	ConnectSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (ConnectSocket == INVALID_SOCKET) {
+		wprintf(L"socket function failed with error: %ld\n", WSAGetLastError());
+		WSACleanup();
+		throw std::exception("Failed to create socket");
+	}
+	//----------------------
+	// The sockaddr_in structure specifies the address family,
+	// IP address, and port of the server to be connected to.
+	sockaddr_in clientService;
+	clientService.sin_family = AF_INET;
+	clientService.sin_addr.s_addr = inet_addr(ip);
+	clientService.sin_port = htons(port);
+
+	int iTimeOut = waitTimeoutSec * 1000;
+	setsockopt(ConnectSocket, SOL_SOCKET, SO_SNDTIMEO, (char*)&iTimeOut, sizeof(int));
+	setsockopt(ConnectSocket, SOL_SOCKET, SO_RCVTIMEO, (char*)&iTimeOut, sizeof(int));
+
+	//----------------------
+	// Connect to server.
+	iResult = connect(ConnectSocket, (SOCKADDR *)& clientService, sizeof(clientService));
+	if (iResult == SOCKET_ERROR) {
+		wprintf(L"connect function failed with error: %ld\n", WSAGetLastError());
+		iResult = closesocket(ConnectSocket);
+		if (iResult == SOCKET_ERROR)
+			wprintf(L"closesocket function failed with error: %ld\n", WSAGetLastError());
+		WSACleanup();
+		throw std::exception("Failed to connect");
+	}
+	wprintf(L"Connected to server.\n");
+	string getCmd = "GET " + url;
+	getCmd += " " + reqHeader + "\r\n\r\n";
+	char sendbuf[1024];
+	strcpy(sendbuf, getCmd.c_str());
+	//Send an initial buffer
+	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
+	if (iResult == SOCKET_ERROR) {
+		wprintf(L"send failed: %d\n", WSAGetLastError());
+		closesocket(ConnectSocket);
+		WSACleanup();
+		throw std::exception("Failed to send");
+	}
+
+	//shutdown the connection for sending since no more data will be sent
+	//the client can still use the ConenctSocket for receiving data					
+	char recvbuf[TCP_IO_BUFFER_SIZE];
+	int contentLen = -1;
+	iResult = 0;
+	respHeader = "";
+	respBody = "";
+	do {
+		iResult = recv(ConnectSocket, recvbuf, TCP_IO_BUFFER_SIZE, 0);
+		if (iResult <= 0)
+			break;
+
+		respBody.append(recvbuf, iResult);
+		size_t pos;
+		if (respHeader.size() == 0 && (pos = respBody.find("\r\n\r\n", 0)) != std::string::npos)
+		{
+			respHeader = respBody.substr(0, pos + 4);
+			respBody = respBody.substr(pos + 4);
+		}
+
+		if (respHeader.size() == 0)
+			continue;
+
+		if (contentLen < 0)
+		{
+			contentLen = HTTPHeaderIntValue("Content-Length", respHeader.c_str());
+			if (contentLen < 0)
+			{
+				closesocket(ConnectSocket);
+				WSACleanup();
+				throw std::exception("Failed to get Content-Length from response header");
+			}
+				
+		}
+		
+		if (respBody.size() >= contentLen)
+			break;
+	} while (true);
+
+
+	iResult = closesocket(ConnectSocket);
+	WSACleanup();
 }
 
 void HttpGetStringResponseAsync(

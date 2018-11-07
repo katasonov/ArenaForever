@@ -9,6 +9,8 @@
 
 #include <vector>
 
+#include <time.h>
+
 //creates vector with name "name" filled by byte array "data", \0 at the end of data is ignored
 #define CREATE_VECTOR_FROM_BYTE_ARRAY(name, data) \
     const char name##Str[] = data; \
@@ -52,6 +54,8 @@ namespace utils {
 //10 kb
 #define MAX_MT_STRING_BYTES 10240
 
+
+	time_t GetTimeStamp();
 
     std::wstring WStrF(const wchar_t* format, ...);
 

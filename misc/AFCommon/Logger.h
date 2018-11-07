@@ -6,6 +6,8 @@
 #include <time.h>
 #include <chrono>
 
+#include "utils.h"
+
 class Logger : public ILogger
 {
 public:
@@ -23,7 +25,7 @@ public:
 		
 #ifdef _LOGGING
 		Timer(const wchar_t *id, Logger &logger)
-			: m_sTime(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()))
+			: m_sTime(utils::GetTimeStamp())
 			, m_logger(logger)
 		{
 			m_logger.PrintLine(L"Begin Timer (%s)", id);
@@ -32,7 +34,7 @@ public:
 		~Timer()
 		{
 			m_logger.PrintLine(L"End Timer: %lu",
-				std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) - m_sTime);
+				utils::GetTimeStamp() - m_sTime);
 		}
 #else
 		Timer(const wchar_t *id, Logger &logger)
@@ -45,6 +47,14 @@ public:
 		}
 #endif
 	};
+
+public:
+
+	static ILogger* CreateLogger(const std::wstring &folder, const std::wstring &prefix)
+	{
+		DWORD tmsmp = utils::GetTimeStamp();
+		return new Logger(folder, utils::WStrF(L"%s%lu", prefix.c_str(), tmsmp));
+	}
 
 
 private:

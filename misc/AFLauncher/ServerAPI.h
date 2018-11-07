@@ -144,4 +144,108 @@ public:
 		return body;
 	}
 
+
+	static void GetFileChunk(const wstring &file, unsigned long fromByte, unsigned bytesCount, string &respHeader, string &respContent)
+	{
+		string url = StrF("%s",
+			WtoUtf8(file).c_str());
+		HttpGetRequest(Host, Port,
+			url,
+			StrF("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: %s\r\nAccept: */*\r\nRange: bytes=%u-%u",
+				Host.c_str(), fromByte, fromByte + bytesCount - 1),
+			respHeader,
+			respContent,
+			10);
+
+	}
+
+	static unsigned long GetTotalFileLenFromRangeHeader(const string &range)
+	{
+		auto pos = range.find('/');
+		return std::stoul(range.substr(pos + 1));
+	}
+
+	static void DownloadHttpFile(ILogger &logger, const std::wstring &fileUri, const std::wstring &toFile,
+		std::function<bool(unsigned int downloadedBytes, unsigned int total)> &&clbk)
+	{
+		//string header, chunk;
+		//ServerAPI::GetFileChunk(L"win32/baseaf/pak0.pk3", 0, header, chunk);
+
+		unsigned long totalLen = 0;
+		unsigned long downloadedBytes = 0;
+		FILE *f = _wfopen(toFile.c_str(), L"wb+");
+		if (f == NULL)
+		{
+			throw std::exception("DownloadHttpFile: Failed to open file for write");
+		}
+			
+		bool ok = false;
+
+		try 
+		{
+			while (true)
+			{
+				string header, chunk;
+				try
+				{
+					unsigned long bytesCount = totalLen - downloadedBytes;
+					if (bytesCount % 65000 > 0)
+						bytesCount = 65000;
+					if (bytesCount == 0)
+						bytesCount = 1;
+					ServerAPI::GetFileChunk(fileUri, downloadedBytes, bytesCount, header, chunk);
+				}
+				catch (std::exception &ex)
+				{
+					logger.PrintLine(L"Failed to get file chunk: %s", UTF8ToW(ex.what()).c_str());
+					Sleep(2000);
+					continue;
+				}
+
+
+				if (totalLen == 0)
+				{
+					auto rangeVal = HTTPHeaderAsString(header, "Content-Range");
+					if (rangeVal.size() == 0)
+						throw std::exception("DownloadHttpFile: Failed to find Range header");
+					totalLen = GetTotalFileLenFromRangeHeader(rangeVal);
+					if (totalLen < 1)
+						throw std::exception("DownloadHttpFile: Failed to get content from Range header");
+				}
+
+				downloadedBytes += chunk.size();
+
+				if (fwrite(chunk.c_str(), 1, chunk.size(), f) != chunk.size())
+				{
+					throw std::exception("DownloadHttpFile: Failed to write chunk to file");
+				}
+				fflush(f);
+
+				logger.PrintLine(L"====================================\n%s", UTF8ToW(header.c_str()).c_str());
+
+
+				if (!clbk(downloadedBytes, totalLen))
+				{
+					throw std::exception("DownloadHttpFile: download canceled");
+				}
+
+
+
+				if (downloadedBytes == totalLen)
+				{
+					break;
+				}
+			}
+
+		}
+		catch (...)
+		{
+			fclose(f);
+			throw;
+		}
+
+
+		fclose(f);
+	}
+
 };

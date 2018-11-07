@@ -4,6 +4,15 @@
 
 std::string HTTPBody(const char *httpMsg);
 
+void HttpGetRequest(
+	std::string host,
+	int port,
+	std::string &url,
+	const std::string &reqHeader,
+	std::string &respHeader,
+	std::string &respBody,
+	int waitTimeoutSec);
+
 std::string HttpGetStringResponse(
 	std::string host,
 	int port,
@@ -19,3 +28,7 @@ void HttpGetStringResponseAsync(
 	int waitTimeoutSec,
 	std::function<void(std::string response)> callback);
 
+
+unsigned long HTTPHeaderContentLen(const std::string &header);
+
+std::string HTTPHeaderAsString(const std::string &header, const std::string &name);

@@ -20,6 +20,8 @@
 //#include <shlobj_core.h>
 #include <shellapi.h>
 
+#include <chrono>
+
 #if _MSC_VER == 1900
 
 FILE _iob[] = { *stdin, *stdout, *stderr };
@@ -893,6 +895,11 @@ namespace utils {
 	{
 		std::ifstream f(filePath.c_str());
 		return f.good();
+	}
+
+	time_t GetTimeStamp()
+	{
+		return (std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
 	}
 
 
