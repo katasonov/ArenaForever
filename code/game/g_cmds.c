@@ -1749,6 +1749,12 @@ void ClientCommand( int clientNum ) {
 		Cmd_SetViewpos_f( ent );
 	else if (Q_stricmp (cmd, "stats") == 0)
 		Cmd_Stats_f( ent );
+	else if (Q_stricmp(cmd, "addbot") == 0) {
+		//AF: Add bot to server
+		//But in TA version must be team number concerned!!!!
+		G_AddRandomBot(0);
+		//:AF
+	}
 	else
 		trap_SendServerCommand( clientNum, va("print \"unknown cmd %s\n\"", cmd ) );
 }
