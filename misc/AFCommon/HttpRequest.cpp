@@ -480,6 +480,7 @@ void HttpGetFile(
 	unsigned long totalBodyDownloaded = 0;
 	string respHeader = "";
 	string respBody = "";
+	unsigned long fileSize = 0;
 	do {
 		iResult = recv(ConnectSocket, recvbuf, TCP_IO_BUFFER_SIZE, 0);
 		if (iResult <= 0)
@@ -516,11 +517,22 @@ void HttpGetFile(
 			}
 		}
 
+		if (fileSize == 0)
+		{
+			auto rangeVal = HTTPHeaderAsString(respHeader, "Content-Range");
+			if (rangeVal.size() == 0)
+				throw std::exception("HttpGetFile: Failed to find Range header");
+			fileSize = GetTotalFileLenFromRangeHeader(rangeVal);
+			if (fileSize < 1)
+				throw std::exception("HttpGetFile: Failed to get content from Range header");
+		}
+
+
 		bool needStop = false;
 		if (respBody.size() > 65000)
 		{
 			try {
-				needStop = !clbkOnData(respBody, contentLen);
+				needStop = !clbkOnData(respBody, fileSize);
 			}
 			catch (...)
 			{
@@ -541,7 +553,7 @@ void HttpGetFile(
 	} while (true);
 
 	if (respBody.size() > 0)
-		clbkOnData(respBody, contentLen);
+		clbkOnData(respBody, fileSize);
 
 
 	iResult = closesocket(ConnectSocket);

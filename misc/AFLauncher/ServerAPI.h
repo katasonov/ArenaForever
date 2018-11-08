@@ -186,61 +186,6 @@ public:
 		{
 			while (true)
 			{
-				//if (canceled)
-				//{
-				//	throw std::exception("DownloadHttpFile: download canceled");
-				//}
-				/*string header, chunk;
-				try
-				{
-					unsigned long bytesCount = totalLen - downloadedBytes;
-					if (bytesCount % 512000 > 0)
-						bytesCount = 512000;
-					if (bytesCount == 0)
-						bytesCount = 1;
-					ServerAPI::GetFileChunk(fileUri, downloadedBytes, bytesCount, header, chunk);
-				}
-				catch (std::exception &ex)
-				{
-					logger.PrintLine(L"Failed to get file chunk: %s", UTF8ToW(ex.what()).c_str());
-					Sleep(2000);
-					continue;
-				}
-
-
-				if (totalLen == 0)
-				{
-					auto rangeVal = HTTPHeaderAsString(header, "Content-Range");
-					if (rangeVal.size() == 0)
-						throw std::exception("DownloadHttpFile: Failed to find Range header");
-					totalLen = GetTotalFileLenFromRangeHeader(rangeVal);
-					if (totalLen < 1)
-						throw std::exception("DownloadHttpFile: Failed to get content from Range header");
-				}
-
-				downloadedBytes += chunk.size();
-
-				if (fwrite(chunk.c_str(), 1, chunk.size(), f) != chunk.size())
-				{
-					throw std::exception("DownloadHttpFile: Failed to write chunk to file");
-				}
-				fflush(f);
-
-				logger.PrintLine(L"====================================\n%s", UTF8ToW(header.c_str()).c_str());
-
-
-				if (!clbk(downloadedBytes, totalLen))
-				{
-					throw std::exception("DownloadHttpFile: download canceled");
-				}
-
-
-
-				if (downloadedBytes == totalLen)
-				{
-					break;
-				}*/
-
 				string url = StrF("%s",
 					WtoUtf8(fileUri).c_str());
 
