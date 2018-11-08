@@ -32,3 +32,12 @@ void HttpGetStringResponseAsync(
 unsigned long HTTPHeaderContentLen(const std::string &header);
 
 std::string HTTPHeaderAsString(const std::string &header, const std::string &name);
+
+void HttpGetFile(
+	std::string host,
+	int port,
+	std::string &url,
+	const std::string &reqHeader,
+	unsigned long fromByte,
+	std::function<bool(const std::string &data, unsigned long fileSize)> clbkOnData,
+	int waitTimeoutSec);

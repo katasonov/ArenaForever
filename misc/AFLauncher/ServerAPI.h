@@ -180,17 +180,22 @@ public:
 		}
 			
 		bool ok = false;
+		bool canceled = false;
 
 		try 
 		{
 			while (true)
 			{
-				string header, chunk;
+				//if (canceled)
+				//{
+				//	throw std::exception("DownloadHttpFile: download canceled");
+				//}
+				/*string header, chunk;
 				try
 				{
 					unsigned long bytesCount = totalLen - downloadedBytes;
-					if (bytesCount % 65000 > 0)
-						bytesCount = 65000;
+					if (bytesCount % 512000 > 0)
+						bytesCount = 512000;
 					if (bytesCount == 0)
 						bytesCount = 1;
 					ServerAPI::GetFileChunk(fileUri, downloadedBytes, bytesCount, header, chunk);
@@ -234,7 +239,43 @@ public:
 				if (downloadedBytes == totalLen)
 				{
 					break;
+				}*/
+
+				string url = StrF("%s",
+					WtoUtf8(fileUri).c_str());
+
+				try
+				{
+					HttpGetFile(Host, Port,
+						url,
+						StrF("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: %s\r\nAccept: */*",
+							Host.c_str()),
+						downloadedBytes,
+						[&canceled, f, &downloadedBytes, &totalLen, &clbk](const string &data, unsigned long fileSize) ->bool
+					{
+						unsigned long written = 0;
+						if ((written = fwrite(data.c_str(), 1, data.size(), f)) != data.size())
+						{
+							throw std::exception("DownloadHttpFile: Failed to write chunk to file");
+						}
+						fflush(f);
+						downloadedBytes += data.size();
+						totalLen = fileSize;
+
+						canceled = !clbk(downloadedBytes, totalLen);
+						return !canceled;
+					},
+					10);
+
 				}
+				catch (std::exception &ex)
+				{
+					logger.PrintLine(L"Failed HttpGetFile: %s", UTF8ToW(ex.what()).c_str());
+					Sleep(2000);
+					continue;
+				}
+
+				break;
 			}
 
 		}
