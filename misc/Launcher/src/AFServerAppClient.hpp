@@ -1,11 +1,13 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <thread>
 
-using namespace std;
+#include "UpdatesManager.h"
 
-typedef void(*GameArenaResponseClbk)(int errCode, wstring srvIp, int port, wstring accessCode, wstring playerDataEnc);
+
+using namespace std;
 
 class AFServerAppClient
 {
@@ -15,6 +17,17 @@ public:
 
 	AFServerAppClient();
 
-	void RequestGameArenaAsync(GameArenaResponseClbk &&responseClbk);
-	
+	void ConnectToArenaAsync(
+		wstring authCode,
+		wstring model, 
+		wstring sex, 
+		function<void(int errCode, wstring srvIp, int port, wstring accessCode, wstring playerDataEnc)> clbk);
+
+	void RegisterNewPlayerAsync(wstring nick, wstring email, wstring pass, std::function<void(int, wstring)> clbk);
+	void LoginPlayerAsync(wstring email, wstring pass, function<void(int, wstring)> clbk);
+
+	void GetCurrentResourcesTableAsync(function<void(int, vector<FileTableItem>&&)> clbk);
+
+	bool DownloadResourceFile(wstring fileName, wstring savePath, function<bool(int, int)> clbk);
+
 };

@@ -1,63 +1,93 @@
-<html>
+﻿<html  custom-frame="layered" window-resizable>
   <head>
     <title></title>
-    <style>
+        <link rel="stylesheet" type="text/css" href="main.css" >
     
-      div#tabs { flow:horizontal; border-spacing:1em; }
-      div#tabs > label { display:block; width:max-content; border:1px solid; behavior:check; }
-      div#tabs > label:checked { background:gold; }
-      
-      
-      html[state="view-1"] { background: #eaffff; }
-      html[state="view-2"] { background: #f3ffd6; }
-    
-    </style>
-    <script type="text/tiscript">
-    
-      const tabs = $(div#tabs);
-      const frameContent = $(frame#content); 
-      const footer = $(footer);
-      
-      var currentViewId = null;
-      var currentViewDoc = null;
-      var currentLabel = null;
-    
-      function selectView(viewId) {
-        if( currentLabel )
-          currentLabel.state.checked = false; // deselect previous
-          
-        frameContent.load(viewId + ".htm");
-        currentLabel = $(#tabs > label#{viewId});
-        currentLabel.state.checked = true;
-        currentViewId = viewId;
-        // getting reference to document loaded into the view
-        currentViewDoc = frameContent[0];  
-        // calling setup() function declared in the document
-        currentViewDoc.ns.setup();
-        footer.text = viewId;
-        // setting <html state="..."> attribute 
-        // so host view can be styled differently for each view (if needed)
-        self.attributes["state"] = viewId;
-      }
-      
-      self.on("click", "#tabs>label", function() {
-        var viewId = this.attributes["id"]; 
-        selectView(viewId);
-      })
-	  
-	  selectView("lobby")
-    
-    </script>
+        <script type="text/tiscript">
+
+                const apiErrorUnknown = 0xFFFF;
+
+                const apiErrorGeneralInvalidRequest = 0x0001;
+                const apiErrorPlayerRegisterNickExists = 0x0102;
+                const apiErrorPlayerRegisterEmailExists = 0x0103;
+
+
+                const apiErrorPlayerLoginNoPlayerWithEmail = 0x0201;
+                const apiErrorPlayerLoginInvalidCredentials = 0x0202;
+
+
+
+
+                 const tabs = $(div#tabs);
+                 const frameContent = $(frame#content);
+                 const footer = $(footer);
+
+                 var currentViewId = null;
+                 var currentViewDoc = null;
+                 var currentLabel = null;
+
+                 function selectView(viewId) {
+                   if( currentLabel )
+                     currentLabel.state.checked = false; // deselect previous
+
+                   frameContent.load(viewId + ".htm");
+                   currentLabel = $(#tabs > label#{viewId});
+                   currentLabel.state.checked = true;
+                   currentViewId = viewId;
+                   // getting reference to document loaded into the view
+                   currentViewDoc = frameContent[0];
+                   // calling setup() function declared in the document
+                   currentViewDoc.ns.setup();
+                   footer.text = viewId;
+                   // setting <html state="..."> attribute
+                   // so host view can be styled differently for each view (if needed)
+                   self.attributes["state"] = viewId;
+                 }
+
+                 self.on("click", "#tabs>label", function() {
+                   var viewId = this.attributes["id"];
+                   selectView(viewId);
+                 })
+
+                 //selectView("login");
+                selectView("console");
+
+
+
+        </script>
   </head>
-<body>
+  <body class="main">
+      <!--<div class="titlebar" role="window-caption">
+        <div class="title">
+            Arena Forever
+        </div>
+        <div class="buttons">
+            <button role="window-minimize">_</button>
+    <button role="window-close">X</button>
+        </div>
+    </div>-->
 
-  <!--<div#tabs>
-    <label#lobby>First view</label>
-    <label#view-2>Second view</label>
-  </div>-->
+      <table class="titlebar" role="window-caption">
+          <tr>
+              <td class="title">Arena Forever </td>
+              <td class="buttons">
+                  <button role="window-minimize">_</button>
+                  <button role="window-close">X</button>
+              </td>
+          </tr>
+      </table>
 
-  <frame#content>    
-  </frame>
-  <footer>.</footer>
-</body>
+      <!--<div#tabs>
+      <label#lobby>First view</label>
+      <label#view-2>Second view</label>
+    </div>-->
+      <div class="header">
+      </div>
+      <frame#content>
+          </frame>
+          <div class="footer">
+          </div>
+
+
+  </body>
 </html>

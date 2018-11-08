@@ -1,0 +1,70 @@
+﻿<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    <link rel="stylesheet" type="text/css" href="register.css">
+
+	<script type="text/tiscript" src="register.tis" />
+
+    
+</head> 
+<body>
+
+    <div class="widget-container">
+
+
+
+        <div id="ProgressWidget" class="progress-widget" style="display:none;">
+            Происходит регистрация...
+        </div>
+
+
+        <div id="FormWidget" class="login-widget">
+            <div class="title">
+                Регистрация
+            </div>
+            <div style="height:20px;"></div>
+            <div class="input-line">
+                <input type="text" id="nick-input" name="nick-input" required
+                       minlength="5" maxlength="10"
+                       novalue="Nickname"
+                       title="Game name that will be seen by other players." />
+            </div>
+            <div class="input-line">
+                <input type="text" id="email-input" name="email-input" required
+                       minlength="5" maxlength="32"
+                       novalue="Email"
+                       title="Email that will be used to restore your passwords." />
+            </div>
+            <div class="input-line">
+                <input type="password" id="pass-input" name="pass-input" required
+                       minlength="5" maxlength="32"
+                       novalue="Password"
+                       title="Password to access game" />
+            </div>
+            <div class="input-line">
+                <input type="password" id="rpass-input" name="rpass-input" required
+                       minlength="5" maxlength="32"
+                       novalue="Repeat password"
+                       title="Repeat password" />
+            </div>
+
+            <div id="ErrorTextDiv" class="error-text" style="visibility:hidden;height:60px;">
+                No Error
+            </div>
+
+
+            <div id="registerdiv" class="submit-line">
+                <button id="RegisterButton">Зарегистрироваться</button>
+            </div>
+
+            <div style="height:80px;"></div>
+            <div>
+                <a id="AlreadyRegisteredLink" href="/">Уже зарегистрированы?</a>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

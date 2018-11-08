@@ -55,6 +55,30 @@
     <ClCompile Include="src\AFServerAppClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AFCommon\HttpRequest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AFCommon\json.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AFCommon\wstrf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UpdatesManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HostEvh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Window.hpp">
@@ -102,6 +126,33 @@
     <ClInclude Include="src\AFServerAppClient.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AFCommon\HttpRequest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AFCommon\json.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AFCommon\wstrf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UpdatesManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HostEvh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DownloadUpdatesCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ProgramOSX.mm">
@@ -113,17 +164,14 @@
     <None Include="src\SciterSharpCPP\SciterWindow.mm">
       <Filter>SciterSharpCPP</Filter>
     </None>
-    <None Include="res\index.html">
-      <Filter>res</Filter>
-    </None>
     <None Include="sciter.dll" />
-    <None Include="res\lobby.htm">
+    <None Include="res\login.htm">
       <Filter>res</Filter>
     </None>
-    <None Include="res\view-2.htm">
+    <None Include="res\register.htm">
       <Filter>res</Filter>
     </None>
-    <None Include="res\main.css">
+    <None Include="res\console.htm">
       <Filter>res</Filter>
     </None>
   </ItemGroup>
@@ -131,5 +179,21 @@
     <Text Include="src\SciterSharpCPP\README.txt">
       <Filter>SciterSharpCPP</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="res\lobby.htm">
+      <Filter>res</Filter>
+    </Xml>
+    <Xml Include="res\main.css">
+      <Filter>res</Filter>
+    </Xml>
+    <Xml Include="res\view-2.htm">
+      <Filter>res</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="res\index.html">
+      <Filter>res</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

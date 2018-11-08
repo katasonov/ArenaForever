@@ -248,8 +248,9 @@ Sys_InitPIDFile
 =================
 */
 void Sys_InitPIDFile( const char *gamedir ) {
-	if( Sys_WritePIDFile( gamedir ) ) {
 #ifndef SERVER
+	if( Sys_WritePIDFile( gamedir ) ) {
+
 		char message[1024];
 		char modName[MAX_OSPATH];
 
@@ -263,8 +264,9 @@ void Sys_InitPIDFile( const char *gamedir ) {
 		if( Sys_Dialog( DT_YES_NO, message, "Abnormal Exit" ) == DR_YES ) {
 			Cvar_Set( "com_abnormalExit", "1" );
 		}
-#endif
+
 	}
+#endif
 }
 
 /*
@@ -696,6 +698,11 @@ void Sys_SigHandler( int signal )
 		Sys_Exit( 2 );
 }
 
+#if !SERVER
+extern cvar_t *net_remote_ip;
+extern cvar_t *net_remote_port;
+#endif
+
 /*
 =================
 main
@@ -774,6 +781,10 @@ int main( int argc, char **argv )
 	signal( SIGSEGV, Sys_SigHandler );
 	signal( SIGTERM, Sys_SigHandler );
 	signal( SIGINT, Sys_SigHandler );
+
+#if !SERVER
+	trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s:%i\n", net_remote_ip->string, net_remote_port->integer));
+#endif
 
 	while( 1 )
 	{

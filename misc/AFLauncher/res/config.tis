@@ -1,0 +1,45 @@
+const APP_NAME = "Квака Онлайн";
+
+//const DBNAME = "sciter-notes.db";
+
+// function getArgv() {
+  // try {
+    // return view.ntvGetArgs(); // native method, defined in notes.cpp  
+  // } catch(e) {
+    // return [];
+  // }
+// }
+
+// const argv = getArgv();
+
+// var needCheckUpdates = true; 
+// view.ntvNeedCheckUpdates(function (need){ 
+
+	// view.msgbox(#alert,  need);
+
+	// needCheckUpdates = need;});
+	
+var cfgPlayer = {};	
+	
+const cfgNeedCheckUpdates = view.ntvNeedCheckUpdates();
+
+!function(){
+	if( !view.api )
+	  View.api = view.nativeApi(); // getting API and assigning it to global View.api veriable seen by all windows
+}();
+
+//const cfgVKOAuthURI = view.native_api.vk_oauth_uri();
+
+
+/*
+function dbPathFromArgs() {
+  // notes.exe -db path-to-db 
+  const idx = argv.indexOf("-db");
+  if( idx >= 0 ) 
+    return argv[idx + 1];
+}
+*/
+
+//const platformSupportsPrinting = view.mediaVar("supports-printing");
+
+

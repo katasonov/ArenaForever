@@ -1,0 +1,20 @@
+const apiErrorGeneralInvalidRequest        = 0x0001
+const apiErrorGeneralAuthentificationError = 0x0002
+
+//Registration errors
+const apiErrorPlayerRegisterNickExists  = 0x0102
+const apiErrorPlayerRegisterEmailExists = 0x0103
+
+//Login Errors
+const apiErrorPlayerLoginNoPlayerWithEmail  = 0x0201
+const apiErrorPlayerLoginInvalidCredentials = 0x0202
+
+//Static content errors
+const apiErrorStaticNoFolder = 0x0301
+
+//Arena Errors
+//TODO:
+
+//Unknown
+const apiErrorUnknown = 0xFFFF
+

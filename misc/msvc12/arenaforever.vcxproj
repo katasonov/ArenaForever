@@ -30,14 +30,17 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
-    <UseOfMfc>Static</UseOfMfc>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v140_xp</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release TA|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -73,13 +76,13 @@
     <OutDir>..\..\build\debug-msvc12-x86\</OutDir>
     <IntDir>..\..\build\debug-msvc12-x86\client\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>af</TargetName>
+    <TargetName>afq3mod</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\..\build\release-msvc12-x86\</OutDir>
-    <IntDir>..\..\build\release-msvc12-x86\client\</IntDir>
-    <LinkIncremental>false</LinkIncremental>
-    <TargetName>arenaforever</TargetName>
+    <OutDir>..\..\build\release\</OutDir>
+    <IntDir>..\..\build\release\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>afq3mod</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug TA|Win32'">
     <OutDir>..\..\build\debug_ta-msvc12-x86\</OutDir>
@@ -114,6 +117,7 @@
       <CompileAs>CompileAsC</CompileAs>
       <FloatingPointModel>Fast</FloatingPointModel>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -136,6 +140,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
+      <UACUIAccess>false</UACUIAccess>
     </Link>
     <PostBuildEvent>
       <Message>Post build processing..</Message>
@@ -153,12 +158,14 @@
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\code\SDL2\include;..\..\code\libcurl-7.35.0;..\..\code\AL;..\..\code\opus-1.1\include;..\..\code\opus-1.1\celt;..\..\code\opus-1.1\silk;..\..\code\opus-1.1\silk\float;..\..\code\zlib;..\..\code\jpeg-8c;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN32;WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;BOTLIB;USE_ICON;USE_CURL;USE_CURL_DLOPEN;USE_OPENAL;USE_OPENAL_DLOPEN;USE_VOIP;OPUS_BUILD;HAVE_LRINTF;FLOATING_POINT;USE_ALLOCA;USE_INTERNAL_JPEG;USE_RENDERER_DLOPEN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StringPooling>true</StringPooling>
+      <PreprocessorDefinitions>_WIN32;WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;BOTLIB;USE_ICON;USE_CURL;USE_CURL_DLOPEN;USE_OPENAL;USE_OPENAL_DLOPEN;USE_VOIP;OPUS_BUILD;HAVE_LRINTF;FLOATING_POINT;USE_ALLOCA;USE_INTERNAL_JPEG;USE_STATIC_MODS;QLYMP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>
+      </StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
       <PrecompiledHeader />
       <PrecompiledHeaderOutputFile>$(IntDir)arenaforever.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
@@ -168,16 +175,17 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>CompileAsC</CompileAs>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>user32.lib;advapi32.lib;winmm.lib;wsock32.lib;ws2_32.lib;SDL2main.lib;SDL2.lib;OpenGL32.lib;msvcrt.lib;psapi.lib;gdi32.lib;uix86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>imm32.lib;version.lib;user32.lib;advapi32.lib;winmm.lib;wsock32.lib;ws2_32.lib;SDL2main.lib;SDL2.lib;OpenGL32.lib;psapi.lib;gdi32.lib;opengl2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\code\libs\win32;..\..\SDL2-2.0.4\VisualC\Win32\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\code\libs\win32;..\..\SDL2-2.0.4\VisualC\Win32\Release;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ProgramDatabaseFile>$(IntDir)arenaforever.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
@@ -187,9 +195,12 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "..\..\SDL2-2.0.4\VisualC\Win32\Release\SDL2.dll" "$(OutDir)"</Command>
+      <Command>xcopy /Y "..\..\build\release\afq3mod.exe" "..\..\installer"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -530,6 +541,7 @@
     <ClCompile Include="..\..\code\cgame\cg_marks.c" />
     <ClCompile Include="..\..\code\cgame\cg_newDraw.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\code\cgame\cg_particles.c" />
     <ClCompile Include="..\..\code\cgame\cg_players.c" />

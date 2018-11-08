@@ -1,20 +1,41 @@
-<html>
-  <head>
+﻿<html>
+<head>
     <title></title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+
     <style>
-      html { background-color:transparent; }
+
+        html {
+            background-color: transparent;
+        }
     </style>
     <script type="text/tiscript">
 
+
         $(button#btnLaunchGame).on("click", function(){
-                    view.Host_HelloWorld();
-                });
+                view.LaunchGame(function (errCode) {
+
+                        if (errCode == 0) {
+                            $(button#btnLaunchGame).style#visibility="hidden";
+                            return;
+                        }
+                        else {
+                            view.msgbox(#alert, errCode);
+                        }
+                    });
+            });
 
     </script>
-  </head>
+</head> 
 <body>
 
-    <button id="btnLaunchGame">Launch</button>
+    <div class="header">
+    </div>
+    <div class="content">
+        <button id="btnLaunchGame" class="launcher">В Бой!</button>
+    </div>
+    <div class="footer">
+    </div>
 
 </body>
 </html>

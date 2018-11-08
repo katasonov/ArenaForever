@@ -176,15 +176,15 @@ static void UI_NetworkOptionsMenu_Init( void ) {
 	networkOptionsInfo.graphics.style				= UI_RIGHT;
 	networkOptionsInfo.graphics.color				= color_red;
 
-	networkOptionsInfo.display.generic.type			= MTYPE_PTEXT;
-	networkOptionsInfo.display.generic.flags		= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
-	networkOptionsInfo.display.generic.id			= ID_DISPLAY;
-	networkOptionsInfo.display.generic.callback		= UI_NetworkOptionsMenu_Event;
-	networkOptionsInfo.display.generic.x			= 216;
-	networkOptionsInfo.display.generic.y			= 240 - PROP_HEIGHT;
-	networkOptionsInfo.display.string				= "DISPLAY";
-	networkOptionsInfo.display.style				= UI_RIGHT;
-	networkOptionsInfo.display.color				= color_red;
+	//networkOptionsInfo.display.generic.type			= MTYPE_PTEXT;
+	//networkOptionsInfo.display.generic.flags		= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
+	//networkOptionsInfo.display.generic.id			= ID_DISPLAY;
+	//networkOptionsInfo.display.generic.callback		= UI_NetworkOptionsMenu_Event;
+	//networkOptionsInfo.display.generic.x			= 216;
+	//networkOptionsInfo.display.generic.y			= 240 - PROP_HEIGHT;
+	//networkOptionsInfo.display.string				= "DISPLAY";
+	//networkOptionsInfo.display.style				= UI_RIGHT;
+	//networkOptionsInfo.display.color				= color_red;
 
 	networkOptionsInfo.sound.generic.type			= MTYPE_PTEXT;
 	networkOptionsInfo.sound.generic.flags			= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
@@ -196,15 +196,15 @@ static void UI_NetworkOptionsMenu_Init( void ) {
 	networkOptionsInfo.sound.style					= UI_RIGHT;
 	networkOptionsInfo.sound.color					= color_red;
 
-	networkOptionsInfo.network.generic.type			= MTYPE_PTEXT;
-	networkOptionsInfo.network.generic.flags		= QMF_RIGHT_JUSTIFY;
-	networkOptionsInfo.network.generic.id			= ID_NETWORK;
-	networkOptionsInfo.network.generic.callback		= UI_NetworkOptionsMenu_Event;
-	networkOptionsInfo.network.generic.x			= 216;
-	networkOptionsInfo.network.generic.y			= 240 + PROP_HEIGHT;
-	networkOptionsInfo.network.string				= "NETWORK";
-	networkOptionsInfo.network.style				= UI_RIGHT;
-	networkOptionsInfo.network.color				= color_red;
+	//networkOptionsInfo.network.generic.type			= MTYPE_PTEXT;
+	//networkOptionsInfo.network.generic.flags		= QMF_RIGHT_JUSTIFY;
+	//networkOptionsInfo.network.generic.id			= ID_NETWORK;
+	//networkOptionsInfo.network.generic.callback		= UI_NetworkOptionsMenu_Event;
+	//networkOptionsInfo.network.generic.x			= 216;
+	//networkOptionsInfo.network.generic.y			= 240 + PROP_HEIGHT;
+	//networkOptionsInfo.network.string				= "NETWORK";
+	//networkOptionsInfo.network.style				= UI_RIGHT;
+	//networkOptionsInfo.network.color				= color_red;
 
 	y = 240 - 1 * (BIGCHAR_HEIGHT+2);
 	networkOptionsInfo.rate.generic.type		= MTYPE_SPINCONTROL;
@@ -231,9 +231,9 @@ static void UI_NetworkOptionsMenu_Init( void ) {
 	Menu_AddItem( &networkOptionsInfo.menu, ( void * ) &networkOptionsInfo.framel );
 	Menu_AddItem( &networkOptionsInfo.menu, ( void * ) &networkOptionsInfo.framer );
 	Menu_AddItem( &networkOptionsInfo.menu, ( void * ) &networkOptionsInfo.graphics );
-	Menu_AddItem( &networkOptionsInfo.menu, ( void * ) &networkOptionsInfo.display );
+	//Menu_AddItem( &networkOptionsInfo.menu, ( void * ) &networkOptionsInfo.display );
 	Menu_AddItem( &networkOptionsInfo.menu, ( void * ) &networkOptionsInfo.sound );
-	Menu_AddItem( &networkOptionsInfo.menu, ( void * ) &networkOptionsInfo.network );
+	//Menu_AddItem( &networkOptionsInfo.menu, ( void * ) &networkOptionsInfo.network );
 	Menu_AddItem( &networkOptionsInfo.menu, ( void * ) &networkOptionsInfo.rate );
 	Menu_AddItem( &networkOptionsInfo.menu, ( void * ) &networkOptionsInfo.back );
 

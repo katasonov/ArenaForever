@@ -461,8 +461,9 @@ static void MainMenu_ExitAction(qboolean result) {
 	if (!result) {
 		return;
 	}
-	UI_PopMenu();
-	UI_CreditMenu();
+	trap_Cmd_ExecuteText(EXEC_APPEND, "quit\n");
+	//UI_PopMenu();
+	//UI_CreditMenu();
 }
 
 

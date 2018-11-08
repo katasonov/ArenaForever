@@ -2806,7 +2806,7 @@ void Com_Init( char *commandLine ) {
 
 	Sys_Init();
 
-	Sys_InitPIDFile( FS_GetCurrentGameDir() );
+	//Sys_InitPIDFile( FS_GetCurrentGameDir() );
 
 	// Pick a random port value
 	Com_RandomBytes( (byte*)&qport, sizeof(int) );
