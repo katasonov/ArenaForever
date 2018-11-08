@@ -86,10 +86,10 @@ function self.ready() {
 				}
 				if (progress != 100)
 				{
-					consolePrintLastLine("Обновление программы: " + progress);
+					consolePrintLastLine("Обновление программы: " + progress + " %");
 					return;
 				}
-				consolePrintLastLine("Обновление программы: " + progress);
+				consolePrintLastLine("Обновление программы: " + progress + " %");
 				if (folder == "")
 				{
 					UpdateResources();

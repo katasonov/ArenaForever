@@ -61,6 +61,18 @@ function LoadPlayerInfo()
 		
 		if (err == 0)
 		{
+			view.msgbox{
+			type:#information, 
+			content:"Внимание", 
+			caption:"",
+			onLoad: function(root)
+			{ 
+				self.timer(200, function()
+				{
+						root.view.close(null);
+				} );
+			}};
+			
 			cfgPlayer = playerMap;
 			
 			if (cfgPlayer["Nick"] == "")
@@ -70,13 +82,18 @@ function LoadPlayerInfo()
 			}
 			else 
 			{
-				//view.msgbox(#alert, cfgPlayer["Nick"]);
-				CollapseScreens();
-				$(#MainContent).style#visibility = "visible";
+				ShowMainContent();
 			}
 			
 		}
 	});	
+}
+
+
+function ShowMainContent()
+{
+	CollapseScreens();
+	$(#MainContent).style#visibility = "visible";
 }
 
 function self.ready() {

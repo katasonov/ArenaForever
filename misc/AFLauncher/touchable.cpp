@@ -1,2 +1,2 @@
 //Need for auto rebuild sciter resources. Maybe it could be done better???
-//timestamp:=[2018-10-21 16:03:13.073000]
+//timestamp:=[2018-11-08 12:22:36.821000]
