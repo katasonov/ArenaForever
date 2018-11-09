@@ -1,10 +1,18 @@
 #include "../qcommon/q_shared.h"
 #include "../AES/aes.h"
 
+#include "af_service.h"
+
 #ifdef SERVER
 
 cvar_t	*af_aes_key;
 cvar_t	*af_access_code;
+int g_opClNum = -1;
+
+//Client ids which are operators and can execute operator commands
+#define MAX_OPERATORS 10
+int af_operators[MAX_OPERATORS];
+int af_lastOperatorId = 0;
 
 #else
 
@@ -16,6 +24,11 @@ cvar_t	*af_srv_access_code;
 void AF_Init(void)
 {
 #ifdef SERVER
+	for (int i = 0; i < MAX_OPERATORS; i++)
+	{
+		af_operators[i] = -1;
+	}
+
 	af_aes_key = Cvar_Get("af_aes_key", "1234567890123456", CVAR_INIT);
 
 	if (strlen(af_aes_key->string) != 16)
@@ -92,5 +105,51 @@ int AF_LoadUserInfo(const char *cipher, char *userinfo)
 
 	return 1;
 }
+
+void AF_PushOperatorClientNumber(const int clNum)
+{
+	g_opClNum = clNum;
+}
+
+int AF_PopOperatorClientNumber()
+{
+	int ret = g_opClNum;
+	g_opClNum = -1;
+	return ret;
+}
+
+void AF_AddOperator(const int clNum)
+{
+	if (af_lastOperatorId > MAX_OPERATORS - 1)
+	{
+		//remove first op :)
+		af_lastOperatorId = 0;
+	}
+	af_operators[af_lastOperatorId++] = clNum;
+}
+
+void AF_RemoveOperator(const int clNum)
+{
+	for (int i = 0; i < MAX_OPERATORS; i++)
+	{
+		if (af_operators[i] == clNum)
+		{
+			af_operators[i] = -1;
+		}
+	}
+}
+
+qboolean AF_IsClientOperator(const int clNum)
+{
+	for (int i = 0; i < MAX_OPERATORS; i++)
+	{
+		if (af_operators[i] == clNum)
+		{
+			return qtrue;
+		}
+	}
+	return qfalse;
+}
+
 
 #endif

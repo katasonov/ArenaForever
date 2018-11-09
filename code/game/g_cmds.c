@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //
 #include "g_local.h"
+#include "../AF/af_service.h"
 
 #ifdef MISSIONPACK
 #include "../../ui/menudef.h"			// for the voice chats
@@ -1650,6 +1651,8 @@ void ClientCommand( int clientNum ) {
 	gentity_t *ent;
 	char	cmd[MAX_TOKEN_CHARS];
 
+#ifdef SERVER
+
 	ent = g_entities + clientNum;
 	if (!ent->client || ent->client->pers.connected != CON_CONNECTED) {
 		return;		// not fully in game yet
@@ -1749,12 +1752,36 @@ void ClientCommand( int clientNum ) {
 		Cmd_SetViewpos_f( ent );
 	else if (Q_stricmp (cmd, "stats") == 0)
 		Cmd_Stats_f( ent );
-	else if (Q_stricmp(cmd, "addbot") == 0) {
-		//AF: Add bot to server
-		//But in TA version must be team number concerned!!!!
-		G_AddRandomBot(0);
-		//:AF
+	
+	//AF: WE ARE SERVER SIDE: These commands came from client and must be processed
+	//OPERATOR COMMANDS
+	else if (Q_stricmp(cmd, "kickbots") == 0) {
+		if (AF_IsClientOperator(clientNum) == qtrue)
+			trap_SendConsoleCommand(EXEC_INSERT, va("kickbots\n")); 
+		else
+			trap_SendServerCommand(clientNum, va("print \"need op permission\n\""));
 	}
+	else if (Q_stricmp(cmd, "addbot") == 0) {
+		//But in TA version must be team number concerned!!!!
+		if (AF_IsClientOperator(clientNum) == qtrue)
+			G_AddRandomBot(0);
+		else
+			trap_SendServerCommand(clientNum, va("print \"need op permission\n\""));
+
+	}
+	else if (Q_stricmp(cmd, "serverinfo") == 0) {
+		if (AF_IsClientOperator(clientNum) == qtrue)
+		{
+			AF_PushOperatorClientNumber(clientNum);
+			trap_SendConsoleCommand(EXEC_INSERT, va("serverinfo\n"));
+		}
+		else
+			trap_SendServerCommand(clientNum, va("print \"need op permission\n\""));
+	}
+
+	//:AF
+
 	else
 		trap_SendServerCommand( clientNum, va("print \"unknown cmd %s\n\"", cmd ) );
+#endif
 }

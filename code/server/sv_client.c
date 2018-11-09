@@ -393,6 +393,7 @@ void SV_DirectConnect( netadr_t from ) {
 		NET_OutOfBandPrint(NS_SERVER, from, "print\nCannot load player data.\n");
 		return;
 	}
+
 #endif
 
 
@@ -624,6 +625,19 @@ gotnewcl:
 	if ( count == 1 || count == sv_maxclients->integer ) {
 		SV_Heartbeat_f();
 	}
+
+	// check for operator access
+#ifdef SERVER
+	char *op = Info_ValueForKey(userinfo, "operator");
+	if (strcmp(op, "yes") == 0) 
+	{
+		AF_AddOperator(clientNum);
+	}
+	else
+	{
+		AF_RemoveOperator(clientNum);
+	}
+#endif
 }
 
 /*
@@ -1234,6 +1248,10 @@ The client is going to disconnect, so remove the connection immediately  FIXME: 
 =================
 */
 static void SV_Disconnect_f( client_t *cl ) {
+	int clientNum = cl - svs.clients;
+#ifdef SERVER
+	AF_RemoveOperator(clientNum);
+#endif
 	SV_DropClient( cl, "disconnected" );
 }
 

@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 #include "server.h"
+#include "../AF/af_service.h"
 
 /*
 ===============================================================================
@@ -1388,6 +1389,7 @@ Examine the serverinfo string
 ===========
 */
 static void SV_Serverinfo_f( void ) {
+	int opClNum = -1;
 	// make sure server is running
 	if ( !com_sv_running->integer ) {
 		Com_Printf( "Server is not running.\n" );
@@ -1395,6 +1397,9 @@ static void SV_Serverinfo_f( void ) {
 	}
 
 	Com_Printf ("Server info settings:\n");
+	opClNum = AF_PopOperatorClientNumber();
+	if (opClNum > -1)
+		trap_SendServerCommand(opClNum, va("print \"%s\n\"", Cvar_InfoString(CVAR_SERVERINFO)));
 	Info_Print ( Cvar_InfoString( CVAR_SERVERINFO ) );
 }
 
@@ -1531,34 +1536,36 @@ void SV_AddOperatorCommands( void ) {
 		Cmd_AddCommand ("banClient", SV_BanNum_f);
 	}
 #endif
+//AF: It forces client to send following commands to server and not to process localy (as server)
+#ifdef SERVER
 	Cmd_AddCommand ("kickbots", SV_KickBots_f);
-	Cmd_AddCommand ("kickall", SV_KickAll_f);
-	Cmd_AddCommand ("kicknum", SV_KickNum_f);
-	Cmd_AddCommand ("clientkick", SV_KickNum_f); // Legacy command
-	Cmd_AddCommand ("status", SV_Status_f);
-	Cmd_AddCommand ("serverinfo", SV_Serverinfo_f);
-	Cmd_AddCommand ("systeminfo", SV_Systeminfo_f);
-	Cmd_AddCommand ("dumpuser", SV_DumpUser_f);
-	Cmd_AddCommand ("map_restart", SV_MapRestart_f);
-	Cmd_AddCommand ("sectorlist", SV_SectorList_f);
-	Cmd_AddCommand ("map", SV_Map_f);
-	Cmd_SetCommandCompletionFunc( "map", SV_CompleteMapName );
+	Cmd_AddCommand("kickall", SV_KickAll_f);
+	Cmd_AddCommand("kicknum", SV_KickNum_f);
+	Cmd_AddCommand("clientkick", SV_KickNum_f); // Legacy command
+	Cmd_AddCommand("status", SV_Status_f);
+	Cmd_AddCommand("serverinfo", SV_Serverinfo_f);
+	Cmd_AddCommand("systeminfo", SV_Systeminfo_f);
+	Cmd_AddCommand("dumpuser", SV_DumpUser_f);
+	Cmd_AddCommand("map_restart", SV_MapRestart_f);
+	Cmd_AddCommand("sectorlist", SV_SectorList_f);
+	Cmd_AddCommand("map", SV_Map_f);
+	Cmd_SetCommandCompletionFunc("map", SV_CompleteMapName);
 #ifndef PRE_RELEASE_DEMO
-	Cmd_AddCommand ("devmap", SV_Map_f);
-	Cmd_SetCommandCompletionFunc( "devmap", SV_CompleteMapName );
-	Cmd_AddCommand ("spmap", SV_Map_f);
-	Cmd_SetCommandCompletionFunc( "spmap", SV_CompleteMapName );
-	Cmd_AddCommand ("spdevmap", SV_Map_f);
-	Cmd_SetCommandCompletionFunc( "spdevmap", SV_CompleteMapName );
+	Cmd_AddCommand("devmap", SV_Map_f);
+	Cmd_SetCommandCompletionFunc("devmap", SV_CompleteMapName);
+	Cmd_AddCommand("spmap", SV_Map_f);
+	Cmd_SetCommandCompletionFunc("spmap", SV_CompleteMapName);
+	Cmd_AddCommand("spdevmap", SV_Map_f);
+	Cmd_SetCommandCompletionFunc("spdevmap", SV_CompleteMapName);
 #endif
-	Cmd_AddCommand ("killserver", SV_KillServer_f);
-	if( com_dedicated->integer ) {
-		Cmd_AddCommand ("say", SV_ConSay_f);
-		Cmd_AddCommand ("tell", SV_ConTell_f);
-		Cmd_AddCommand ("sayto", SV_ConSayto_f);
-		Cmd_SetCommandCompletionFunc( "sayto", SV_CompletePlayerName );
+	Cmd_AddCommand("killserver", SV_KillServer_f);
+	if (com_dedicated->integer) {
+		Cmd_AddCommand("say", SV_ConSay_f);
+		Cmd_AddCommand("tell", SV_ConTell_f);
+		Cmd_AddCommand("sayto", SV_ConSayto_f);
+		Cmd_SetCommandCompletionFunc("sayto", SV_CompletePlayerName);
 	}
-	
+
 	Cmd_AddCommand("rehashbans", SV_RehashBans_f);
 	Cmd_AddCommand("listbans", SV_ListBans_f);
 	Cmd_AddCommand("banaddr", SV_BanAddr_f);
@@ -1566,6 +1573,8 @@ void SV_AddOperatorCommands( void ) {
 	Cmd_AddCommand("bandel", SV_BanDel_f);
 	Cmd_AddCommand("exceptdel", SV_ExceptDel_f);
 	Cmd_AddCommand("flushbans", SV_FlushBans_f);
+#endif
+//:AF
 }
 
 /*
