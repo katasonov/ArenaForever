@@ -40,7 +40,46 @@ public:
 		string response;
 		try
 		{
-			response = ServerAPI::GetArenaToConnect(model, sex, authCode);
+			response = ServerAPI::GetGoodArena(authCode);
+			string arenaID;
+			bool needToCreateNewArena = false;
+
+			try
+			{ 
+				arenaID = JsonValueString("ArenaID", response);
+			}
+			catch (...)
+			{
+				needToCreateNewArena = true;
+			}
+			
+			if (needToCreateNewArena)
+			{
+				//random arena not found
+				//Try to create new one
+				response = ServerAPI::CreateNewArena(authCode, L"wrackdm17");
+				string taskID = JsonValueString("TaskID", response);
+				int errCounter = 10;
+				while (errCounter > 0)
+				{
+					Sleep(2000);
+					response = ServerAPI::GetCreatedArenaID(taskID);
+					try
+					{
+						arenaID = JsonValueString("ArenaID", response);
+						break;
+					}
+					catch (...)
+					{
+						errCounter--;
+						if (errCounter < 1)
+							throw;
+						continue;
+					}
+				}				
+			}
+
+			response = ServerAPI::AddPlayerToArena(arenaID, authCode);
 			
 			wstring IP = UTF8ToW(JsonValueString("IP", response));
 			int Port = JsonValueInt("Port", response);

@@ -92,13 +92,48 @@ public:
 		return body;
 	}
 
-	static string GetArenaToConnect(const wstring &model, const wstring &sex, const wstring &authCode)
+	static string CreateNewArena(const wstring &authCode, const wstring map)
 	{
 		auto response = HttpGetStringResponse(Host, Port,
-			StrF("/api/v1/arena/connect?authCode=%s&model=%s&sex=%s",
-				WtoUtf8(authCode).c_str(),
-				WtoUtf8(model).c_str(),
-				WtoUtf8(sex).c_str()),
+			StrF("/api/v1/arena/create?authCode=%s&map=%s",
+				WtoUtf8(authCode).c_str(), WtoUtf8(map).c_str()),
+			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + Host + "\r\nAccept: */*",
+			10);
+		auto body = HTTPBody(response.c_str());
+
+		return body;
+	}
+
+	static string GetCreatedArenaID(const string &taskID)
+	{
+		auto response = HttpGetStringResponse(Host, Port,
+			StrF("/api/v1/arena/getCreatedArenaId?taskId=%s",
+				taskID.c_str()),
+			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + Host + "\r\nAccept: */*",
+			10);
+		auto body = HTTPBody(response.c_str());
+
+		return body;
+	}
+
+	static string AddPlayerToArena(const string arenaID, const wstring &authCode)
+	{
+		auto response = HttpGetStringResponse(Host, Port,
+			StrF("/api/v1/arena/addPlayer?authCode=%s&arenaId=%s",
+				WtoUtf8(authCode).c_str(), arenaID.c_str()),
+			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + Host + "\r\nAccept: */*",
+			10);
+		auto body = HTTPBody(response.c_str());
+
+		return body;
+	}
+
+
+	static string GetGoodArena(const wstring &authCode)
+	{
+		auto response = HttpGetStringResponse(Host, Port,
+			StrF("/api/v1/arena/getGoodArena?authCode=%s",
+				WtoUtf8(authCode).c_str()),
 			string("HTTP/1.1\r\nUser-Agent: curl/7.33.0\r\nHost: ") + Host + "\r\nAccept: */*",
 			10);
 		auto body = HTTPBody(response.c_str());
