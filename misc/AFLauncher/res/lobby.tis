@@ -1,0 +1,149 @@
+﻿var errCounter = 0;
+
+
+$(#LobbyFrame).on("show", function(){
+	
+	Debug_Println("#LobbyFrame: show");
+
+	Common_SetWindowSize(1024dip, 768dip);
+	LoadLobby();
+});
+
+
+// $(#SubmitButton).on("click", function(){
+   // // var el = $(#SubmitButton);		   
+   // // el.@#flash = true;
+   // // el.timer(10ms, ::el.@#flash = undefined);
+   // $(#SubmitButton).state.disabled = true;
+   // $(#NickName).state.disabled = true;
+	
+	// view.ntvSetNickName($(#NickName).text, function (err, msg) {
+		// if (err != 0) {
+			// $(#NicknameErrorText).text = msg;
+			// $(#NicknameErrorText).style#visibility = "visible";
+			// $(#SubmitButton).state.disabled = false;
+			// $(#NickName).state.disabled = false;
+			// return;
+		// }
+		// cfgPlayer["nick"] = $(#NickName).text;
+
+		// CollapseScreens();
+		// $(#MainContent).style#visibility = "visible";
+	// });
+   // //view.msgbox(#alert, $(#NickName).text);
+   
+   
+// });
+
+$(#LaunchGameButton).on("click", function (){
+	$(#LaunchGameButton).state.disabled = true;
+	//ShowScreen($(#SearchingArena));
+	view.ntvLaunchGame(function (err, msg) {
+				if (err != 0)
+				{
+					view.msgbox(#alert, "Произошла ошибка: " + msg);
+				}
+				$(#LaunchGameButton).state.disabled = false;
+				//ShowScreen($(#MainContent));
+			});
+});
+
+
+function LoadLobby()
+{
+	errCounter = 0;
+	$(#LaunchGameButton).state.disabled = false;
+	LoadPlayerInfo();
+}
+
+function CollapseScreens()
+{
+	// $(#MainContent).style#visibility = "collapse";
+	// $(#LoadingDataScreen).style#visibility = "collapse";
+	// $(#SetNickNameWidget).style#visibility = "collapse";			
+	// $(#SearchingArena).style#visibility = "collapse";			
+}
+
+function ShowScreen(screen) 
+{
+	CollapseScreens();
+	screen.style#visibility = "visible";
+}
+
+function LoadPlayerInfo() 
+{
+	view.ntvLoadPlayerInfo(function(err, playerMap) {
+		
+		if (err != 0) {
+			
+			if (errCounter > 10) {
+				errCounter = 0;
+				selectView("login-vk/login")
+				return;
+			}
+		
+			errCounter = errCounter + 1;
+			self.timer(1000ms, function() {
+				LoadPlayerInfo();
+				return false; // to stop the timer
+			});
+			return;
+		}
+		errCounter = 0;
+		
+		if (err == 0)
+		{
+			view.msgbox{
+			type:#information, 
+			content:"Внимание", 
+			caption:"",
+			onLoad: function(root)
+			{ 
+				self.timer(200, function()
+				{
+						root.view.close(null);
+				} );
+			}};
+			
+			cfgPlayer = playerMap;
+			
+			if (cfgPlayer["Nick"] == "")
+			{
+				CollapseScreens();
+				$(#SetNickNameWidget).style#visibility = "visible";								
+			}
+			else 
+			{
+				ShowMainContent();
+			}
+			
+		}
+	});	
+}
+
+
+function ShowMainContent()
+{
+	CollapseScreens();
+	//$(#MainContent).style#visibility = "visible";
+}
+
+// function self.ready() {
+	
+		// CollapseScreens();
+		// $(#LoadingDataScreen).style#visibility = "visible";
+		// LoadLobby();
+		
+		
+		// //TEST{
+		// // $(#MainContent).style#visibility = "collapse";
+		// // $(#LoadingDataScreen).style#visibility = "collapse";
+		// // $(#SetNickNameWidget).style#visibility = "visible";
+		// //}TEST
+		
+		
+		
+	
+
+// }
+

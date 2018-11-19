@@ -1,0 +1,47 @@
+#LobbyFrame {
+
+  
+}
+
+#LobbyHeader
+{
+	height: 20px;
+	background-color:yellow;
+}
+
+
+#Chat {
+	flow: horizontal;
+	height: 1*;
+}
+
+#Footer {
+	height: 20px;
+	background-color:green;
+}
+
+#ChatMain {
+	flow: vertical;
+	width: 1*;
+	background-color:blue;
+	height: 1*;
+}
+
+#ChatPeople {
+    overflow: auto;
+	width: 200px;
+	background-color:red;
+	height:1*;
+}
+
+#ChatMessages {
+	width: 1*;
+	background-color:gray;
+	height: 1*;
+}
+
+#ChatInput {
+	width: 1*;
+	background-color:yellow;
+	height: 30px;
+}

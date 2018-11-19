@@ -20,12 +20,27 @@ const APP_NAME = "Квака Онлайн";
 	// needCheckUpdates = need;});
 	
 var cfgPlayer = {};	
-	
-const cfgNeedCheckUpdates = view.ntvNeedCheckUpdates();
+
+var cfgIsNative = false;
+
+
+try {
+  view.ntvNeedCheckUpdates();
+  cfgIsNative = true;
+} catch(e) 
+{	
+}
+
+
+
+var cfgNeedCheckUpdates = false;
+
+if( cfgIsNative )
+	cfgNeedCheckUpdates = view.ntvNeedCheckUpdates();
 
 !function(){
-	if( !view.api )
-	  View.api = view.nativeApi(); // getting API and assigning it to global View.api veriable seen by all windows
+	if( !view.api && cfgIsNative)
+		View.api = view.nativeApi(); // getting API and assigning it to global View.api veriable seen by all windows
 }();
 
 //const cfgVKOAuthURI = view.native_api.vk_oauth_uri();

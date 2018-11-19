@@ -1,0 +1,6 @@
+function Debug_Println(msg)
+{
+	if (cfgIsNative)
+		return;
+	stdout.println(msg);	
+}

@@ -1,21 +1,55 @@
- include "config.tis";
- include "libs/settings.tis";
+include "config.tis";
+include "debug.tis";
+include "libs/settings.tis";
+include "updates.tis";
+include "login.tis"
+include "lobby.tis"
 
- const tabs = $(div#tabs);
- const frameContent = $(frame#content);
+
+
+ //const tabs = $(div#tabs);
+ //const frameContent = $(frame#content);
  const footer = $(footer);
 
  var currentViewId = null;
  var currentViewDoc = null;
  var currentLabel = null;
  
+var currentFrameId = "";
 
 
+$(#Papa).on("frame-finished", function (e) {
+	Debug_Println(String.$({e.data}: finished));
+	switch (e.data) {
+		case #UpdatesFrame:
+		{			
+			setFrame(#LoginFrame);
+			break;
+		}
+		case #LoginFrame:
+		{
+			setFrame(#LobbyFrame);
+			break;
+		}
+	}
+});
 
+
+function Common_SetWindowSize(width, height)
+{
+    
+    var (sx,sy,sw,sh) = View.screenBox(0,#workarea,#rectw);
+    
+    var w = self.toPixels(width, #width);
+    var h = self.toPixels(height, #height);
+    
+    view.move( sx + (sw - w) / 2, sy + (sh - h) / 2, w,h, true );
+	
+}
 
 function self.ready() 
 {
-	if( !view.api )
+	if( !view.api && view.nativeApi)
 	  view.api = view.nativeApi(); 
 	  
 	Settings.restore();
@@ -23,8 +57,17 @@ function self.ready()
 	view.settings = Settings.fetch();
 
 
-	selectView("updates/updates");
-		
+	setFrame("UpdatesFrame");
+	
+	
+	// self.timer(1000ms, function() {
+				// UpdatesDo();
+				// LoginDo();
+				// //LobbyDo();
+				// return true; // Repeat again!
+	 // });	
+
+	
 	//view.msgbox(#alert,  false);
 	//var needCheckUpdates = true; 
 	
@@ -46,24 +89,43 @@ function self.ready()
 }
 
 
+function setFrame(frameId)
+{
+	currentFrameId = frameId;
+	for(var frameItem in $$(.frame)) {
+		if (frameId != frameItem.id)
+		{
+			frameItem.style#visibility = "collapse";
+		}
+		else
+		{
+			frameItem.style#visibility = "visible";		
+			frameItem.postEvent("show");
+		}
+		
+ // to hide and
+    // toolbarItem.state.expanded = true; // to show
+	}
+	return "OK";
+}
 
- function selectView(viewId) {
-   if( currentLabel )
-	 currentLabel.state.checked = false; // deselect previous
+ // function selectView(viewId) {
+   // if( currentLabel )
+	 // currentLabel.state.checked = false; // deselect previous
 
-   frameContent.load(viewId + ".htm");
-   //currentLabel = $(#tabs > label#{viewId});
-   //currentLabel.state.checked = true;
-   currentViewId = viewId;
-   // getting reference to document loaded into the view
-   currentViewDoc = frameContent[0];
-   // calling setup() function declared in the document
-   //currentViewDoc.ns.setup();
-   //footer.text = viewId;
-   // setting <html state="..."> attribute
-   // so host view can be styled differently for each view (if needed)
-   //self.attributes["state"] = viewId;
- }
+   // frameContent.load(viewId + ".htm");
+   // //currentLabel = $(#tabs > label#{viewId});
+   // //currentLabel.state.checked = true;
+   // currentViewId = viewId;
+   // // getting reference to document loaded into the view
+   // currentViewDoc = frameContent[0];
+   // // calling setup() function declared in the document
+   // //currentViewDoc.ns.setup();
+   // //footer.text = viewId;
+   // // setting <html state="..."> attribute
+   // // so host view can be styled differently for each view (if needed)
+   // //self.attributes["state"] = viewId;
+ // }
 
  // self.on("click", "#tabs>label", function() {
    // var viewId = this.attributes["id"];

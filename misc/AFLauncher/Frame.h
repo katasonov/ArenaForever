@@ -124,7 +124,7 @@ public:
 #else
 		Switcher::Instance().AddCommand([=]()
 		{
-			clbk.call(sciter::value(0), sciter::value(100));
+			clbkDone.call();
 		});
 #endif
 		return 0;
@@ -144,7 +144,6 @@ public:
 			{
 				clbk.call(sciter::value(err));
 			}));
-
 		return 0;
 	}
 
@@ -176,11 +175,19 @@ public:
 
 	int NtvCheckVKOAuthStatus(sciter::value clbk)
 	{
+#ifndef TEST_PLAYER_ON
+
 		Switcher::Instance().AddCommand(new CheckVKOAuthStatusCommand([=](bool logged, int err)
 		{
 			clbk.call(sciter::value(logged), sciter::value(err));
 		}));
+#else
+		Switcher::Instance().AddCommand(new CheckVKOAuthStatusCommand([=](bool logged, int err)
+		{
+			clbk.call(sciter::value(true), sciter::value(0));
+		}));
 
+#endif
 		return 0;
 	}
 
@@ -192,10 +199,14 @@ public:
 		{
 			sciter::value playerMap;
 
-			
+#ifndef TEST_PLAYER_ON
 			playerMap.set_item("Nick", playerInfo.nickName);
 			playerMap.set_item("Score", playerInfo.score);
-
+#else
+			playerMap.set_item("Nick", L"TestPlayer");
+			playerMap.set_item("Score", 100);
+			err = 0;
+#endif
 
 			clbk.call(sciter::value(err), playerMap);
 		}));

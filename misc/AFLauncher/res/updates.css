@@ -1,0 +1,20 @@
+#UpdatesFrame
+{
+	
+}
+
+.console-container {
+    width:1*;
+    text-align:left;
+    vertical-align:top;
+    color:gold;
+}
+
+.console-line {
+    word-wrap: break-word;
+}
+
+.console-line.error {
+    color:red;
+}
+

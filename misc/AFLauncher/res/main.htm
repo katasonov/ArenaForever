@@ -2,30 +2,32 @@
   <head>
     <title></title>
         <link rel="stylesheet" type="text/css" href="main.css" >
+		<link rel="stylesheet" type="text/css" href="lobby.css" >
+		<link rel="stylesheet" type="text/css" href="updates.css">
+		<link rel="stylesheet" type="text/css" href="login.css">
+
+
 		<script type="text/tiscript" src="main.tis" />
 		
   </head>
-  <body class="main">
+  <body #Papa class="main">
 
-      <table class="titlebar" role="window-caption">
-          <tr>
-              <td class="title" style="width:16px;height:16px;"><img src="images/icon16.png" style="margin-left:4px;margin-right:4px;"></td>
-              <td class="title">Квака Онлайн</td>
-              <td class="buttons">
-                  <button role="window-minimize">_</button>
-                  <button role="window-close">X</button>
-              </td>
-          </tr>
-      </table>
+	<table #Titlebar role="window-caption">
+	  <tr>
+		  <td class="title" style="width:16px;height:16px;"><img src="images/icon16.png" style="margin-left:4px;margin-right:4px;"></td>
+		  <td class="title">Квака Онлайн</td>
+		  <td class="buttons">
+			  <button role="window-minimize">_</button>
+			  <button role="window-close">X</button>
+		  </td>
+	  </tr>
+	</table>
 
-      <div class="header">
-      </div>
+	
+	<include src="updates.htm" />
+	<include src="lobby.htm" />
+	<include src="login.htm" />
 
-      <frame#content>
-	  </frame>
-
-	  <div class="footer">
-	  </div>
 
 
   </body>
