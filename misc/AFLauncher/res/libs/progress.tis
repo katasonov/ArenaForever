@@ -1,0 +1,33 @@
+function Progress_Create(id)
+{
+	var progress = $(#ProgressTemplate).clone();
+	
+	//view.msgbox(#alert, progress)
+	//var progress = new Element("div");
+	// progress.attributes.addClass("progress");
+	// progress.$append(<span class='progress-text' />);
+	// progress.$append(<div class='progress-fill' />);
+	// progress.$append(<div class='progress-no' />);
+	return progress;
+}
+
+function Progress_Set(val, text)
+{
+	
+	var progressNode = $(.progress);
+
+	if (progressNode == undefined)
+		return;
+	progressNode.$(.progress-fill).style#width= String.$({val}*);
+	progressNode.$(.progress-no).style#width= String.$({100 - val}*);
+	progressNode.$(.progress-text).text = text;
+	// if (progressNode.length > 0)
+		// progressNode.clear();
+	
+	//progressNode.$append(<span #UpdateProgressText class='progress-text'> {text} </span>);
+	// for (var i = 0; i < val; i++)
+		// progressNode.$append(<div class='progress-item' />);
+	//view.update();
+	//Common_SetWindowSize(900dip, 550dip);
+	//$(body).refresh();
+}

@@ -1,5 +1,7 @@
 const APP_NAME = "Квака Онлайн";
 
+const Screen_Width = 900dip;
+const Screen_Height = 550dip;
 //const DBNAME = "sciter-notes.db";
 
 // function getArgv() {

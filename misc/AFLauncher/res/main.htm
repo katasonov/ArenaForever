@@ -2,9 +2,9 @@
   <head>
     <title></title>
         <link rel="stylesheet" type="text/css" href="main.css" >
-		<link rel="stylesheet" type="text/css" href="lobby.css" >
-		<link rel="stylesheet" type="text/css" href="updates.css">
-		<link rel="stylesheet" type="text/css" href="login.css">
+		<!-- <link rel="stylesheet" type="text/css" href="lobby.css" > -->
+		<!-- <link rel="stylesheet" type="text/css" href="updates.css"> -->
+		<!-- <link rel="stylesheet" type="text/css" href="login.css"> -->
 
 
 		<script type="text/tiscript" src="main.tis" />
@@ -12,21 +12,93 @@
   </head>
   <body #Papa class="main">
 
-	<table #Titlebar role="window-caption">
-	  <tr>
-		  <td class="title" style="width:16px;height:16px;"><img src="images/icon16.png" style="margin-left:4px;margin-right:4px;"></td>
-		  <td class="title">Квака Онлайн</td>
-		  <td class="buttons">
-			  <button role="window-minimize">_</button>
-			  <button role="window-close">X</button>
-		  </td>
-	  </tr>
-	</table>
+
+	<div #LauncherHeader role="window-caption">
+		 <div #LauncherLogo> 
+			 <img src="images/woa-logo-200x32.png" style="margin-left:4px;margin-right:4px;"> 
+		 </div> 
+		 <div #LauncherHeaderMenu> 
+			 <a href="#" > НАСТРОЙКИ</a>
+			 <a href="#" > ТОП</a>
+			 <a href="#" > ОБЩЕНИЕ</a>
+		 </div> 
+		 <div #LauncherHeaderAppMenu>
+			<button role="window-minimize">_</button>
+			<button role="window-close">X</button>
+		 </div>
+	</div>
+	
+
+	<div #LauncherContent>		
+		<div #LauncherContentAutorization class="content" style="visibility:collapse;">
+			<div class="header"> 
+				<>АВТОРИЗАЦИЯ </div>
+			<div style="height:20px;"/>
+			<div class="space-xx" />
+			<div class="space-xx" />
+			<center>
+				<button  style="filter: opacity(10%);display:inline-block;background: url(images/vkloginbutton.png) stretch;width:320px;height:84px;cursor: pointer;"></button>
+			</center>
+		</div>
+		<div #LauncherContentUserInfo class="content" style="visibility:visible;">
+			<div class="header"> ИНФОРМАЦИЯ ОБ ИГРОКЕ </div>
+			<div style="height:50px;"/>
+			
+			<div class="data-table" style="filter: opacity(10%);">
+				<div class="data-table-line">
+					<div class="data-table-line-name">Никнейм</div>
+					<div class="data-table-line-value"><input type="text" size="16" /></div>
+					
+				</div>
+				<div class="space-x" />
+				<div class="data-table-line">
+					<div class="data-table-line-name"></div>
+					<div class="data-table-line-value"><input type="checkbox" style="">Мне больше 18-ти лет</input></div>
+				</div>
+				<div class="space-xx" />
+				<div class="data-table-line">
+					<div class="data-table-line-name"></div>
+					<div class="data-table-line-value"><a class="button" href="#" style="width:auto;height:15px;">Сохранить</a></div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	
+	<div #LauncherFooter >
+	
+		<div #LauncherFooterMain class="footer-content" style="">
+				<div #LauncherFooterBody style="">
+				</div>
+				<div #LauncherFooterButton style="">
+					<a class="button" href="#" style="width:120px;height:35px;" disabled> Играть </a>
+				</div>
+		</div>
+	</div>
+	<!-- <table #Titlebar role="window-caption"> -->
+	  <!-- <tr> -->
+		  <!-- <td class="title" style="width:16px;height:16px;"><img src="images/icon16.png" style="margin-left:4px;margin-right:4px;"></td> -->
+		  <!-- <td class="title">Квака Онлайн</td> -->
+		  <!-- <td class="buttons"> -->
+			  <!-- <button role="window-minimize">_</button> -->
+			  <!-- <button role="window-close">X</button> -->
+		  <!-- </td> -->
+	  <!-- </tr> -->
+	<!-- </table> -->
 
 	
-	<include src="updates.htm" />
-	<include src="lobby.htm" />
-	<include src="login.htm" />
+	<!-- <include src="updates.htm" /> -->
+	<!-- <include src="lobby.htm" /> -->
+	<!-- <include src="login.htm" /> -->
+	<div #BlockOfTemplates  style="visibility:collapse;">
+		<div #ProgressTemplate class='progress'>
+			<span class='progress-text' />
+			<div class='progress-fill' />
+			<div class='progress-no' />
+		</div>
+	</div>
+	
+	<img id="RandomProgress" src="images/loading_basic.gif" style="position: fixed;left:0px;top:0px;width: 32px; height: 32px;"/>
 
 
 

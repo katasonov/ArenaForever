@@ -4,167 +4,254 @@ html {
 }
 
 body {
-    background: rgb(37, 37, 37);
-    text-align: center;
+    background: rgb(27, 27, 27);
+    text-align: left;
     //vertical-align: top;
     padding:0px;
     margin:0px;
     border: 1px solid gray;
+    font: normal normal normal 14px verdana;
+    color: rgb(157,157,157);
 }
 
-.frame 
+#LauncherHeader {
+	width: 1*;
+	flow:horizontal;
+	background-color: rgb(34,34,34);
+	height:46px;
+	
+}
+
+#LauncherLogo {
+	vertical-align: middle;
+	width: 210px;
+}
+
+
+#LauncherHeaderMenu {
+	text-align: right;
+	width:1*;
+	margin-right: 12px;
+	vertical-align: middle;
+}
+
+#LauncherHeaderMenu > a {
+	color: rgb(92,92,92);
+	font-size: 10pt;
+	font-weight: bold;
+	text-decoration:none;
+	background: transparent;	
+}
+
+#LauncherHeaderMenu > a:hover {
+	color: rgb(112,112,112);
+	background: rgb(64, 64, 64);
+	text-decoration:none;
+	background: transparent;	
+}
+
+#LauncherHeaderAppMenu {
+	width:80px;	
+	text-align:right;
+	vertical-align:middle;
+}
+
+#LauncherHeaderAppMenu > button {
+	color: rgb(92,92,92);
+	background: rgb(34, 34, 34);
+	cursor: pointer;
+	
+}
+
+#LauncherHeaderAppMenu > button:hover {
+	color: rgb(92,92,92);
+	background: rgb(64, 64, 64);
+	
+}
+
+#LauncherHeaderAppMenu > button:active {
+	color: rgb(92,92,92);
+	background: rgb(44, 44, 44);
+	
+}
+
+#LauncherContent {
+	height:1*;
+	width:1*;
+	margin:0px;
+	padding:0px;
+}
+
+.content > div.header {
+	font-size: 20pt;	
+	font-weight: bold;
+	margin:0px;
+	padding:0px;
+	color: rgb(200, 200, 200);
+	margin-left: 18px;
+	padding-top: 18px;
+}
+
+.space-x {
+	height: 12pt;
+}
+
+.space-xx {
+	height: 20pt;
+}
+.data-table {
+	width: 1*;
+	
+}
+.data-table-line {
+	width: 1*;
+	flow: horizontal;
+	vertical-align:middle;
+}
+
+.data-table-line-name {
+	width: 2*;
+	text-align:right;
+	//background-color:red;
+
+	
+}
+.data-table-line-value {
+	width: 5*;	
+//	background-color:green;
+}
+
+.data-table-line-value  > input[type=text] {
+	width: 200pt;	
+	margin-left: 14pt;
+	text-align:left;
+}
+
+.data-table-line-value  > input[type=checkbox] {
+	width:16pt;
+	margin-left:11pt;
+}
+
+.data-table-line-value  > a.button {
+	font-size: 12pt;
+	margin-left:14pt;
+	padding:6px;
+	margin-left:18px;
+	border-radius: 3pt;
+
+}
+
+
+
+#LauncherFooter {
+	width:1*;
+	height:128px;	
+	background-color: rgb(34,34,34);
+}
+
+#LauncherFooterBody
 {
-  flow: vertical;
-  height: 1*;
-  width:1*;
+	width:1*;
+	height:1*;
+	vertical-align:middle;
 }
 
-button.launcher {
-    width: 255px;
+#LauncherFooterButton
+{	
+	width:300px;
+	height:1*;
+	text-align:center;
+	vertical-align:middle;
 }
 
-a {
-    color:aqua;
-}
-
-
-input {
-    width: 100%;
-    font-size: medium;
-    color: white;
-    background: transparent;
-    border: 1px solid gray;
-    text-selection-caret-color:white;
-}
-
-input[type='text']:empty {
-	color: gray;
-}
-
-.widget-container {
-    width:100%;
-    text-align:center;
-}
-
-
-#Titlebar {
-    width: 1*;
-    color: white;
-    background-color: black;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: 700;
-    font-size: medium;
-    display: block;
-    height: 20px;
-    text-align: left;
-    margin: 0px;
-    padding: 0px;
+.progress {
+	flow: horizontal;
+	display: block;
+	border: 4px solid rgb(162,162,162);
+	border-radius: 6px;
+	width: 1*;
+	height: 40px;	
+	padding: 8px;
 	
 }
 
-td.title {
-    width:50%;
-    text-align: left;
-}
-
-td.buttons {
-    width: 50%;
-    text-align: right;
-}
-
-
-
-
-div.input-widget {
-    width: 400px;
-    //background-color: red;
-    display: inline-block;
-	border: 1px solid gray;
-	text-align: center;
-}
-
-div.input-widget > div {
-	display: inline-block;
-}
-
-div.widget-line > div.title {
-	margin-top: 20px;
-	font-size: medium;
-    color: aliceblue;
+.progress-text {
 	
-}
-
-div.input-widget > table {
-    width:100%;
-    font-size: small;
-    color: aliceblue;
-    background-color: gray;
-}
-
-
-div.input-widget > div.widget-line {
-	width:90%;
-    text-align:center;
-    margin-bottom: 20px;
-}
-
-div.widget-line > div.input-line {
+	position: absolute;
 	width:100%;
-    font-size: medium;
-    color: white;
-    border-bottom: 1px solid gray;
-    text-align:left;
+	height:100%;
+	vertical-align:
+	middle;color: rgb(255,255,255);
+    font-size:14px;
 }
 
-div.input-line > input {
-	position: relative;
-    text-selection-caret-color:white;
-	border: none;
+.progress-fill {
+	width:0*;
+	height:1*;
+	margin: 0px;
+	background-color: rgb(162,162,162);
 }
 
-    div.input-line >  input:disabled {
-        color: gray;
-    }
-
-    div.input-line >  input[type='text']:empty {
-        color: gray;
-    }
-
-    div.input-line > input[type='password']:empty {
-        color: gray;
-    }
-	
-	
-
-div.widget-line > button {
-    width: 200px;
-    background: transparent;
-    border: 1px solid gray;
-    color: white;
-    font-size: medium;
-}
-
-div.widget-line > button[flash] {
-    background-color: yellow;
-    transition: background-color(none, linear, 250ms);
+.progress-no {
+	width:100*;
+	height:1*;
+	margin: 0px;
+	background-color: transparent;
 }
 
 
-div.widget-line > button:disabled {
-	color: gray;
+.footer-content {
+	flow: horizontal;
+	width:1*;
+	height:1*;
 }
 
-div.error-text {
-    color:red;
-}
 
-div.progress-widget {
-    display:inline-block;
-    height: 300px;
-    width: 300px;
-    font-size: small;
-    color: white;
-    border: 1px solid gray;
+
+
+a.button {
+    display: inline-block;	
     text-align: center;
-    vertical-align:middle;
+    vertical-align: middle;
+    padding: 12px 24px;
+    border: 0px solid #2a8f25;
+    border-radius: 8px;
+    background: rgb(31,105,31);
+    //background: linear-gradient(to bottom, #45e93c, #2a8f25);
+    text-shadow: #1b5a17 1px 1px 1px;
+    font-size:24px;
+	font-weight: bold;
+    color: #ffffff;
+    text-decoration: none;
 }
+a.button:hover,
+a.button:focus {
+    border: 0px solid #35b32e;
+    background: rgb(31,105,31);
+    //background: linear-gradient(to bottom, #53ff48, #32ac2c);
+    color: #ffffff;
+    text-decoration: none;
+}
+a.button:active {
+    background: #2a8f25;
+    //background: linear-gradient(to bottom, #2a8f25, #2a8f25);
+}
+a.button:before{
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    line-height: 24px;
+    margin: 0 4px -6px -4px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    //background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAEx0lEQVRIia2VfWhVdRjHP/ecc7frvXvVtbeYzusLy5fJjHxBSVkGUkynJf4ziJQCq1mJEYJJEtEfEQUGEUqiQVR/aC++FtV0c7pw0ticOt3ddvd2d7fde3ffz73nnF9/nDO9hEmDHng48OP5fV+e5+H8ZGYY9QspXlfG6ifymSNpxMdUkjPFeGQ0vVVyXIw2C6P3rAg2faR2fr61+fud2bvKHDj+F4JfGsu+E7EhISKDQkSGhIj7hBi5JHqPbbv1aS3r/1kvzZhBCFBDVgYh5gd7Ie5tH1a9cuj9306+6NyVWa7M3IMBqTDoBiBMQpMZ16JNWS806l+GIh/49l7kHIA8U/iGFWKHOz+y1KZOQnYe6BroCdCToMWxF8yVKnKiz7Zdu/PVYIyEXF1EztPlLOwOMGlKenRsmZ/e4fJ3Lo12XcbmuUD27DngKAQtDloS0jFyy+a5SoJX9G9uqL/LR7ay9+CBhh92b3hs90s1tlWbK6by1ZiI3Q4SfBjhunlsyHOwTFGwJ5MqmudPXGXlYHeCljDdCLCl/BXHzg9+Yft6O4cb3nz9EK55Jl4qSHrCYwx6vf1To4Otnr6Ri8fbROvZXjwWx2ygsqqIqlef5OXnFlFb4S6VnOv3gK5bkgTqWBeb955ersRT6AQ8ILnuC7YXzpPcs+e7qTHcNVqooW7HoDE0MnwvMuFrudkz/uvRZlqavNzYd5Fz3jDvvZvn2+dUvWBzmkPXIdthZ0ERc5WbfnpEaABbbgUI40FXJGEusSTIKiqT3MWPL0YyFq+ondq1fafPaG/vurD+cPj5z65yePNyNpYagZWgmgSGDSbbkGQU5coQt6OBcXKLgyaBTZi7lbF+5keAAUjgsAWkrMlwFeaah6W8WbeR1JXoqgke6AZ1AGRQun0M+QPhUK4aKADjAbicAc60GwMxchf/tTEiMTTAOPgMS1atLdmCMQV6GsL3QA2ABFoaQ0kYhCZDqndBsLuAnCJANl1IwsS/70RH7+3H1x5nRCV8ooOPjzZQW19XeDy/ODsHtRcS45gDgLgfhsNMKIAWiOMhOVqN4QOnCxxOsNlBsmUsqI4oBmeNgjEmAgfXyO+459sXy0oaUnfN9trNFpKCgT5CV4fwKABjUbpRqEcRQBT0KGiAJJkp28AGSh4UFsLqpVQi0iBSpstsU/h0Jm5Ch5/LkaTpgA4fHQKwKdbYFEw1imGldSZbabMSzMEbFrgBWieMDKOd7OAIYCgAl/roSajgzLMA7KZNBJCTcSZbRJn/YGERqJBuBb8HzvRz8vwtLmOV0zXKkD9CqLKUAuwgpiDQbra1sBLk5UBJBomU4UAF0QfRFggmodlP076fOWBJNAlSOqHxMN5KOwViFMa7YVgQlUGJ9uNweSCnHLKrQCoFHCA00Ccg3gNTXkgJjDP9nNr/E28bBv5pg9PvgTY1yT29i2r/OPRp+PZfYE8gRvyNdTSuLWdjSYAcpQ2UWSBbm4wG0TTGjQDdx65z5Ewn3wLhjAY+eHCGE3SNhdj+V5yu106ze2CS64DReIqWHAdL6paxafVcnipyUZyloERUQnfG6fmxkz/u+GgFJqxpPDzqqlnzST0nnFm4/7UIHNbY8wAnM3wRJSBrJhf+S/wNbS430494JFMAAAAASUVORK5CYII=") no-repeat left center transparent;
+    background-size: 100% 100%;
+}
+a.button:disabled {
+	background: rgb(87,87,87);
+	color: rgb(120,120,120);
+	text-shadow: #000000 0px 0px 0px;
+}
+
+

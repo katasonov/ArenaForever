@@ -1,10 +1,19 @@
+
+include "libs/settings.tis";
+include "libs/progress.tis";
+
 include "config.tis";
 include "debug.tis";
-include "libs/settings.tis";
-include "updates.tis";
-include "login.tis"
-include "lobby.tis"
+// include "updates.tis";
+// include "login.tis"
+// include "lobby.tis"
 
+
+const Launcher_State_UpdateProgram = 0;
+const Launcher_State_UpdateResources = 1;
+const Launcher_State_Main = 2; //select player model and map to play.
+const Launcher_State_ConnectToGame = 3;
+//const Launcher_State_Main = 1; //select player model and map to play.
 
 
  //const tabs = $(div#tabs);
@@ -18,7 +27,49 @@ include "lobby.tis"
 var currentFrameId = "";
 
 
-$(#Papa).on("frame-finished", function (e) {
+
+var launcherState = Launcher_State_UpdateProgram;
+
+$(body).on("on-change-state", function (e) {
+	launcherState = e.data;
+	if (e.data == Launcher_State_UpdateProgram)
+	{
+		var parent = $(#LauncherFooterBody);
+		if (parent.length > 0)
+			parent.clear();
+		parent.$append({Progress_Create("UpdateProgramProgress")});
+	}
+	if (e.data == Launcher_State_UpdateResources)
+	{
+		var parent = $(#LauncherFooterBody);
+		if (parent.length > 0)
+			parent.clear();
+		parent.$append({Progress_Create("UpdateResourcesProgress")});
+	}
+});
+
+
+$(body).on("on-progress", function (e) {
+	
+	//Debug_Println(String.$(on-progress: {e.data["progress"]}));
+	Progress_Set(e.data["progress"], e.data["text"]);
+	// switch (e.data) {
+		// case #UpdatesFrame:
+		// {			
+			// setFrame(#LoginFrame);
+			// break;
+		// }
+		// case #LoginFrame:
+		// {
+			// setFrame(#LobbyFrame);
+			// break;
+		// }
+	// }
+});
+
+
+$(body).on("frame-finished", function (e) {
+	
 	Debug_Println(String.$({e.data}: finished));
 	switch (e.data) {
 		case #UpdatesFrame:
@@ -32,6 +83,7 @@ $(#Papa).on("frame-finished", function (e) {
 			break;
 		}
 	}
+	
 });
 
 
@@ -49,6 +101,8 @@ function Common_SetWindowSize(width, height)
 
 function self.ready() 
 {
+	//view.isResizeable = false;
+	
 	if( !view.api && view.nativeApi)
 	  view.api = view.nativeApi(); 
 	  
@@ -57,7 +111,54 @@ function self.ready()
 	view.settings = Settings.fetch();
 
 
-	setFrame("UpdatesFrame");
+	
+	Common_SetWindowSize(Screen_Width, Screen_Height);
+	
+	
+
+	//Set Progress position
+	// $(#RandomProgress).style#left= Screen_Width/2 - $(#RandomProgress).style#width;
+	// $(#RandomProgress).style#top= Screen_Height/2 - $(#RandomProgress).style#height;
+	$(#RandomProgress).style#left= Screen_Width - $(#RandomProgress).style#width - 70;
+	$(#RandomProgress).style#top= $(#RandomProgress).style#height + 28;
+	
+
+	$(body).sendEvent("on-change-state", Launcher_State_UpdateProgram);
+
+	//Test Interface
+	if (!cfgIsNative)
+	{
+		var progUpdateProgress = 0;
+		self.timer(100ms, function() {
+			if (launcherState == Launcher_State_UpdateProgram)
+			{
+				progUpdateProgress = progUpdateProgress + 1;
+				if (progUpdateProgress > 100) 
+				{
+					progUpdateProgress = 0;
+					//launcherState = Launcher_State_UpdateProgram;
+					$(body).sendEvent("on-change-state", Launcher_State_UpdateResources);
+					return true;
+				}
+				$(body).postEvent("on-progress", {"progress": progUpdateProgress, "text": "Обновление программы (1Мб из 10Мб / 4кб/сек)"});
+			}
+			if (launcherState == Launcher_State_UpdateResources)
+			{
+				progUpdateProgress = progUpdateProgress + 1;
+				if (progUpdateProgress > 100) 
+				{
+					//launcherState = Launcher_State_UpdateProgram;
+					$(body).sendEvent("on-change-state", Launcher_State_UpdateResources);
+					return true;
+				}
+				$(body).postEvent("on-progress", {"progress": progUpdateProgress, "text": "Загрузка 'pak0.pk3' (1Мб из 70Мб / 4кб/сек)"});
+			}
+			return true;
+		});			
+	}
+
+
+	//setFrame("UpdatesFrame");
 	
 	
 	// self.timer(1000ms, function() {
@@ -67,7 +168,8 @@ function self.ready()
 				// return true; // Repeat again!
 	 // });	
 
-	
+
+
 	//view.msgbox(#alert,  false);
 	//var needCheckUpdates = true; 
 	
