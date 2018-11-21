@@ -29,36 +29,82 @@
 	</div>
 	
 
-	<div #LauncherContent>		
+	<div #LauncherContent>
+		<div #LauncherContentUpdate class="content" style="visibility:visible;">
+			<div class="data-table">
+				<div class="data-table-line">
+					<div class="data-table-line-header">Обновление</div>
+				</div>
+			</div>
+		</div>	
+		<div #LauncherContentLobby class="content" style="visibility:collapse;">
+			<div class="data-table">
+				<div class="data-table-line">
+					<div class="data-table-line-header">Лобби</div>
+				</div>
+			</div>
+		</div>	
 		<div #LauncherContentAutorization class="content" style="visibility:collapse;">
-			<div class="header"> 
-				<>АВТОРИЗАЦИЯ </div>
-			<div style="height:20px;"/>
-			<div class="space-xx" />
-			<div class="space-xx" />
+			<div class="data-table">
+				<div class="data-table-line">
+					<div class="data-table-line-header">АВТОРИЗАЦИЯ</div>
+				</div>
+				<div class="data-table-line">
+					<div class="data-table-line-sub-header">Вы будете переведы на сайт Вконтакте для прохождения верификации, после чего вернетесь сюда для продолжения.</div>
+				</div>
+			
+
+
+				<div class="data-table-line" />
+				<div class="data-table-line" />
+				<div class="data-table-line" />
+				<div class="data-table-line" />
+				<div class="data-table-line" />
+				<div class="data-table-line" />
+				<div class="data-table-line" />
+			</div>
 			<center>
-				<button  style="filter: opacity(10%);display:inline-block;background: url(images/vkloginbutton.png) stretch;width:320px;height:84px;cursor: pointer;"></button>
+				<button #VKLoginButton style="filter: opacity(100%);display:inline-block;background: url(images/vkloginbutton.png) stretch;width:320px;height:84px;cursor: pointer;"></button>
 			</center>
 		</div>
-		<div #LauncherContentUserInfo class="content" style="visibility:visible;">
-			<div class="header"> ИНФОРМАЦИЯ ОБ ИГРОКЕ </div>
-			<div style="height:50px;"/>
+		
+		<div #LauncherContentUserInfo class="content" style="visibility:collapse;">
 			
-			<div class="data-table" style="filter: opacity(10%);">
+			<!--<div class="data-table" style="filter: opacity(10%);" disabled>-->
+			<div class="data-table">
+				<div class="data-table-line">
+					<div class="data-table-line-header">ИНФОРМАЦИЯ ОБ ИГРОКЕ</div>
+				</div>
+				<div class="data-table-line">
+					<div class="data-table-line-sub-header">Ваш никнейм будет использоваться в игре и не может быть изменён. Игра содержит элементы насилия, поэтому не допустима для игроков младше 18-ти лет.</div>
+				</div>
+				<div class="data-table-line">
+				</div>
+				<div class="data-table-line">
+				</div>
+				<div class="data-table-line">
+				</div>
 				<div class="data-table-line">
 					<div class="data-table-line-name">Никнейм</div>
-					<div class="data-table-line-value"><input type="text" size="16" /></div>
-					
+					<div class="data-table-line-value"><input #NickNameTextbox type="text" size="16" /></div>
+				</div>
+				<div #NickNameError class="data-table-line" style="visibility:collapse;">
+					<div class="data-table-line-name"></div>
+					<div class="data-table-line-value-error">* Никнейм состоит из цифр, латинских букв и символов (-,_,+). Длина от 6 до 16 символов.</div>
 				</div>
 				<div class="space-x" />
 				<div class="data-table-line">
 					<div class="data-table-line-name"></div>
-					<div class="data-table-line-value"><input type="checkbox" style="">Мне больше 18-ти лет</input></div>
+					<div class="data-table-line-value"><input #AgeCheckbox type="checkbox" style="">Мне больше 18-ти лет</input></div>
+				</div>
+				<div #AgeError class="data-table-line" style="visibility:collapse;">
+					<div class="data-table-line-name"></div>
+					<div class="data-table-line-value-error">* Вы должны быть старше 18 лет чтобы продолжить.</div>
 				</div>
 				<div class="space-xx" />
 				<div class="data-table-line">
 					<div class="data-table-line-name"></div>
-					<div class="data-table-line-value"><a class="button" href="#" style="width:auto;height:15px;">Сохранить</a></div>
+					<div class="data-table-line-value"><a #UserDataConfirmButton class="button" href="#" style="width:auto;height:15px;">Сохранить</a></div>
 				</div>
 			</div>
 			
@@ -98,7 +144,7 @@
 		</div>
 	</div>
 	
-	<img id="RandomProgress" src="images/loading_basic.gif" style="position: fixed;left:0px;top:0px;width: 32px; height: 32px;"/>
+	<img id="RandomProgress" src="images/loading_basic.gif" style="position: fixed;left:0px;top:0px;width: 32px; height: 32px;visibility:collapse;"/>
 
 
 

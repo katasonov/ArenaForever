@@ -82,15 +82,6 @@ body {
 	padding:0px;
 }
 
-.content > div.header {
-	font-size: 20pt;	
-	font-weight: bold;
-	margin:0px;
-	padding:0px;
-	color: rgb(200, 200, 200);
-	margin-left: 18px;
-	padding-top: 18px;
-}
 
 .space-x {
 	height: 12pt;
@@ -107,6 +98,27 @@ body {
 	width: 1*;
 	flow: horizontal;
 	vertical-align:middle;
+	padding-top: 8pt;	
+}
+
+.data-table-line-header {
+	font-size: 20pt;	
+	font-weight: bold;
+	margin:0px;
+	padding:0px;
+	color: rgb(200, 200, 200);
+	margin-left: 18pt;
+}
+
+.data-table-line-sub-header {
+	font-size: 8pt;	
+	font-weight: bold;
+	margin:0px;
+	padding:0px;
+	color: rgb(150, 150, 150);
+	margin-left: 18pt;
+	margin-right: 18pt;
+	
 }
 
 .data-table-line-name {
@@ -118,7 +130,16 @@ body {
 }
 .data-table-line-value {
 	width: 5*;	
-//	background-color:green;
+	margin-right: 18pt;
+	//background-color:green;
+}
+
+.data-table-line-value-error {
+	width: 5*;
+	color:red;
+	margin-right: 18pt;
+	margin-left: 18pt;
+	font-size:8pt;
 }
 
 .data-table-line-value  > input[type=text] {

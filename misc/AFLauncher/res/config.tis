@@ -33,8 +33,6 @@ try {
 {	
 }
 
-
-
 var cfgNeedCheckUpdates = false;
 
 if( cfgIsNative )

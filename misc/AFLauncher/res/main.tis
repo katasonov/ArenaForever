@@ -11,8 +11,11 @@ include "debug.tis";
 
 const Launcher_State_UpdateProgram = 0;
 const Launcher_State_UpdateResources = 1;
-const Launcher_State_Main = 2; //select player model and map to play.
-const Launcher_State_ConnectToGame = 3;
+const Launcher_State_Authorization = 2;
+const Launcher_State_UserData = 3;
+const Launcher_State_Lobby = 4;
+// const Launcher_State_Main = 2; //select player model and map to play.
+// const Launcher_State_ConnectToGame = 3;
 //const Launcher_State_Main = 1; //select player model and map to play.
 
 
@@ -26,6 +29,8 @@ const Launcher_State_ConnectToGame = 3;
  
 var currentFrameId = "";
 
+var waitingProgressActive = false;
+
 
 
 var launcherState = Launcher_State_UpdateProgram;
@@ -38,6 +43,7 @@ $(body).on("on-change-state", function (e) {
 		if (parent.length > 0)
 			parent.clear();
 		parent.$append({Progress_Create("UpdateProgramProgress")});
+		Common_ShowContent($(#LauncherContentUpdate));
 	}
 	if (e.data == Launcher_State_UpdateResources)
 	{
@@ -45,9 +51,142 @@ $(body).on("on-change-state", function (e) {
 		if (parent.length > 0)
 			parent.clear();
 		parent.$append({Progress_Create("UpdateResourcesProgress")});
+		Common_ShowContent($(#LauncherContentUpdate));
+	}
+	if (e.data == Launcher_State_Authorization)
+	{
+		var parent = $(#LauncherFooterBody);
+		if (parent.length > 0)
+			parent.clear();
+		//parent.$append({Progress_Create("UpdateResourcesProgress")});
+		
+		//Hide all content items		
+		Common_ShowContent($(#LauncherContentAutorization));
+	}
+	if (e.data == Launcher_State_UserData)
+	{
+		Common_StopWaitingProgress();
+		var parent = $(#LauncherFooterBody);
+		if (parent.length > 0)
+			parent.clear();
+		//parent.$append({Progress_Create("UpdateResourcesProgress")});
+		
+		Common_ShowContent($(#LauncherContentUserInfo));
+		
+		//Check fields correctness
+		self.timer(1000ms, function() {
+			if (launcherState != Launcher_State_UserData)
+			{
+				return false;
+			}
+			
+			
+			Common_CheckNickNameIsValid();
+			
+			return true;
+		});
+	}
+	if (e.data == Launcher_State_Lobby)
+	{
+		Common_StopWaitingProgress();
+		var parent = $(#LauncherFooterBody);
+		if (parent.length > 0)
+			parent.clear();
+		//parent.$append({Progress_Create("UpdateResourcesProgress")});
+		
+		//Hide all content items		
+		Common_ShowContent($(#LauncherContentLobby));
 	}
 });
 
+function Common_CheckNickNameIsValid()
+{
+	var text = $(#NickNameTextbox).value;
+	
+	var errFound = false;
+	for (var i = 0; i < text.length; i++)
+	{
+		if (!Common_ValidNickNameCharacter(text[i]))
+		{
+			errFound = true;
+			
+		}
+	}
+
+	if (text.length < 6)
+	{
+		errFound = true;
+	}
+
+	if (errFound)
+	{
+		$(#NickNameError).style#visibility = "visible";
+	}
+	else 
+	{
+		$(#NickNameError).style#visibility = "collapse";
+	}
+
+	return !errFound;
+}
+
+$(#AgeCheckbox).on("click", function (e){
+	
+	if ($(#AgeCheckbox).checked == false)
+	{
+		$(#AgeError).style#visibility = "visible";
+	}
+	else
+	{
+		$(#AgeError).style#visibility = "collapse";
+	}
+	
+	
+});
+
+$(#UserDataConfirmButton).on("click", function (e){
+	
+	if (!Common_CheckNickNameIsValid())
+	{
+		return;
+	}
+	if ($(#AgeCheckbox).checked == false)
+	{
+		$(#AgeError).style#visibility = "visible";
+		return;
+	}
+	
+	if (!cfgIsNative)
+	{
+		Common_StartWaitingProgress();
+		return;
+	}
+	
+});
+
+function Common_ValidNickNameCharacter(ch)
+{
+	// return ((ch >= 'a' && ch <= 'Z') || (ch >= '0' && ch <= '9') || (ch == '-') || (ch == '.') || (ch == '+') || (ch == '_'));
+	
+	return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || (ch == '-') || (ch == '.') || (ch == '+') || (ch == '_');		
+}
+
+
+function Common_ShowContent(cont)
+{
+	Common_HideContentItems();
+	cont.style#visibility = "visible";
+}
+
+function Common_HideContentItems()
+{
+	var size = $$([class = "content"]).length;
+	var i = 0;
+	for (var (pos, a) in $$([class = "content"]))
+	{
+		a.style#visibility = "collapse";
+	}		
+}
 
 $(body).on("on-progress", function (e) {
 	
@@ -86,7 +225,6 @@ $(body).on("frame-finished", function (e) {
 	
 });
 
-
 function Common_SetWindowSize(width, height)
 {
     
@@ -97,6 +235,55 @@ function Common_SetWindowSize(width, height)
     
     view.move( sx + (sw - w) / 2, sy + (sh - h) / 2, w,h, true );
 	
+}
+
+$(#VKLoginButton).on("click", function(e){
+	if (cfgIsNative)
+		Sciter.launch(View.api.vk_oauth_uri());
+	else
+		Sciter.launch("http://127.0.0.1/login");
+	
+	Common_StartWaitingProgress();
+});
+
+function Common_StartWaitingProgress()
+{
+	var size = $$([class = "content"]).length;
+	var i = 0;
+	for (var (pos, a) in $$([class = "content"]))
+	{
+		if (a.style#visibility == "visible")
+		{
+			a.style#filter = "opacity(10%)";
+			a.state.disabled = true;
+		}
+	}
+	
+	$(#RandomProgress).style#visibility = "visible";
+	waitingProgressActive = true;
+}
+
+function Common_StopWaitingProgress()
+{
+	var size = $$([class = "content"]).length;
+	var i = 0;
+	for (var (pos, a) in $$([class = "content"]))
+	{
+		if (a.style#visibility == "visible")
+		{
+			a.style#filter = "opacity(100%)";
+			a.state.disabled = false;			
+		}
+	}
+	
+	$(#RandomProgress).style#visibility = "collapse";
+	
+	waitingProgressActive = false;
+}
+
+function Common_IsWaitingProgress()
+{
+	return waitingProgressActive;
 }
 
 function self.ready() 
@@ -117,10 +304,10 @@ function self.ready()
 	
 
 	//Set Progress position
-	// $(#RandomProgress).style#left= Screen_Width/2 - $(#RandomProgress).style#width;
-	// $(#RandomProgress).style#top= Screen_Height/2 - $(#RandomProgress).style#height;
-	$(#RandomProgress).style#left= Screen_Width - $(#RandomProgress).style#width - 70;
-	$(#RandomProgress).style#top= $(#RandomProgress).style#height + 28;
+	$(#RandomProgress).style#left= Screen_Width/2 - $(#RandomProgress).style#width;
+	$(#RandomProgress).style#top= Screen_Height/2 - $(#RandomProgress).style#height;
+	//$(#RandomProgress).style#left= Screen_Width - $(#RandomProgress).style#width - 70;
+	//$(#RandomProgress).style#top= $(#RandomProgress).style#height + 28;
 	
 
 	$(body).sendEvent("on-change-state", Launcher_State_UpdateProgram);
@@ -128,35 +315,63 @@ function self.ready()
 	//Test Interface
 	if (!cfgIsNative)
 	{
-		var progUpdateProgress = 0;
+		var testCounter = 0;
 		self.timer(100ms, function() {
 			if (launcherState == Launcher_State_UpdateProgram)
 			{
-				progUpdateProgress = progUpdateProgress + 1;
-				if (progUpdateProgress > 100) 
+				testCounter = testCounter + 10;
+				if (testCounter > 100) 
 				{
-					progUpdateProgress = 0;
+					testCounter = 0;
 					//launcherState = Launcher_State_UpdateProgram;
 					$(body).sendEvent("on-change-state", Launcher_State_UpdateResources);
 					return true;
 				}
-				$(body).postEvent("on-progress", {"progress": progUpdateProgress, "text": "Обновление программы (1Мб из 10Мб / 4кб/сек)"});
+				$(body).postEvent("on-progress", {"progress": testCounter, "text": "Обновление программы (1Мб из 10Мб / 4кб/сек)"});
 			}
 			if (launcherState == Launcher_State_UpdateResources)
 			{
-				progUpdateProgress = progUpdateProgress + 1;
-				if (progUpdateProgress > 100) 
+				testCounter = testCounter + 10;
+				if (testCounter > 100) 
 				{
 					//launcherState = Launcher_State_UpdateProgram;
-					$(body).sendEvent("on-change-state", Launcher_State_UpdateResources);
+					testCounter = 0;
+					$(body).sendEvent("on-change-state", Launcher_State_Authorization);
 					return true;
 				}
-				$(body).postEvent("on-progress", {"progress": progUpdateProgress, "text": "Загрузка 'pak0.pk3' (1Мб из 70Мб / 4кб/сек)"});
+				$(body).postEvent("on-progress", {"progress": testCounter, "text": "Загрузка 'pak0.pk3' (1Мб из 70Мб / 4кб/сек)"});
+			}			
+			if (launcherState == Launcher_State_Authorization)
+			{
+				if (Common_IsWaitingProgress())
+					testCounter = testCounter + 1;
+				if (testCounter > 20) 
+				{
+					testCounter = 0;
+					//launcherState = Launcher_State_UpdateProgram;
+					
+					$(body).sendEvent("on-change-state", Launcher_State_UserData);
+					return true;
+				}
+				//$(body).postEvent("on-progress", {"progress": testCounter, "text": "Загрузка 'pak0.pk3' (1Мб из 70Мб / 4кб/сек)"});
 			}
+			if (launcherState == Launcher_State_UserData)
+			{
+				if (Common_IsWaitingProgress())
+					testCounter = testCounter + 1;
+				if (testCounter > 20) 
+				{
+					testCounter = 0;
+					//launcherState = Launcher_State_UpdateProgram;
+					
+					$(body).sendEvent("on-change-state", Launcher_State_Lobby);
+					return true;
+				}
+				//$(body).postEvent("on-progress", {"progress": testCounter, "text": "Загрузка 'pak0.pk3' (1Мб из 70Мб / 4кб/сек)"});
+			}				
 			return true;
 		});			
 	}
-
 
 	//setFrame("UpdatesFrame");
 	
