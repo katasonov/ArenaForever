@@ -94,10 +94,101 @@ $(body).on("on-change-state", function (e) {
 			parent.clear();
 		//parent.$append({Progress_Create("UpdateResourcesProgress")});
 		
-		//Hide all content items		
+		//Hide all content items
 		Common_ShowContent($(#LauncherContentLobby));
+		Common_LoadLobby();
+		Debug_Println("Lobby Loaded!");
+		
 	}
 });
+
+function Common_LoadLobby()
+{
+	Common_StartWaitingProgress();
+	var task = Common_GetPlayerModelsList();
+	task.then(function(){
+		Debug_Println("Done!");
+		Common_StopWaitingProgress();		
+	});
+}
+
+async function Common_GetPlayerModelsList()
+{
+	
+	var path = String.$({APP_URL}/api/v1/model/getList);
+	//self.request(Common_onPlayerModelsList, #get, path );
+	try{
+		var data = await view.request {
+			url: path,
+			noCache: true,
+			output: #json, // will deliver data as already parsed JSON to onDataReady
+			// success: Common_onPlayerModelsList,
+			// error: function () {
+				// Debug_Println("Common_GetPlayerModelsList request failed");
+				// self.timer(2000ms, function() {				
+							// Common_GetPlayerModelsList();
+							// return false;
+						// });	
+				// }
+		}
+		Common_onPlayerModelsList(data);
+	}
+	catch(e)
+	{
+			Debug_Println(String.printf("Failed %V", e.data.status));
+			// self.timer(2000ms, function() {				
+						// Common_GetPlayerModelsList();
+						// return false;
+					// });	
+	
+	}
+	
+	
+
+}
+
+function Common_onPlayerModelsList(data) {
+	//Debug_Println(String.printf("Got data %V with status", data));
+	var select = "selected";
+	var i = 0;
+	if (data.length > 0) 
+	{
+		for(var it in data)
+		{
+			var link = it["ThumbnailUrl"];
+			
+			var el = $(#ModelBoxItemTemplate).clone();	
+			
+			el.attributes["id"] = String.$(ModelBoxItemTemplate_{i++});
+			
+			el[0].attributes["src"] = link; 
+			
+			el.attributes["state"] = select;
+			select = "free";
+			
+			el.on("click", function () {
+				Models_SelectModel(el.id);
+			});
+			
+			//Debug_Println(String.printf("Got data %V", link));
+			$(#ModelBoxContent).append(el);
+		}
+	}
+	
+}
+
+function Models_SelectModel(modID)
+{
+	for (var el in $$(.model-box-item))
+	{
+		el.attributes["state"] = "free";
+	}
+	
+	var item = $([id={modID}]);
+	
+	Debug_Println(String.printf("Model to select: %V %V", modID, item));
+	item.attributes["state"] = "selected";
+}
 
 function Common_CheckNickNameIsValid()
 {
@@ -158,7 +249,7 @@ $(#UserDataConfirmButton).on("click", function (e){
 	
 	if (!cfgIsNative)
 	{
-		Common_StartWaitingProgress();
+		Common_StartWaitingProgress();		
 		return;
 	}
 	
@@ -256,6 +347,8 @@ function Common_StartWaitingProgress()
 		{
 			a.style#filter = "opacity(10%)";
 			a.state.disabled = true;
+			//a.state.busy = true;
+		
 		}
 	}
 	
@@ -310,7 +403,8 @@ function self.ready()
 	//$(#RandomProgress).style#top= $(#RandomProgress).style#height + 28;
 	
 
-	$(body).sendEvent("on-change-state", Launcher_State_UpdateProgram);
+	//$(body).sendEvent("on-change-state", Launcher_State_UpdateProgram);
+	$(body).sendEvent("on-change-state", Launcher_State_Lobby);
 
 	//Test Interface
 	if (!cfgIsNative)

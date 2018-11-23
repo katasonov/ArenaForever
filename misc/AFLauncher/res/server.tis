@@ -1,0 +1,30 @@
+include "config.tis"
+
+async function Server_GetModels()
+{
+	var path = String.$({APP_URL}/api/v1/model/getList);
+	//self.request(Common_onPlayerModelsList, #get, path );
+	try {
+		var data = await view.request {
+			url: path,
+			noCache: true,
+			output: #json, // will deliver data as already parsed JSON to onDataReady
+			// success: Common_onPlayerModelsList,
+			// error: function () {
+				// Debug_Println("Common_GetPlayerModelsList request failed");
+				// self.timer(2000ms, function() {				
+							// Common_GetPlayerModelsList();
+							// return false;
+						// });	
+				// }
+		}
+		return data;
+	}
+	catch(e)
+	{
+			Debug_Println(String.printf("Failed %V", e.data.status));
+			return null;
+
+	
+	}
+}

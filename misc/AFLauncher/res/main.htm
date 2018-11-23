@@ -37,10 +37,16 @@
 				</div>
 			</div>
 		</div>	
-		<div #LauncherContentLobby class="content" style="visibility:collapse;">
-			<div class="data-table">
-				<div class="data-table-line">
-					<div class="data-table-line-header">Лобби</div>
+		<div #LauncherContentLobby class="content" style="visibility:collapse;background-color:transparent;">
+			<div style="flow:horizontal;width:1*;height:1*;">
+				<div #ModelBox style="width:1*;height:1*;background-color:transparent;">
+					<!-- <div #ModelBoxText style="width:1*;height:20pt;background-color:rgb(27, 27, 27);"> HELLO </div> -->
+					<div #ModelBoxContent style="width:1*;height:1*;background-color:transparent;overflow: auto;padding-left:8pt;margin-top:8pt;">
+						
+					</div>
+					
+				</div>
+				<div #MapBox style="width:1*;height:1*;background-color:transparent;">
 				</div>
 			</div>
 		</div>	
@@ -142,10 +148,12 @@
 			<div class='progress-fill' />
 			<div class='progress-no' />
 		</div>
+		<div #ModelBoxItemTemplate class="model-box-item" >
+			<img src=""/>
+		</div>
 	</div>
 	
 	<img id="RandomProgress" src="images/loading_basic.gif" style="position: fixed;left:0px;top:0px;width: 32px; height: 32px;visibility:collapse;"/>
-
 
 
   </body>

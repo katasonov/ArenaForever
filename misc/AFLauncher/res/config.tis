@@ -1,5 +1,8 @@
 const APP_NAME = "Квака Онлайн";
 
+const APP_URL = "http://localhost:8889";
+
+
 const Screen_Width = 900dip;
 const Screen_Height = 550dip;
 //const DBNAME = "sciter-notes.db";

@@ -221,12 +221,43 @@ body {
 }
 
 
+.content {
+	height: 1*;
+}
+
 .footer-content {
 	flow: horizontal;
 	width:1*;
 	height:1*;
 }
 
+.model-box-item
+{
+	width:64px;
+	height:64px;
+	display: inline-block;
+	background-color:transparent;
+	padding: 6pt;
+	border: 1px solid transparent;
+}
+
+.model-box-item[state="selected"]
+{
+	background-color:rgb(62,72,62);
+}
+
+.model-box-item:hover
+{
+	border: 1px solid blue;
+	width:64px;
+	height:64px;
+}
+
+.model-box-item img {
+   //width: 1*;
+   width:64px;
+   height:64px;
+}
 
 
 
