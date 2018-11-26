@@ -783,7 +783,7 @@ int main( int argc, char **argv )
 	signal( SIGINT, Sys_SigHandler );
 
 #if !SERVER
-	trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s:%i\n", net_remote_ip->string, net_remote_port->integer));
+	//trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s:%i\n", net_remote_ip->string, net_remote_port->integer));
 #endif
 
 	while( 1 )

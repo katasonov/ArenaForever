@@ -1,30 +1,41 @@
 include "config.tis"
 
-async function Server_GetModels()
+async function Server_GetPlayerModelsList()
 {
+	Debug_Println(String.printf("Server_GetPlayerModelsList begin"));
 	var path = String.$({APP_URL}/api/v1/model/getList);
-	//self.request(Common_onPlayerModelsList, #get, path );
-	try {
-		var data = await view.request {
-			url: path,
-			noCache: true,
-			output: #json, // will deliver data as already parsed JSON to onDataReady
-			// success: Common_onPlayerModelsList,
-			// error: function () {
-				// Debug_Println("Common_GetPlayerModelsList request failed");
-				// self.timer(2000ms, function() {				
-							// Common_GetPlayerModelsList();
-							// return false;
-						// });	
-				// }
-		}
-		return data;
+	var data = await view.request {
+		url: path,
+		noCache: true,
+		output: #json // will deliver data as already parsed JSON to onDataReady
+		// success: Common_onPlayerModelsList,
+		// error: function () {
+			// Debug_Println("Common_GetPlayerModelsList request failed");
+			// self.timer(2000ms, function() {				
+						// Common_GetPlayerModelsList();
+						// return false;
+					// });	
+			// }
 	}
-	catch(e)
-	{
-			Debug_Println(String.printf("Failed %V", e.data.status));
-			return null;
+	return String.printf("%V", data);
+}
 
-	
+async function Server_GetMapsList()
+{
+	Debug_Println(String.printf("Server_GetMapsList begin"));
+	var path = String.$({APP_URL}/api/v1/map/getList);
+	var data = await view.request {
+		url: path,
+		noCache: true,
+		output: #json // will deliver data as already parsed JSON to onDataReady
+		// success: Common_onPlayerModelsList,
+		// error: function () {
+			// Debug_Println("Common_GetPlayerModelsList request failed");
+			// self.timer(2000ms, function() {				
+						// Common_GetPlayerModelsList();
+						// return false;
+					// });	
+			// }
 	}
+	return String.printf("%V", data);
 }

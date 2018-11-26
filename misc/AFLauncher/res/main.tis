@@ -4,6 +4,8 @@ include "libs/progress.tis";
 
 include "config.tis";
 include "debug.tis";
+
+include "server.tis"
 // include "updates.tis";
 // include "login.tis"
 // include "lobby.tis"
@@ -96,86 +98,79 @@ $(body).on("on-change-state", function (e) {
 		
 		//Hide all content items
 		Common_ShowContent($(#LauncherContentLobby));
-		Common_LoadLobby();
-		Debug_Println("Lobby Loaded!");
+		Lobby_Reload();
+		Debug_Println("Lobby loading...");
 		
 	}
 });
 
-function Common_LoadLobby()
-{
+function Lobby_Reload()
+{	
 	Common_StartWaitingProgress();
-	var task = Common_GetPlayerModelsList();
-	task.then(function(){
-		Debug_Println("Done!");
-		Common_StopWaitingProgress();		
-	});
+	Lobby_ReloadModels();
+	//Lobby_ReloadMaps();
+	
+	self.timer(1000ms, function() {
+		if (Lobby_Loaded())
+		{
+			Common_StopWaitingProgress();
+			return false;
+		}
+		return true;
+	});	
 }
 
-async function Common_GetPlayerModelsList()
+function Lobby_Loaded()
 {
-	
-	var path = String.$({APP_URL}/api/v1/model/getList);
-	//self.request(Common_onPlayerModelsList, #get, path );
-	try{
-		var data = await view.request {
-			url: path,
-			noCache: true,
-			output: #json, // will deliver data as already parsed JSON to onDataReady
-			// success: Common_onPlayerModelsList,
-			// error: function () {
-				// Debug_Println("Common_GetPlayerModelsList request failed");
-				// self.timer(2000ms, function() {				
-							// Common_GetPlayerModelsList();
-							// return false;
-						// });	
-				// }
-		}
-		Common_onPlayerModelsList(data);
+	return $(#ModelBoxContent).attributes["loaded"];	
+}
+
+async function Lobby_ReloadModels()
+{
+	try
+	{
+		var data = JSON.parse(await Server_GetPlayerModelsList());
+		Debug_Println("Common_LoadLobby got data!");	 
+		var select = "selected";
+		var i = 0;
+		$(#ModelBoxContent).attributes["loaded"] = false;
+		$(#ModelBoxContent).clear();
+		if (data.length > 0) 
+		{
+			for(var it in data)
+			{
+				var link = it["ThumbnailUrl"];
+				
+				var el = $(#ModelBoxItemTemplate).clone();	
+				
+				el.attributes["id"] = String.$(ModelBoxItemTemplate_{i++});
+				
+				el[0].attributes["src"] = link; 
+				
+				el.attributes["state"] = select;
+				select = "free";
+				
+				el.on("click", function () {
+					Models_SelectModel(el.id);
+				});
+				
+				//Debug_Println(String.printf("Got data %V", link));
+				$(#ModelBoxContent).append(el);
+			}
+		}		
+		$(#ModelBoxContent).attributes["loaded"] = true;
+		Debug_Println("Lobby_ReloadModels done");
 	}
 	catch(e)
 	{
-			Debug_Println(String.printf("Failed %V", e.data.status));
-			// self.timer(2000ms, function() {				
-						// Common_GetPlayerModelsList();
-						// return false;
-					// });	
-	
+		Debug_Println(String.printf("Lobby_ReloadModels: Failed:  %V", e));
+		self.timer(1000ms, function() {
+			Lobby_ReloadModels();	
+		});		
 	}
-	
-	
 
 }
 
-function Common_onPlayerModelsList(data) {
-	//Debug_Println(String.printf("Got data %V with status", data));
-	var select = "selected";
-	var i = 0;
-	if (data.length > 0) 
-	{
-		for(var it in data)
-		{
-			var link = it["ThumbnailUrl"];
-			
-			var el = $(#ModelBoxItemTemplate).clone();	
-			
-			el.attributes["id"] = String.$(ModelBoxItemTemplate_{i++});
-			
-			el[0].attributes["src"] = link; 
-			
-			el.attributes["state"] = select;
-			select = "free";
-			
-			el.on("click", function () {
-				Models_SelectModel(el.id);
-			});
-			
-			//Debug_Println(String.printf("Got data %V", link));
-			$(#ModelBoxContent).append(el);
-		}
-	}
-	
-}
 
 function Models_SelectModel(modID)
 {
