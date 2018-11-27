@@ -231,7 +231,7 @@ body {
 	height:1*;
 }
 
-.model-box-item
+.gallery-box-item
 {
 	width:64px;
 	height:64px;
@@ -240,19 +240,19 @@ body {
 	border: 1px solid transparent;
 }
 
-.model-box-item[state="selected"]
+.gallery-box-item[state="selected"]
 {
 	background-color:rgb(62,72,62);
 }
 
-.model-box-item:hover
+.gallery-box-item:hover
 {
 	border: 1px solid blue;
 	width:64px;
 	height:64px;
 }
 
-.model-box-item img {
+.gallery-box-item img {
    //width: 1*;
    width:64px;
    height:64px;

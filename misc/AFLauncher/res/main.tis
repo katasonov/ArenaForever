@@ -108,7 +108,7 @@ function Lobby_Reload()
 {	
 	Common_StartWaitingProgress();
 	Lobby_ReloadModels();
-	//Lobby_ReloadMaps();
+	Lobby_ReloadMaps();
 	
 	self.timer(1000ms, function() {
 		if (Lobby_Loaded())
@@ -122,7 +122,7 @@ function Lobby_Reload()
 
 function Lobby_Loaded()
 {
-	return $(#ModelBoxContent).attributes["loaded"];	
+	return $(#ModelBoxContent).attributes["loaded"] && $(#MapBoxContent).attributes["loaded"];	
 }
 
 async function Lobby_ReloadModels()
@@ -130,36 +130,15 @@ async function Lobby_ReloadModels()
 	try
 	{
 		var data = JSON.parse(await Server_GetPlayerModelsList());
-		Debug_Println("Common_LoadLobby got data!");	 
-		var select = "selected";
-		var i = 0;
-		$(#ModelBoxContent).attributes["loaded"] = false;
-		$(#ModelBoxContent).clear();
-		if (data.length > 0) 
-		{
-			for(var it in data)
-			{
-				var link = it["ThumbnailUrl"];
-				
-				var el = $(#ModelBoxItemTemplate).clone();	
-				
-				el.attributes["id"] = String.$(ModelBoxItemTemplate_{i++});
-				
-				el[0].attributes["src"] = link; 
-				
-				el.attributes["state"] = select;
-				select = "free";
-				
-				el.on("click", function () {
-					Models_SelectModel(el.id);
-				});
-				
-				//Debug_Println(String.printf("Got data %V", link));
-				$(#ModelBoxContent).append(el);
-			}
-		}		
-		$(#ModelBoxContent).attributes["loaded"] = true;
-		Debug_Println("Lobby_ReloadModels done");
+		Debug_Println(String.printf("Lobby_ReloadModels: data: %V", data));
+		var links = new Array();
+		for (var it in data)
+		{			
+			links.push(it["ThumbnailUrl"]);	
+		}
+		Debug_Println("Lobby_ReloadModels: Links: %V", links);
+
+		Gallery_Reload($(#ModelBoxContent), "ModelBoxItem_", Common_SelectModel, links);
 	}
 	catch(e)
 	{
@@ -168,13 +147,73 @@ async function Lobby_ReloadModels()
 			Lobby_ReloadModels();	
 		});		
 	}
+}
+
+
+async function Lobby_ReloadMaps()
+{
+	try
+	{
+		var data = JSON.parse(await Server_GetPlayerMapsList());
+		Debug_Println(String.printf("Lobby_ReloadMaps: data: %V", data));
+		var links = new Array();
+		for (var it in data)
+		{			
+			links.push(it["ThumbnailUrl"]);	
+		}
+		Debug_Println("Lobby_ReloadMaps: Links: %V", links);
+
+		Gallery_Reload($(#MapBoxContent), "MapBoxItem_", Common_SelectMap, links);
+	}
+	catch(e)
+	{
+		Debug_Println(String.printf("Lobby_ReloadMaps: Failed:  %V", e));
+		self.timer(1000ms, function() {
+			Lobby_ReloadMaps();	
+		});		
+	}
+
+}
+
+function Gallery_Reload(galleryObj, itemIdPrefix, onItemClickFunc, links)
+{
+	Debug_Println("Gallery_Reload do");
+	var select = "selected";
+	var i = 0;
+	galleryObj.attributes["loaded"] = false;
+	galleryObj.clear();
+	
+	if (links.length > 0) 
+	{
+		for(var link in links)
+		{
+			var el = $(#GalleryBoxItemTemplate).clone();	
+			
+			el.attributes["id"] = String.$({itemIdPrefix}{i++});
+			
+			el[0].attributes["src"] = link; 
+			
+			el.attributes["state"] = select;
+			select = "free";
+			
+			el.on("click", function () {
+				onItemClickFunc(el.id);
+			});
+			
+			//Debug_Println(String.printf("Got data %V", link));
+			galleryObj.append(el);
+		}
+	}		
+	galleryObj.attributes["loaded"] = true;
+	Debug_Println("Gallery_Reload done");
 
 }
 
 
-function Models_SelectModel(modID)
+
+function Common_SelectModel(modID)
 {
-	for (var el in $$(.model-box-item))
+	for (var el in $(#ModelBoxContent).$$(.gallery-box-item))
 	{
 		el.attributes["state"] = "free";
 	}
@@ -182,6 +221,19 @@ function Models_SelectModel(modID)
 	var item = $([id={modID}]);
 	
 	Debug_Println(String.printf("Model to select: %V %V", modID, item));
+	item.attributes["state"] = "selected";
+}
+
+function Common_SelectMap(mapID)
+{
+	for (var el in $(#MapBoxContent).$$(.gallery-box-item))
+	{
+		el.attributes["state"] = "free";
+	}
+	
+	var item = $([id={mapID}]);
+	
+	Debug_Println(String.printf("Map to select: %V %V", mapID, item));
 	item.attributes["state"] = "selected";
 }
 

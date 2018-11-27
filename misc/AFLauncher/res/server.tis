@@ -17,12 +17,13 @@ async function Server_GetPlayerModelsList()
 					// });	
 			// }
 	}
+	//Debug_Println(String.printf("Common_GetPlayerModelsList: data: %V", data));
 	return String.printf("%V", data);
 }
 
-async function Server_GetMapsList()
+async function Server_GetPlayerMapsList()
 {
-	Debug_Println(String.printf("Server_GetMapsList begin"));
+	Debug_Println(String.printf("Server_GetPlayerMapsList begin"));
 	var path = String.$({APP_URL}/api/v1/map/getList);
 	var data = await view.request {
 		url: path,
